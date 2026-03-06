@@ -1,0 +1,126 @@
+body{
+margin:0;
+font-family:Arial, Helvetica, sans-serif;
+}
+
+/* Fondo + nutria */
+.bg-mindpet{
+display:flex;
+flex-direction:column;
+align-items:center;
+
+padding-top:4vh;
+padding-bottom:200px;
+
+min-height:100vh;
+width:100%;
+
+background-image:
+url('../images/OTTER.png'),
+url('../images/registroFondo.png');
+
+background-repeat:no-repeat, no-repeat;
+
+/* tamaño nutria | tamaño fondo */
+background-size:520px, cover;
+
+/* posicion nutria | posicion fondo */
+background-position:center bottom 60px, center;
+}
+
+/* Contenedor */
+.main-wrapper{
+display:flex;
+flex-direction:column;
+align-items:center;
+
+width:100%;
+max-width:350px;
+}
+
+/* Logo */
+.imgLogo{
+max-width:70px;
+margin-bottom:10px;
+}
+
+/* Título */
+.titulo-registro{
+font-size:26px;
+font-weight:bold;
+color:#14333b;
+margin-bottom:20px;
+text-align:center;
+}
+
+/* Formulario */
+.formulario-registro{
+width:100%;
+display:flex;
+flex-direction:column;
+align-items:center;
+}
+
+/* Inputs */
+.input-mindpet{
+width:100%;
+padding:12px 18px;
+margin:8px 0;
+border-radius:15px;
+border:none;
+background:white;
+font-size:15px;
+outline:none;
+box-shadow:0 3px 10px rgba(0,0,0,0.08);
+}
+
+/* Inputs en fila */
+.row-inputs{
+display:flex;
+gap:10px;
+width:100%;
+}
+
+.row-inputs .input-mindpet{
+flex:1;
+}
+
+/* Botones */
+.botones-container{
+display:flex;
+gap:15px;
+justify-content:center;
+margin-top:25px;
+}
+
+/* Botón */
+.boton{
+margin-top:15px;
+padding:12px 24px;
+border-radius:40px;
+border:none;
+background:#142a2f;
+color:white;
+font-weight:600;
+font-size:14px;
+cursor:pointer;
+transition:0.3s;
+box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+.boton:hover{
+background:#1f4c55;
+transform:translateY(-2px);
+}
+
+/* Botón secundario */
+.boton-secundario{
+margin-top:10px;
+background:white;
+color:#142a2f;
+border:2px solid #142a2f;
+}
+
+.boton-secundario:hover{
+background:#f2f2f2;
+}
