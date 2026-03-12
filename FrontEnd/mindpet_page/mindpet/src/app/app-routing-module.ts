@@ -4,12 +4,14 @@ import { Login } from './login/login';
 import { Home } from './home/home';
 import { Welcome } from './welcome/welcome';
 import { Register } from './register/register';
+import { Foro } from './foro/foro';
 
 const routes: Routes = [
   { path: "", component: Home },
 { path: 'login', component: Login },
 { path: 'welcome', component: Welcome },
-{ path: 'register', component: Register}
+{ path: 'register', component: Register},
+{ path: 'foro', component: Foro}
 ];
 
 @NgModule({

@@ -125,7 +125,7 @@ object-fit: cover;
     color: #000000;
     font-size: 2vw;
     font-weight: bold;
-    padding: 5px;
+    padding: 2px;
     padding-right: 10px;
     display: flex;
         align-items: center;
@@ -140,4 +140,44 @@ object-fit: cover;
   text-shadow: 
   1px 0 currentColor,
   -1px 0 currentColor;
+}
+
+.buttonforo{
+    background-color: #ffffff;
+    border-radius: 10px;
+    border: none;
+    color: #000000;
+    font-size: 2vw;
+    font-weight: bold;
+    padding: 10px;
+    padding-right: 20px;
+    padding-left: 20px;
+    display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+}
+
+.foro{
+    background-color: #BDE9F5;
+    background-size: cover;
+    background-position: center;
+    border-radius: 20px;
+    aspect-ratio: 13 / 6;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+
+.forotext{
+    color: rgb(0, 0, 0);
+    font-size: 4vw;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(160, 158, 158, 0.7);
+    text-align: center;
 }
