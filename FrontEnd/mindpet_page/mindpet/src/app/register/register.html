@@ -46,8 +46,8 @@
         <span>Términos y condiciones</span>
       </div>
 
-      @if(terminos.invalid && terminos.touched){
-      <p class="error">Debes aceptar nuestros términos y condiciones</p>
+      @if(terminos.invalid){
+      <p class="errorT">Acepta nuestros términos y condiciones</p>
       }
 
       <button class="boton" [disabled]="registerForm.invalid">Registrate</button>
