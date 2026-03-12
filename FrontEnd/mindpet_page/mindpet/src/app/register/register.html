@@ -5,29 +5,55 @@
 
     <h2 class="titulo-registro sour-gummy" style="font-weight: bolder;">Registro</h2>
 
-    <div class="formulario-registro">
+    <form action="" class="formulario-registro" [formGroup]="registerForm" (submit)="handleSubmit()">
 
-      <input type="text" placeholder="Nombre" class="input-mindpet">
+      <input type="text" placeholder="Nombre" class="input-mindpet" formControlName="nombre">
+      @if(nombre.invalid && nombre.touched){
+      <p class="error">Nombre requerido</p>
+      }
 
-      <input type="email" placeholder="Correo" class="input-mindpet">
+      <input type="email" placeholder="Correo" class="input-mindpet" formControlName="correo">
+      @if(correo.hasError("required") && correo.touched ){
+      <p class="error">Correo requerido</p>
+      }@else if(correo.hasError("email") && correo.touched ){
+      <p class="error">Ingresa un correo valido</p>
+      }
 
-      <input type="password" placeholder="Contraseña" class="input-mindpet">
+      <input type="password" placeholder="Contraseña" class="input-mindpet" formControlName="contrasena">
 
-      <input type="password" placeholder="Confirme la contraseña" class="input-mindpet">
+      @if(contrasena.invalid && contrasena.touched){
+      <p class="error">Contraseña requerida</p>
+      }
+
+      <input type="password" placeholder="Confirme la contraseña" class="input-mindpet" formControlName="contraseñaC">
+      @if(contrasenaC.invalid && contrasenaC.touched){
+      <p class="error">Confirmacion requerida</p>
+      }@else if(contrasenaC.value != contrasena.value && contrasenaC.touched){
+      <p class="error">Las contraseñas no coinciden</p>
+      }
 
       <div class="fecha-container">
         <label>Fecha de nacimiento</label>
-        <input type="date" class="input-mindpet">
+        <input type="date" class="input-mindpet" formControlName="fechaNacimiento">
+      </div>
+      @if(fechaNacimiento.invalid && fechaNacimiento.touched){
+      <p class="error">Fecha de nacimiento requerida</p>
+      }
+
+
+      <div class="terminos">
+        <input type="checkbox" formControlName="terminos">
+        <span>Términos y condiciones</span>
       </div>
 
-<div class="terminos">
-  <input type="checkbox">
-  <span>Términos y condiciones</span>
-</div>
+      @if(terminos.invalid && terminos.touched){
+      <p class="error">Debes aceptar nuestros términos y condiciones</p>
+      }
 
-      <button class="boton">Registrate</button>
+      <button class="boton" [disabled]="registerForm.invalid">Registrate</button>
 
-    </div>
+
+    </form>
 
   </div>
 </div>

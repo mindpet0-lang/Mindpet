@@ -8,6 +8,7 @@ import { Login } from './login/login';
 import { Home } from './home/home';
 import { Welcome } from './welcome/welcome';
 import { Register } from './register/register';
+import { Foro } from './foro/foro';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { Register } from './register/register';
     Login,
     Welcome,
     Register,
+    Foro,
   ],
   imports: [
     BrowserModule,
