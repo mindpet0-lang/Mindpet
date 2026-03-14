@@ -11,6 +11,7 @@ import { Welcome } from './welcome/welcome';
 import { Register } from './register/register';
 import { Foro } from './foro/foro';
 
+
 @NgModule({
   declarations: [
     App,

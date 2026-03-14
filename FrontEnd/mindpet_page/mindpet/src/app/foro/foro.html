@@ -1,87 +1,36 @@
-<div class="foro-container">
+<div class="forum-wrapper">
+  <nav class="mindpet-nav">
+    <span class="logo">MindPet 🐾</span>
+    <button *ngIf="!isLoggedIn()" (click)="login()" class="btn-login">Entrar</button>
+    <span *ngIf="isLoggedIn()" class="user-badge">Hola, {{ currentUser() }}</span>
+  </nav>
 
-    <!-- CREAR POST -->
-    <div class="crear-post">
-
-        <h3>Comparte con la comunidad</h3>
-
-        <form [formGroup]="postForm" (ngSubmit)="crearPost()">
-
-            <textarea 
-            formControlName="contenido"
-            placeholder="¿Cómo te sientes hoy?"></textarea>
-
-            <button type="submit" [disabled]="postForm.invalid">
-                Publicar
-            </button>
-
-        </form>
-
+  <div class="content-container">
+    <div class="post-box card" *ngIf="isLoggedIn()">
+      <textarea [(ngModel)]="newPostContent" placeholder="¿Cómo te sientes hoy?"></textarea>
+      <div class="actions">
+        <input type="file" (change)="onFileSelected($event)" id="img-input" hidden #fileInput>
+        <button class="btn-outline ml-3" (click)="fileInput.click()" style="border: none; background-color: white;">📸 Añadir Foto</button>
+        <button class="btn-publish" (click)="publishPost()">Publicar</button>
+      </div>
+      <img *ngIf="selectedImage" [src]="selectedImage" class="preview-img">
     </div>
 
-
-    <!-- LISTA POSTS -->
-
-    <div class="post" *ngFor="let post of posts">
-
+    <div class="feed">
+      <div *ngFor="let post of posts()" class="post-card card">
         <div class="post-header">
-
-            <div class="avatar"></div>
-
-            <div>
-                <span class="usuario">{{post.usuario}}</span>
-                <span class="fecha">{{post.fecha}}</span>
-            </div>
-
+          <div class="avatar"></div>
+          <strong>{{ post.author }}</strong>
         </div>
-
-
-        <p class="contenido">
-            {{post.contenido}}
-        </p>
-
-
-        <!-- ACCIONES -->
-
-        <div class="acciones">
-
-            <button (click)="darLike(post)">
-                ❤️ {{post.likes}}
-            </button>
-
+        <p class="post-body">{{ post.content }}</p>
+        <img *ngIf="post.image" [src]="post.image" class="post-image">
+        
+        <div class="post-footer">
+          <button (click)="toggleLike(post.id)" style="border: none;" [class.liked]="post.likes.includes(currentUser() || '')">
+            ❤ {{ post.likes.length }}
+          </button>
         </div>
-
-
-        <!-- COMENTARIOS -->
-
-        <div class="comentarios">
-
-            <div class="comentario"
-            *ngFor="let comentario of post.comentarios">
-
-                <span class="comentario-user">
-                    {{comentario.usuario}}
-                </span>
-
-                {{comentario.texto}}
-
-            </div>
-
-
-            <div class="nuevo-comentario">
-
-                <input
-                [(ngModel)]="post.nuevoComentario"
-                placeholder="Escribe un comentario...">
-
-                <button (click)="agregarComentario(post)">
-                    Enviar
-                </button>
-
-            </div>
-
-        </div>
-
+      </div>
     </div>
-
+  </div>
 </div>

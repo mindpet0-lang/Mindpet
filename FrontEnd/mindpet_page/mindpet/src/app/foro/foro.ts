@@ -1,64 +1,92 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, signal } from '@angular/core';
+
+interface Post {
+  id: number;
+  author: string;
+  content: string;
+  image?: string;
+  likes: string[]; // IDs de usuarios que dieron like
+}
 
 @Component({
   selector: 'app-foro',
-  standalone: false,
+  standalone: false, // Mantengo tu configuración original
   templateUrl: './foro.html',
   styleUrl: './foro.css',
 })
 export class Foro {
-postForm: FormGroup;
+  // --- ESTADO DEL FORO ---
+  // Usamos signals para que la UI reaccione instantáneamente
+  isLoggedIn = signal<boolean>(false);
+  currentUser = signal<string | null>(null);
+  posts = signal<Post[]>([]);
 
-  posts:any[] = [];
+  // --- MODELOS PARA EL FORMULARIO ---
+  newPostContent: string = '';
+  selectedImage: string | null = null;
 
-  constructor(private fb:FormBuilder){
+  // --- MÉTODOS ---
 
-    this.postForm = this.fb.group({
-      contenido:['',Validators.required]
-    });
-
+  // Simula el inicio de sesión en MindPet
+  login() {
+    this.isLoggedIn.set(true);
+    this.currentUser.set('Usuario_MindPet'); 
   }
 
-  crearPost(){
+  // Maneja la carga de imágenes desde el input file
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.selectedImage = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
 
-    if(this.postForm.invalid) return;
+  // Publica un nuevo comentario
+  publishPost() {
+    if (!this.newPostContent.trim()) return;
 
-    const nuevoPost = {
-
-      usuario:"Usuario",
-      fecha:new Date().toLocaleDateString(),
-      contenido:this.postForm.value.contenido,
-      likes:0,
-      comentarios:[],
-      nuevoComentario:''
-
+    const newPost: Post = {
+      id: Date.now(),
+      author: this.currentUser()!,
+      content: this.newPostContent,
+      image: this.selectedImage || undefined,
+      likes: []
     };
 
-    this.posts.unshift(nuevoPost);
+    // Agregamos el post al inicio del array
+    this.posts.update(current => [newPost, ...current]);
 
-    this.postForm.reset();
-
+    // Limpiamos el formulario
+    this.newPostContent = '';
+    this.selectedImage = null;
   }
 
-  darLike(post:any){
+  // Lógica de Like Único
+  toggleLike(postId: number) {
+    if (!this.isLoggedIn()) {
+      alert("Para MindPet, tu interacción es importante. ¡Inicia sesión para dar amor! 🐾");
+      return;
+    }
 
-    post.likes++;
+    const user = this.currentUser()!;
 
-  }
-
-  agregarComentario(post:any){
-
-    if(!post.nuevoComentario) return;
-
-    post.comentarios.push({
-
-      usuario:"Usuario",
-      texto:post.nuevoComentario
-
-    });
-
-    post.nuevoComentario='';
-
+    this.posts.update(allPosts => 
+      allPosts.map(post => {
+        if (post.id === postId) {
+          const hasLiked = post.likes.includes(user);
+          return {
+            ...post,
+            likes: hasLiked 
+              ? post.likes.filter(id => id !== user) // Si ya tenía like, lo quita
+              : [...post.likes, user]               // Si no, lo agrega
+          };
+        }
+        return post;
+      })
+    );
   }
 }
