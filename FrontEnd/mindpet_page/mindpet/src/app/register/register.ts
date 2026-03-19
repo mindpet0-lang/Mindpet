@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { FormGroup, FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { AuthService } from '../services/auth-service';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-register',
@@ -101,27 +102,43 @@ export class Register {
     return null;
   }
 
-    handleSubmit() {
-      if (this.registerForm.valid) {
-        this.registerForm.markAllAsTouched();
-        // Extraemos solo los datos que la API espera
-        const { contrasenaC, ...userData } = this.registerForm.value;
-  
-        this.authService.register(userData).subscribe({
-          next: (response) => {
-            console.log('¡Registro exitoso!', response);
-            alert('Usuario registrado correctamente');
-             this.router.navigate(['/login']);
-          },
-          error: (err) => {
-            console.error('Error en el registro', err);
-            alert('Hubo un error al registrar: ' + err.error.message);
+   handleSubmit() {
+  if (this.registerForm.valid) {
+    const { contrasenaC, ...userData } = this.registerForm.value;
+
+    this.authService.register(userData).subscribe({
+      next: (response) => {
+        // AQUÍ VA EL ALERT BONITO
+        Swal.fire({
+          title: '¡Registro Exitoso!',
+          text: `Bienvenido/a ${userData.nombre}, tu cuenta ha sido creada.`,
+          imageUrl: 'assets/images/logo.png', 
+          imageHeight: '150px',
+          confirmButtonText: 'Genial',
+          confirmButtonColor: '#62C6E2', // Puedes poner el color de tu marca
+          backdrop: `
+            rgba(0,0,123,0.4)
+            url("assets/images/nyan-cat.gif") 
+            left top
+            no-repeat
+          ` // El backdrop opcional oscurece el fondo
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.router.navigate(['/login']);
           }
         });
-      } else {
-        this.registerForm.markAllAsTouched();
+      },
+      error: (err) => {
+        // Alert de error por si Mockoon falla o el correo ya existe
+        Swal.fire({
+          title: 'Error',
+          text: 'No se pudo completar el registro. Intenta más tarde.',
+          icon: 'error',
+          confirmButtonText: 'Entendido'
+        });
       }
-    }
-
+    });
+  }
+}
 
 }
