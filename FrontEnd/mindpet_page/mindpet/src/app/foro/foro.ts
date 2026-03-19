@@ -1,92 +1,116 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, OnInit } from '@angular/core';
+import { ForoService } from '../services/foro.service';
 
 interface Post {
   id: number;
   author: string;
   content: string;
   image?: string;
-  likes: string[]; // IDs de usuarios que dieron like
+  likes: string[];
 }
 
 @Component({
   selector: 'app-foro',
-  standalone: false, // Mantengo tu configuración original
+  standalone: false,
   templateUrl: './foro.html',
-  styleUrl: './foro.css',
+  styleUrls: ['./foro.css'],
 })
-export class Foro {
-  // --- ESTADO DEL FORO ---
-  // Usamos signals para que la UI reaccione instantáneamente
+export class Foro implements OnInit {
   isLoggedIn = signal<boolean>(false);
   currentUser = signal<string | null>(null);
   posts = signal<Post[]>([]);
 
-  // --- MODELOS PARA EL FORMULARIO ---
+  // manejo de nuevo post
   newPostContent: string = '';
   selectedImage: string | null = null;
 
-  // --- MÉTODOS ---
+  constructor(private foroService: ForoService) {}
 
-  // Simula el inicio de sesión en MindPet
+  ngOnInit() {
+    this.loadPosts();
+  }
+
+  // 🔥 TRAER POSTS DESDE BACKEND
+  loadPosts() {
+    this.foroService.getForos().subscribe((data: any[]) => {
+      const postsConvertidos: Post[] = data.map((f) => ({
+        id: f.id,
+        author: f.titulo,       
+        content: f.descripcion,
+        image: '',
+        likes: [],
+      }));
+
+      this.posts.set(postsConvertidos);
+    });
+  }
   login() {
     this.isLoggedIn.set(true);
-    this.currentUser.set('Usuario_MindPet'); 
+    this.currentUser.set('Usuario');
   }
 
   // Maneja la carga de imágenes desde el input file
   onFileSelected(event: any) {
     const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.selectedImage = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
-  }
+    if (!file) return;
 
-  // Publica un nuevo comentario
-  publishPost() {
-    if (!this.newPostContent.trim()) return;
-
-    const newPost: Post = {
-      id: Date.now(),
-      author: this.currentUser()!,
-      content: this.newPostContent,
-      image: this.selectedImage || undefined,
-      likes: []
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.selectedImage = e.target.result;
     };
-
-    // Agregamos el post al inicio del array
-    this.posts.update(current => [newPost, ...current]);
-
-    // Limpiamos el formulario
-    this.newPostContent = '';
-    this.selectedImage = null;
+    reader.readAsDataURL(file);
   }
 
-  // Lógica de Like Único
+  // 🔥 PUBLICAR EN BACKEND
+  publishPost() {
+  if (!this.currentUser()) {
+    alert("Debes iniciar sesión");
+    return;
+  }
+
+  if (!this.newPostContent.trim()) return;
+
+  console.log("Enviando:", this.newPostContent);
+
+  const foro = {
+    titulo: this.currentUser(),
+    descripcion: this.newPostContent
+  };
+
+  this.foroService.crearForo(foro).subscribe({
+    next: () => {
+      console.log("POST CREADO ✅");
+      this.loadPosts();
+      this.newPostContent = '';
+      this.selectedImage = null;
+    },
+    error: (err) => {
+      console.error("ERROR BACKEND ❌", err);
+    }
+  });
+}
+
+  // ❤️ LIKE CON BACKEND
   toggleLike(postId: number) {
-    if (!this.isLoggedIn()) {
+    const user = this.currentUser()!;
+     if (!this.isLoggedIn()) {
       alert("Para MindPet, tu interacción es importante. ¡Inicia sesión para dar amor! 🐾");
       return;
     }
 
-    const user = this.currentUser()!;
-
-    this.posts.update(allPosts => 
-      allPosts.map(post => {
-        if (post.id === postId) {
-          const hasLiked = post.likes.includes(user);
+    this.posts.update((posts) =>
+      posts.map((p) => {
+        if (p.id === postId) {
+          const hasLiked = p.likes.includes(user);
           return {
-            ...post,
-            likes: hasLiked 
-              ? post.likes.filter(id => id !== user) // Si ya tenía like, lo quita
-              : [...post.likes, user]               // Si no, lo agrega
+            ...p,
+            likes: hasLiked ? p.likes.filter((u) => u !== user) : [...p.likes, user],
           };
         }
-        return post;
-      })
+        return p;
+      }),
     );
   }
+
+  
 }

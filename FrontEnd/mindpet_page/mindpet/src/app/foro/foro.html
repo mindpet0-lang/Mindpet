@@ -11,7 +11,7 @@
       <div class="actions">
         <input type="file" (change)="onFileSelected($event)" id="img-input" hidden #fileInput>
         <button class="btn-outline ml-3" (click)="fileInput.click()" style="border: none; background-color: white;">📸 Añadir Foto</button>
-        <button class="btn-publish" (click)="publishPost()">Publicar</button>
+        <button (click)="publishPost()" class="btn-publish">Publicar</button>
       </div>
       <img *ngIf="selectedImage" [src]="selectedImage" class="preview-img">
     </div>

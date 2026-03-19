@@ -108,20 +108,20 @@ export class Register {
 
     this.authService.register(userData).subscribe({
       next: (response) => {
-        // AQUÍ VA EL ALERT BONITO
+        
         Swal.fire({
           title: '¡Registro Exitoso!',
           text: `Bienvenido/a ${userData.nombre}, tu cuenta ha sido creada.`,
           imageUrl: 'assets/images/logo.png', 
           imageHeight: '150px',
           confirmButtonText: 'Genial',
-          confirmButtonColor: '#62C6E2', // Puedes poner el color de tu marca
+          confirmButtonColor: '#62C6E2', 
           backdrop: `
             rgba(0,0,123,0.4)
             url("assets/images/nyan-cat.gif") 
             left top
             no-repeat
-          ` // El backdrop opcional oscurece el fondo
+          ` 
         }).then((result) => {
           if (result.isConfirmed) {
             this.router.navigate(['/login']);
@@ -129,7 +129,7 @@ export class Register {
         });
       },
       error: (err) => {
-        // Alert de error por si Mockoon falla o el correo ya existe
+
         Swal.fire({
           title: 'Error',
           text: 'No se pudo completar el registro. Intenta más tarde.',
