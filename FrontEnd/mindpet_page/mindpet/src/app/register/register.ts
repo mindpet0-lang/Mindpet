@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormGroup, FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
-import { RegisterService } from '../services/register-service';
+import { AuthService } from '../services/auth-service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
   styleUrl: './register.css',
 })
 export class Register {
-  private authService = inject(RegisterService);
+  private authService = inject(AuthService);
   private router = inject(Router);
 
   registerForm: FormGroup;
