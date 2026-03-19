@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormGroup, FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { RegisterService } from '../services/register-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -8,6 +10,8 @@ import { FormGroup, FormControl, Validators, AbstractControl, ValidationErrors }
   styleUrl: './register.css',
 })
 export class Register {
+  private authService = inject(RegisterService);
+  private router = inject(Router);
 
   registerForm: FormGroup;
 
@@ -97,16 +101,27 @@ export class Register {
     return null;
   }
 
-
-  handleSubmit(): void{
-
-    if(this.registerForm.invalid){
-      this.registerForm.markAllAsTouched();
-      return;
+    handleSubmit() {
+      if (this.registerForm.valid) {
+        this.registerForm.markAllAsTouched();
+        // Extraemos solo los datos que la API espera
+        const { contrasenaC, ...userData } = this.registerForm.value;
+  
+        this.authService.register(userData).subscribe({
+          next: (response) => {
+            console.log('¡Registro exitoso!', response);
+            alert('Usuario registrado correctamente');
+             this.router.navigate(['/login']);
+          },
+          error: (err) => {
+            console.error('Error en el registro', err);
+            alert('Hubo un error al registrar: ' + err.error.message);
+          }
+        });
+      } else {
+        this.registerForm.markAllAsTouched();
+      }
     }
 
-    console.log(this.registerForm.value);
-
-  }
 
 }
