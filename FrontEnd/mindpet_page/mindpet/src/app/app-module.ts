@@ -10,6 +10,7 @@ import { Home } from './home/home';
 import { Welcome } from './welcome/welcome';
 import { Register } from './register/register';
 import { Foro } from './foro/foro';
+import { Download } from './download/download';
 
 
 @NgModule({
@@ -20,6 +21,7 @@ import { Foro } from './foro/foro';
     Welcome,
     Register,
     Foro,
+    Download,
   ],
   imports: [
     BrowserModule,
