@@ -1,11 +1,10 @@
 <div class="forum-wrapper">
 
-
-  <!-- NAV -->
+  <!-- NAV11 -->
   <nav class="mindpet-nav">
     <span class="logo">🐾 MindPet</span>
 
-    <button (click)="login()" class="btn-login">
+    <button *ngIf="!isLoggedIn()" (click)="login()" class="btn-login">
       Entrar
     </button>
 
@@ -19,7 +18,10 @@
 
     <!-- CREAR POST -->
     <div class="post-box card" *ngIf="isLoggedIn()">
-      <textarea [(ngModel)]="newPostContent" placeholder="¿Cómo te sientes hoy?" class="textarea">
+      <textarea 
+        [(ngModel)]="newPostContent" 
+        placeholder="¿Cómo te sientes hoy?" 
+        class="textarea">
       </textarea>
 
       <div class="actions">
@@ -48,21 +50,43 @@
           <strong>{{ post.author || 'Usuario' }}</strong>
         </div>
 
-        <!-- CONTENIDO -->
-        <p class="post-body">
+        <!-- CONTENIDO NORMAL -->
+        <p *ngIf="editandoPostId !== post.id" class="post-body">
           {{ post.content || 'Sin contenido' }}
         </p>
+
+        <!-- MODO EDICIÓN -->
+        <div *ngIf="editandoPostId === post.id">
+          <textarea [(ngModel)]="editContent"></textarea>
+
+          <button (click)="guardarEdicion(post)">💾 Guardar</button>
+          <button (click)="editandoPostId = null">❌ Cancelar</button>
+        </div>
 
         <!-- IMAGEN -->
         <img *ngIf="post.image" [src]="post.image" class="post-image">
 
         <!-- FOOTER -->
         <div class="post-footer">
-          <button (click)="toggleLike(post.id)" class="like-btn"
-            [class.liked]="post.likes.includes(currentUser() || '')">
+
+          <!-- ❤️ LIKE -->
+          <button 
+            (click)="toggleLike(post.id)" 
+            class="like-btn"
+            [class.liked]="post.likes.includes(currentUser()!)">
 
             ❤️ {{ post.likes.length || 0 }}
           </button>
+
+          <!-- ✏️🗑️ SOLO SI ES TU POST -->
+          <div *ngIf="post.author === currentUser()" class="owner-actions">
+
+            <button (click)="editarPost(post)">✏️</button>
+
+            <button (click)="eliminarPost(post.id)">🗑️</button>
+
+          </div>
+
         </div>
 
       </div>

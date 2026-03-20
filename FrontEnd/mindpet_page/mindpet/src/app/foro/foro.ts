@@ -24,26 +24,38 @@ export class Foro implements OnInit {
   newPostContent: string = '';
   selectedImage: string | null = null;
 
+  // 🔥 NUEVO: editar
+  editandoPostId: number | null = null;
+  editContent: string = '';
+
   constructor(private foroService: ForoService) { }
 
   ngOnInit() {
+    const userData = localStorage.getItem("user");
+
+    if (userData) {
+      const user = JSON.parse(userData);
+      this.currentUser.set(user.nombre);
+      this.isLoggedIn.set(true);
+    }
+
     this.loadPosts();
   }
 
   // 🔥 TRAER POSTS DESDE BACKEND
   loadPosts() {
     this.foroService.getForos().subscribe((data: Post[]) => {
-      this.posts.set(data); // 🔥 DIRECTO
+      this.posts.set(data);
     });
   }
 
-login() {
-  console.log("CLICK FUNCIONA");
-  this.isLoggedIn.set(true);
-  this.currentUser.set('Usuario');
-}
+  login() {
+    console.log("CLICK FUNCIONA");
+    this.isLoggedIn.set(true);
+    this.currentUser.set('Usuario');
+  }
 
-  // Maneja la carga de imágenes desde el input file
+  // Maneja la carga de imágenes
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (!file) return;
@@ -55,7 +67,7 @@ login() {
     reader.readAsDataURL(file);
   }
 
-  // 🔥 PUBLICAR EN BACKEND
+  // 🔥 PUBLICAR
   publishPost() {
     if (!this.currentUser()) {
       alert("Debes iniciar sesión");
@@ -74,7 +86,6 @@ login() {
 
     this.foroService.crearForo(foro).subscribe({
       next: () => {
-        console.log("POST CREADO ✅");
         this.loadPosts();
         this.newPostContent = '';
         this.selectedImage = null;
@@ -85,29 +96,82 @@ login() {
     });
   }
 
-  // ❤️ LIKE CON BACKEND
+  // ❤️ LIKE
   toggleLike(postId: number) {
-  if (!this.isLoggedIn()) {
-    alert("Para MindPet, tu interacción es importante 🐾\nInicia sesión para dar amor ❤️");
-    return;
+
+    if (!this.isLoggedIn()) {
+      const irLogin = confirm("Debes iniciar sesión para dar like 🐾\n\n¿Quieres ir a iniciar sesión?");
+
+      if (irLogin) {
+        window.location.href = "/login";
+      }
+      return;
+    }
+
+    const user = this.currentUser();
+
+    if (!user) {
+      alert("Error con el usuario");
+      return;
+    }
+
+    this.posts.update((posts) =>
+      posts.map((p) => {
+        if (p.id === postId) {
+
+          const hasLiked = p.likes.includes(user);
+
+          return {
+            ...p,
+            likes: hasLiked
+              ? p.likes.filter((u) => u !== user)
+              : [...p.likes, user],
+          };
+        }
+        return p;
+      })
+    );
   }
 
-  const user = this.currentUser()!;
-  const post = this.posts().find(p => p.id === postId);
-  if (!post) return;
+  // 🗑️ ELIMINAR POST
+  eliminarPost(id: number) {
+    const confirmacion = confirm("¿Seguro que quieres eliminar este post?");
 
-  const hasLiked = post.likes.includes(user);
+    if (!confirmacion) return;
 
-  const updatedPost: Post = {
-    ...post,
-    likes: hasLiked
-      ? post.likes.filter(u => u !== user)
-      : [...post.likes, user]
-  };
+    this.foroService.eliminarForo(id).subscribe({
+      next: () => {
+        this.loadPosts();
+      },
+      error: (err: any) => {
+        console.error("Error eliminando ❌", err);
+      }
+    });
+  }
 
-  this.foroService.actualizarForo(post.id, updatedPost).subscribe(() => {
-    this.loadPosts(); // 🔥 sincroniza con BD
-  });
-}
+  // ✏️ ACTIVAR EDICIÓN
+  editarPost(post: Post) {
+    this.editandoPostId = post.id;
+    this.editContent = post.content;
+  }
 
+  // 💾 GUARDAR EDICIÓN
+  guardarEdicion(post: Post) {
+
+    const actualizado: Post = {
+      ...post,
+      content: this.editContent
+    };
+
+    this.foroService.actualizarForo(post.id, actualizado).subscribe({
+      next: () => {
+        this.editandoPostId = null;
+        this.editContent = '';
+        this.loadPosts();
+      },
+      error: (err) => {
+        console.error("Error editando ❌", err);
+      }
+    });
+  }
 }
