@@ -19,7 +19,7 @@ export class AuthService {
     return this.http.post(`${this.API_URL}`, userData);
   }
 
-  login(credentials: LoginRequest): Observable<LoginResponse> {
+  login (credentials: LoginRequest): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.API_URL}/login`, credentials).pipe(
       tap(res => {
         // Guardamos el token en el almacenamiento local del navegador
@@ -33,4 +33,5 @@ export class AuthService {
   isLoggedIn(): boolean {
     return !!localStorage.getItem('token');
   }
+  
 }

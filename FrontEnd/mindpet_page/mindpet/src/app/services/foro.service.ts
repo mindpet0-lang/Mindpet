@@ -30,4 +30,8 @@ export class ForoService {
   actualizarForo(id: number, foro: Foro): Observable<Foro> {
     return this.http.put<Foro>(`${this.apiUrl}/${id}`, foro);
   }
+  
+  eliminarForo(id: number) {
+  return this.http.delete(`${this.apiUrl}/${id}`);
+}
 }

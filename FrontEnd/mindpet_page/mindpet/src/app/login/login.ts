@@ -27,16 +27,23 @@ export class Login {
 
   onLogin() {
     if (this.loginForm.valid) {
-      // Mostramos un mensaje de espera
+
       Swal.fire({
         title: 'Cargando...',
         didOpen: () => { Swal.showLoading(); }
       });
 
       this.authService.login(this.loginForm.value).subscribe({
+
         next: (res) => {
-          Swal.close(); // Cerramos el cargando
-          
+          Swal.close();
+
+          // 🔥 GUARDAR USUARIO (AQUÍ VA EL PASO 4)
+          localStorage.setItem("user", res.usuario.nombre);
+
+          // (opcional pero PRO 🔥)
+          localStorage.setItem("userEmail", res.usuario.correo);
+
           Swal.fire({
             icon: 'success',
             title: '¡Bienvenido!',
@@ -44,9 +51,12 @@ export class Login {
             timer: 1500,
             showConfirmButton: false
           }).then(() => {
-            this.router.navigate(['/home']); // Cambia '/home' por tu ruta real
+
+            // 👉 REDIRIGE AL FORO (IMPORTANTE)
+            this.router.navigate(['/foro']); // cambia si tu ruta es otra
           });
         },
+
         error: (err) => {
           Swal.fire({
             icon: 'error',
@@ -54,7 +64,9 @@ export class Login {
             text: 'Credenciales incorrectas o problema de conexión.'
           });
         }
+
       });
     }
   }
+
 }
