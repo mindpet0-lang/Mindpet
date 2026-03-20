@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router'; // 👈 Importamos ActivatedRoute
 import { AuthService } from '../services/auth-service';
 import Swal from 'sweetalert2';
 
@@ -14,20 +14,19 @@ export class Login {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute); // 👈 Inyectamos la ruta activa
 
-  // Definimos la estructura del formulario
   loginForm: FormGroup = this.fb.group({
     correo: ['', [Validators.required, Validators.email]],
     contrasena: ['', Validators.required]
   });
 
-  // Getters para facilitar la lectura en el HTML
   get correo() { return this.loginForm.get('correo'); }
   get contrasena() { return this.loginForm.get('contrasena'); }
 
   onLogin() {
     if (this.loginForm.valid) {
-      // Mostramos un mensaje de espera
+
       Swal.fire({
         title: 'Cargando...',
         didOpen: () => { Swal.showLoading(); }
@@ -35,8 +34,15 @@ export class Login {
 
       this.authService.login(this.loginForm.value).subscribe({
         next: (res) => {
-          Swal.close(); // Cerramos el cargando
-          
+          Swal.close();
+
+          // GUARDAR DATOS DE FORMA SEGURA
+          localStorage.setItem("user_token", res.token || 'true');
+          // Guardamos el objeto completo convertido a texto JSON
+          localStorage.setItem("user", JSON.stringify(res.usuario));
+          // Importante: El Guard suele revisar un token para dejar pasar
+          localStorage.setItem("user_token", res.token || 'true');
+
           Swal.fire({
             icon: 'success',
             title: '¡Bienvenido!',
@@ -44,9 +50,15 @@ export class Login {
             timer: 1500,
             showConfirmButton: false
           }).then(() => {
-            this.router.navigate(['/home']); // Cambia '/home' por tu ruta real
+
+            const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/foro';
+
+            this.router.navigateByUrl(returnUrl);
           });
         },
+
+
+
         error: (err) => {
           Swal.fire({
             icon: 'error',

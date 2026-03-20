@@ -25,7 +25,7 @@
     </div>
   </div>
 </nav>
-<h6 class="display-1 text-left mb-4 sour-gummy" style="padding-top: 15%; padding-left: 5%; padding-right: 10%; font-weight: bold; font-size: 5vw;"><p>cuida tu mente,</p>cuida tu mindpet</h6>
+<h6 class="display-1 text-left mb-4 sour-gummy" style="padding-top: 15%; padding-left: 5%; padding-right: 10%; font-weight: bold; font-size: 5vw;"><p>Cuida tu mente,</p>Cuida tu mindpet</h6>
 <!--End of Nav bar-->
   </div>
 
@@ -93,30 +93,25 @@
   </div>
   </section>
   <!--end of quienes somos?-->
-  <!--descargar-->
+<section id="descargar">
+    <div class="descarga" style="background-image: url('assets/images/fondodes.png');">
+        <h3 class="descargatext mb-5 sour-gummy">¡Gracias por elegir mindpet!</h3>
+        
+        <button class="descargabutton" [routerLink]="['/download']"> 
+            <i class="bi bi-download icono"></i>Descargue aquí
+        </button>
+    </div>
+</section>
 
-    <section id="descargar">
-        <div class="descarga" style="background-image: url('assets/images/fondodes.png');">
-            <h3 class="descargatext mb-5 sour-gummy">¡Gracias por elegir mindpet!</h3>
-            <button class="descargabutton" routerLink="/welcome"> <i class="bi bi-download icono" ></i>Descargue aqui</button>
-        </div>
-    </section>
-
-  <!--end of descargar-->
-  <!--footer-->
-
-    <!--descargar-->
-
-    <section id="foro">
-        <div class="descarga" style="background-image: url('assets/images/fondoforo.png');">
-          <div class="foro">
-             <h3 class="forotext mb-2 sour-gummy">Entra a nuestro foro aqui:</h3>
-            <button class="buttonforo" routerLink="/foro">Entrar</button>
-          </div>
-        </div>
-    </section>
-
-  <!--end of descargar-->
+<section id="foro">
+    <div class="descarga" style="background-image: url('assets/images/fondoforo.png');">
+      <div class="foro1">
+         <h3 class="forotext mb-2 sour-gummy">Entra a nuestro foro aquí:</h3>
+         
+         <button class="buttonforo" [routerLink]="['/foro']">Entrar</button>
+      </div>
+    </div>
+</section>
 
 
   <footer class="footer">

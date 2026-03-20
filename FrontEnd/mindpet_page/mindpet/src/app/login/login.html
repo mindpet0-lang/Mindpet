@@ -1,40 +1,39 @@
-<body  background="assets/images/imagen-terapia.png">
-<div class="main-container">
-  <div class="card">
-    <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
-      <img src="assets/images/logo.png" class="logo" alt="Logo">
+<div class="login-page-wrapper">
+  <div class="main-container">
+    <div class="card">
+      <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+        <img src="assets/images/logo.png" class="logo" alt="Logo">
 
-      <h2>Iniciar sesión</h2>
+        <h2>Iniciar sesión</h2>
 
-      <div class="form-group">
-        <label>Correo</label>
-        <input type="email" 
-               formControlName="correo" 
-               placeholder="ejemplo@correo.com">
-        
-        @if (correo?.invalid && correo?.touched) {
-          <small style="color: red;">Correo inválido</small>
-        }
-      </div>
+        <div class="form-group">
+          <label>Correo</label>
+          <input type="email" 
+                 formControlName="correo" 
+                 placeholder="ejemplo@correo.com">
+          
+          @if (correo?.invalid && correo?.touched) {
+            <small class="error-text">Correo inválido o incompleto</small>
+          }
+        </div>
 
-      <div class="form-group">
-        <label>Contraseña</label>
-        <input type="password" 
-               formControlName="contrasena"
-               placeholder="********">
-        
-        @if (contrasena?.invalid && contrasena?.touched) {
-          <small style="color: red;">La contraseña es requerida</small>
-        }
-      </div>
+        <div class="form-group">
+          <label>Contraseña</label>
+          <input type="password" 
+                 formControlName="contrasena"
+                 placeholder="********">
+          
+          @if (contrasena?.invalid && contrasena?.touched) {
+            <small class="error-text">La contraseña es requerida</small>
+          }
+        </div>
 
-      <button type="submit" [disabled]="loginForm.invalid">
-        Iniciar sesión
-      </button>
+        <button type="submit" [disabled]="loginForm.invalid">
+          Iniciar sesión
+        </button>
 
-      <a class="forgot" href="#">¿Olvidaste la contraseña?</a>
-    </form>
+        <a class="forgot" href="#">¿Olvidaste la contraseña?</a>
+      </form>
+    </div>
   </div>
 </div>
-  
-</body>

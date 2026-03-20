@@ -9,10 +9,11 @@ import { LoginRequest, LoginResponse } from '../models/usuarios.model';
   providedIn: 'root',
 })
 export class AuthService {
-    private API_URL = 'http://localhost:12346/usuarios';
-    
 
-  constructor(private http: HttpClient) {}
+  private API_URL = 'http://localhost:8080/usuarios';
+
+
+  constructor(private http: HttpClient) { }
 
   register(userData: UserRegister): Observable<any> {
     return this.http.post(`${this.API_URL}/register`, userData);
@@ -32,4 +33,15 @@ export class AuthService {
   isLoggedIn(): boolean {
     return !!localStorage.getItem('token');
   }
+
+  logout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+  }
+
+  getUser(): any {
+    const user = localStorage.getItem('user');
+    return user ? JSON.parse(user) : null;
+  }
+
 }
