@@ -88,7 +88,7 @@ login() {
   // ❤️ LIKE CON BACKEND
   toggleLike(postId: number) {
   if (!this.isLoggedIn()) {
-    alert("Inicia sesión 🐾");
+    alert("Para MindPet, tu interacción es importante 🐾\nInicia sesión para dar amor ❤️");
     return;
   }
 
