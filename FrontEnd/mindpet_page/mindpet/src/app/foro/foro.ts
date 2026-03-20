@@ -77,10 +77,147 @@ export class Foro implements OnInit {
   }
 
   loadPosts() {
-    this.foroService.getForos().subscribe((data: Post[]) => {
-      this.posts.set(data);
+    this.foroService.getForos().subscribe((data: any[]) => {
+
+      const postsConvertidos = data.map(f => ({
+        id: f.id,
+        author: f.author,        // 🔥 usa backend real
+        content: f.content,
+        image: f.image,
+        likes: f.likes || []
+      }));
+
+      this.posts.set(postsConvertidos);
     });
   }
 
+<<<<<<< HEAD
   // ... Resto de tus métodos (publishPost, toggleLike, etc.) igual ...
+=======
+  login() {
+    console.log("CLICK FUNCIONA");
+    this.isLoggedIn.set(true);
+    this.currentUser.set('Usuario');
+  }
+
+  // Maneja la carga de imágenes
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.selectedImage = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // 🔥 PUBLICAR
+  publishPost() {
+
+    if (!this.currentUser()) {
+      alert("Debes iniciar sesión");
+      return;
+    }
+
+    if (!this.newPostContent.trim()) return;
+
+    const foro = {
+      author: this.currentUser(),
+      content: this.newPostContent,
+      image: this.selectedImage,
+      likes: []
+    };
+
+    this.foroService.crearForo(foro).subscribe({
+      next: () => {
+        this.loadPosts();
+        this.newPostContent = '';
+        this.selectedImage = null;
+      },
+      error: (err) => {
+        console.error("ERROR BACKEND ❌", err);
+      }
+    });
+  }
+
+  // ❤️ LIKE
+  toggleLike(postId: number) {
+
+    if (!this.isLoggedIn()) {
+      const irLogin = confirm("Debes iniciar sesión para dar like 🐾\n\n¿Quieres ir a iniciar sesión?");
+
+      if (irLogin) {
+        window.location.href = "/login";
+      }
+      return;
+    }
+
+    const user = this.currentUser();
+
+    if (!user) {
+      alert("Error con el usuario");
+      return;
+    }
+
+    this.posts.update((posts) =>
+      posts.map((p) => {
+        if (p.id === postId) {
+
+          const hasLiked = p.likes.includes(user);
+
+          return {
+            ...p,
+            likes: hasLiked
+              ? p.likes.filter((u) => u !== user)
+              : [...p.likes, user],
+          };
+        }
+        return p;
+      })
+    );
+  }
+
+  // 🗑️ ELIMINAR POST
+  eliminarPost(id: number) {
+    const confirmacion = confirm("¿Seguro que quieres eliminar este post?");
+
+    if (!confirmacion) return;
+
+    this.foroService.eliminarForo(id).subscribe({
+      next: () => {
+        this.loadPosts();
+      },
+      error: (err: any) => {
+        console.error("Error eliminando ❌", err);
+      }
+    });
+  }
+
+  // ✏️ ACTIVAR EDICIÓN
+  editarPost(post: Post) {
+    this.editandoPostId = post.id;
+    this.editContent = post.content;
+  }
+
+  // 💾 GUARDAR EDICIÓN
+  guardarEdicion(post: Post) {
+
+    const actualizado: Post = {
+      ...post,
+      content: this.editContent
+    };
+
+    this.foroService.actualizarForo(post.id, actualizado).subscribe({
+      next: () => {
+        this.editandoPostId = null;
+        this.editContent = '';
+        this.loadPosts();
+      },
+      error: (err) => {
+        console.error("Error editando ❌", err);
+      }
+    });
+  }
+>>>>>>> e35108e6ff23b1f81e61221c2308386b9ed058b9
 }

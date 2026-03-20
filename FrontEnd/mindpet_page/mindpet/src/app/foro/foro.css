@@ -1,14 +1,15 @@
-/* ===== FONDO ===== */
 .forum-wrapper {
   min-height: 100vh;
-  background-image: url('/assets/images/fondoForo1.png'); /* 👈 ARREGLADO */
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+
+  background: 
+    url('/assets/images/fondoForo1.png') no-repeat center bottom / cover;
+
   background-attachment: fixed;
-  position: relative;
+  overflow: auto;
 }
-/* capa oscura elegante BIEN hecha */
+
+
+/* capa oscura */
 .forum-wrapper::before {
   content: "";
   position: fixed;
@@ -155,4 +156,244 @@
   padding: 8px 15px;
   border-radius: 20px;
   cursor: pointer;
+}
+/* capa oscura */
+.forum-wrapper::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+}
+
+/* TODO encima del fondo */
+.forum-wrapper > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== NAV ===== */
+.mindpet-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  color: rgb(0, 0, 0);
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.user-badge {
+  background: rgba(255,255,255,0.2);
+  padding: 6px 12px;
+  border-radius: 20px;
+  backdrop-filter: blur(5px);
+}
+
+/* ===== CONTENIDO ===== */
+.content-container {
+  max-width: 600px;
+  margin: 30px auto;
+  color: rgb(0, 0, 0);
+}
+
+/* ===== CARDS PRO ===== */
+.card {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(255,255,255,0.2);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+  transition: all 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+}
+
+/* ===== TEXTAREA ===== */
+.textarea {
+  width: 100%;
+  border: none;
+  resize: none;
+  outline: none;
+  font-size: 15px;
+  padding: 10px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.2);
+  color: rgb(0, 0, 0);
+}
+
+.textarea::placeholder {
+  color: rgba(5, 5, 5, 0.7);
+}
+
+/* ===== BOTONES ===== */
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.btn-publish {
+  background: #3f6d8c;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.btn-publish:hover {
+  background: #2f556e;
+}
+
+/* ===== POSTS ===== */
+.post-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  background: linear-gradient(135deg, #5fa8d3, #3f6d8c);
+  color: rgb(0, 0, 0);
+  border-radius: 50%;
+  padding: 10px;
+  font-size: 14px;
+}
+
+.post-body {
+  margin: 10px 0;
+  color: rgb(0, 0, 0);
+}
+
+/* ===== IMAGEN ===== */
+.post-image {
+  width: 100%;
+  border-radius: 15px;
+  margin-top: 10px;
+}
+
+/* ===== LIKE ===== */
+.post-footer {
+  margin-top: 10px;
+}
+
+.like-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: rgb(0, 0, 0);
+  font-size: 16px;
+}
+
+.liked {
+  color: red;
+}
+
+.btn-login{
+  background: #1e1e1e;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+/* ===== ACCIONES (EDITAR / ELIMINAR) ===== */
+.post-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* BOTÓN EDITAR */
+.btn-edit {
+  background: rgba(91, 200, 228, 0.973);
+  border: none;
+  padding: 6px 12px;
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: 13px;
+  backdrop-filter: blur(5px);
+  transition: all 0.2s ease;
+}
+
+.btn-edit:hover {
+  background: #35e570;
+  color: white;
+  transform: scale(1.05);
+}
+
+/* BOTÓN ELIMINAR */
+.btn-delete {
+  background: rgba(91, 200, 228, 0.973);
+  border: none;
+  padding: 6px 12px;
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: 13px;
+  backdrop-filter: blur(5px);
+  transition: all 0.2s ease;
+}
+
+.btn-delete:hover {
+  background: #35e570;
+  color: white;
+  transform: scale(1.05);
+}
+
+.acciones-edicion {
+  display: flex;
+  gap: 12px;              /* 🔥 separación entre botones */
+  margin-top: 10px;       /* 🔥 los baja debajo del texto */
+}
+
+/* BOTÓN GUARDAR */
+.botonguardar {
+  background: #3f6d8c;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.botonguardar:hover {
+  background: #2ecc71;
+  transform: scale(1.05);
+}
+
+/* BOTÓN CANCELAR */
+.botoncancelar {
+  background: rgba(255,255,255,0.2);
+  color: black;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.botoncancelar:hover {
+  background: #e74c3c;
+  color: white;
+  transform: scale(1.05);
 }

@@ -38,16 +38,13 @@
 
     <!-- CREAR POST -->
     <div class="post-box card" *ngIf="isLoggedIn()">
-      <textarea 
-        [(ngModel)]="newPostContent" 
-        placeholder="¿Cómo te sientes hoy?" 
-        class="textarea">
+      <textarea [(ngModel)]="newPostContent" placeholder="¿Cómo te sientes hoy?" class="textarea">
       </textarea>
 
       <div class="actions">
         <input type="file" (change)="onFileSelected($event)" hidden #fileInput>
 
-        <button class="btn-outline btn btn-dark"  (click)="fileInput.click()">
+        <button class="btn-outline btn btn-dark" (click)="fileInput.click()">
           📸 Añadir Foto
         </button>
 
@@ -76,11 +73,11 @@
         </p>
 
         <!-- MODO EDICIÓN -->
-        <div *ngIf="editandoPostId === post.id">
+        <div *ngIf="editandoPostId === post.id" class="acciones-edicion">
           <textarea [(ngModel)]="editContent"></textarea>
 
-          <button (click)="guardarEdicion(post)">💾 Guardar</button>
-          <button (click)="editandoPostId = null">❌ Cancelar</button>
+          <button (click)="guardarEdicion(post)" class="botonguardar">Guardar</button>
+          <button (click)="editandoPostId = null" class="botoncancelar">Cancelar</button>
         </div>
 
         <!-- IMAGEN -->
@@ -90,20 +87,21 @@
         <div class="post-footer">
 
           <!-- ❤️ LIKE -->
-          <button 
-            (click)="toggleLike(post.id)" 
-            class="like-btn"
-            [class.liked]="post.likes.includes(currentUser()!)">
+          <button (click)="toggleLike(post.id)" class="like-btn" [class.liked]="post.likes.includes(currentUser()!)">
 
             ❤️ {{ post.likes.length || 0 }}
           </button>
 
-          <!-- ✏️🗑️ SOLO SI ES TU POST -->
-          <div *ngIf="post.author === currentUser()" class="owner-actions">
+          <!-- editar y eliminar SOLO SI ES TU POST -->
+          <div class="post-actions" *ngIf="currentUser() === post.author">
 
-            <button (click)="editarPost(post)">✏️</button>
+            <button class="btn-edit" (click)="editarPost(post)">
+              ✏️ Editar
+            </button>
 
-            <button (click)="eliminarPost(post.id)">🗑️</button>
+            <button class="btn-delete" (click)="eliminarPost(post.id)">
+              🗑 Eliminar
+            </button>
 
           </div>
 
