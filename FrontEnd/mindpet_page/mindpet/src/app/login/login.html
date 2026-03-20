@@ -10,7 +10,7 @@
         <label>Correo</label>
         <input type="email" 
                formControlName="correo" 
-               placeholder="ejemplo@correo.com">
+       >
         
         @if (correo?.invalid && correo?.touched) {
           <small style="color: red;">Correo inválido</small>
@@ -21,7 +21,7 @@
         <label>Contraseña</label>
         <input type="password" 
                formControlName="contrasena"
-               placeholder="********">
+        >
         
         @if (contrasena?.invalid && contrasena?.touched) {
           <small style="color: red;">La contraseña es requerida</small>

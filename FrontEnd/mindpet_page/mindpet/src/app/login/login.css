@@ -80,3 +80,14 @@ button:hover {
     padding: 30px;
   }
 }
+
+.input-container {
+  position: relative;
+  width: 100%;
+}
+
+.input-mindpet {
+  width: 100%;
+  padding-right: 40px; /* espacio para el ojito */
+}
+

@@ -104,18 +104,24 @@ mostrarPasswordC = false;
     return null;
   }
 
-   handleSubmit() {
+ handleSubmit() {
   if (this.registerForm.valid) {
+    // Extraemos los datos, quitando la confirmación de contraseña para la API
     const { contrasenaC, ...userData } = this.registerForm.value;
+
+    // Mostramos un pequeño loading para que el usuario sepa que algo pasa
+    Swal.fire({
+      title: 'Procesando...',
+      didOpen: () => { Swal.showLoading(); }
+    });
 
     this.authService.register(userData).subscribe({
       next: (response) => {
-        
+        // Registro exitoso
         Swal.fire({
           title: '¡Registro Exitoso!',
           text: `Bienvenido/a ${userData.nombre}, tu cuenta ha sido creada.`,
-          imageUrl: 'assets/images/logo.png', 
-          imageHeight: '150px',
+          icon: 'success',
           confirmButtonText: 'Genial',
           confirmButtonColor: '#62C6E2', 
           backdrop: `
@@ -131,14 +137,27 @@ mostrarPasswordC = false;
         });
       },
       error: (err) => {
+        // --- AQUÍ ESTÁ EL CAMBIO ---
+        // Intentamos obtener el mensaje de error que viene de Spring Boot
+        // Puede venir como err.error.message o err.error
+        const mensajeError = err.error?.message || err.error || 'No se pudo completar el registro. Intenta más tarde.';
 
         Swal.fire({
-          title: 'Error',
-          text: 'No se pudo completar el registro. Intenta más tarde.',
+          title: '¡Ups!',
+          text: mensajeError, // Mostrará: "El correo ya está registrado"
           icon: 'error',
-          confirmButtonText: 'Entendido'
+          confirmButtonText: 'Entendido',
+          confirmButtonColor: '#d33'
         });
       }
+    });
+  } else {
+    // Si el formulario no es válido pero intentaron enviarlo
+    Swal.fire({
+      title: 'Formulario incompleto',
+      text: 'Por favor, revisa que todos los campos estén correctos.',
+      icon: 'warning',
+      confirmButtonColor: '#f8bb86'
     });
   }
 }
