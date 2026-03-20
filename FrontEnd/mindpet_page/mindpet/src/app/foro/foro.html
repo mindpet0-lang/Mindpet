@@ -4,13 +4,33 @@
   <nav class="mindpet-nav">
     <span class="logo">🐾 MindPet</span>
 
-    <button *ngIf="!isLoggedIn()" (click)="login()" class="btn-login">
+    <button *ngIf="!isLoggedIn()" (click)="login()" class="btn-login" routerLink="/login">
       Entrar
     </button>
 
     <span *ngIf="isLoggedIn()" class="user-badge">
       Hola, {{ currentUser() }}
     </span>
+
+    <div class="profile-header">
+  <div class="account-container" (click)="onProfileClick()">
+    <span class="material-icons">account_circle</span>
+  </div>
+
+  <div class="user-menu" *ngIf="isMenuOpen && user">
+    <div class="user-info">
+      <p class="user-name">{{ user.nombre }}</p>
+      <p class="user-email">{{ user.correo }}</p>
+    </div>
+    <hr>
+    <button class="btn-logout" (click)="onLogout()">
+      <span class="material-icons">logout</span>
+      Cerrar sesión
+    </button>
+  </div>
+</div>
+      
+  </div>
   </nav>
 
   <!-- CONTENIDO -->

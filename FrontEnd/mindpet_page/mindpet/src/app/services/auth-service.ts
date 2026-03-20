@@ -10,16 +10,16 @@ import { LoginRequest, LoginResponse } from '../models/usuarios.model';
 })
 export class AuthService {
 
-    private API_URL = 'http://localhost:8080/usuarios';
+  private API_URL = 'http://localhost:8080/usuarios';
 
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   register(userData: UserRegister): Observable<any> {
     return this.http.post(`${this.API_URL}/register`, userData);
   }
 
-  login (credentials: LoginRequest): Observable<LoginResponse> {
+  login(credentials: LoginRequest): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.API_URL}/login`, credentials).pipe(
       tap(res => {
         // Guardamos el token en el almacenamiento local del navegador
@@ -33,5 +33,15 @@ export class AuthService {
   isLoggedIn(): boolean {
     return !!localStorage.getItem('token');
   }
-  
+
+  logout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+  }
+
+  getUser(): any {
+    const user = localStorage.getItem('user');
+    return user ? JSON.parse(user) : null;
+  }
+
 }
