@@ -1,63 +1,158 @@
+/* ===== FONDO ===== */
 .forum-wrapper {
-  background-color: #f7f9fc;
   min-height: 100vh;
-  font-family: 'Outfit', sans-serif;
+  background-image: url('/assets/images/fondoForo1.png'); /* 👈 ARREGLADO */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  position: relative;
+}
+/* capa oscura elegante BIEN hecha */
+.forum-wrapper::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
 }
 
+/* TODO encima del fondo */
+.forum-wrapper > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== NAV ===== */
 .mindpet-nav {
   display: flex;
   justify-content: space-between;
-  padding: 1rem 10%;
-  background: white;
   align-items: center;
-  border-bottom: 2px solid #eef2f6;
+  padding: 15px 30px;
+  color: rgb(0, 0, 0);
 }
 
-.card {
-  background: white;
-  border-radius: 24px;
-  padding: 20px;
-  box-shadow: 0 10px 30px rgba(168, 218, 220, 0.1);
-  margin-bottom: 20px;
+.logo {
+  font-weight: bold;
+  font-size: 20px;
 }
 
+.user-badge {
+  background: rgba(255,255,255,0.2);
+  padding: 6px 12px;
+  border-radius: 20px;
+  backdrop-filter: blur(5px);
+}
+
+/* ===== CONTENIDO ===== */
 .content-container {
   max-width: 600px;
   margin: 30px auto;
+  color: rgb(0, 0, 0);
 }
 
-textarea {
+/* ===== CARDS PRO ===== */
+.card {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(255,255,255,0.2);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+  transition: all 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+}
+
+/* ===== TEXTAREA ===== */
+.textarea {
   width: 100%;
   border: none;
-  font-size: 1.1rem;
+  resize: none;
   outline: none;
-  background: #fbfcfd;
+  font-size: 15px;
+  padding: 10px;
   border-radius: 12px;
-  padding: 15px;
+  background: rgba(255,255,255,0.2);
+  color: rgb(0, 0, 0);
+}
+
+.textarea::placeholder {
+  color: rgba(5, 5, 5, 0.7);
+}
+
+/* ===== BOTONES ===== */
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
 }
 
 .btn-publish {
-  background: #457b9d;
+  background: #3f6d8c;
   color: white;
   border: none;
-  padding: 10px 25px;
-  border-radius: 30px;
+  padding: 8px 15px;
+  border-radius: 20px;
   cursor: pointer;
-  font-weight: 600;
 }
 
+.btn-publish:hover {
+  background: #2f556e;
+}
+
+/* ===== POSTS ===== */
+.post-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  background: linear-gradient(135deg, #5fa8d3, #3f6d8c);
+  color: rgb(0, 0, 0);
+  border-radius: 50%;
+  padding: 10px;
+  font-size: 14px;
+}
+
+.post-body {
+  margin: 10px 0;
+  color: rgb(0, 0, 0);
+}
+
+/* ===== IMAGEN ===== */
 .post-image {
   width: 100%;
-  border-radius: 18px;
-  margin: 15px 0;
+  border-radius: 15px;
+  margin-top: 10px;
+}
+
+/* ===== LIKE ===== */
+.post-footer {
+  margin-top: 10px;
+}
+
+.like-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: white;
+  font-size: 16px;
 }
 
 .liked {
-  color: #e63946;
-  font-weight: bold;
+  color: red;
 }
 
-button {
-  transition: all 0.3s ease;
+.btn-login{
+  background: #1e1e1e;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 20px;
   cursor: pointer;
 }

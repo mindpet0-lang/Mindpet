@@ -3,9 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface Foro {
-  id?: number;
-  titulo: string;
-  descripcion: string;
+  id: number;
+  author: string;
+  content: string;
+  image?: string;
+  likes: string[];
 }
 
 @Injectable({

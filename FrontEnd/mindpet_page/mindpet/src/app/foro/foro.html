@@ -1,36 +1,73 @@
 <div class="forum-wrapper">
+
+
+  <!-- NAV -->
   <nav class="mindpet-nav">
-    <span class="logo">MindPet 🐾</span>
-    <button *ngIf="!isLoggedIn()" (click)="login()" class="btn-login">Entrar</button>
-    <span *ngIf="isLoggedIn()" class="user-badge">Hola, {{ currentUser() }}</span>
+    <span class="logo">🐾 MindPet</span>
+
+    <button (click)="login()" class="btn-login">
+      Entrar
+    </button>
+
+    <span *ngIf="isLoggedIn()" class="user-badge">
+      Hola, {{ currentUser() }}
+    </span>
   </nav>
 
+  <!-- CONTENIDO -->
   <div class="content-container">
+
+    <!-- CREAR POST -->
     <div class="post-box card" *ngIf="isLoggedIn()">
-      <textarea [(ngModel)]="newPostContent" placeholder="¿Cómo te sientes hoy?"></textarea>
+      <textarea [(ngModel)]="newPostContent" placeholder="¿Cómo te sientes hoy?" class="textarea">
+      </textarea>
+
       <div class="actions">
-        <input type="file" (change)="onFileSelected($event)" id="img-input" hidden #fileInput>
-        <button class="btn-outline ml-3" (click)="fileInput.click()" style="border: none; background-color: white;">📸 Añadir Foto</button>
-        <button (click)="publishPost()" class="btn-publish">Publicar</button>
+        <input type="file" (change)="onFileSelected($event)" hidden #fileInput>
+
+        <button class="btn-outline" (click)="fileInput.click()">
+          📸 Añadir Foto
+        </button>
+
+        <button (click)="publishPost()" class="btn-publish">
+          Publicar
+        </button>
       </div>
+
       <img *ngIf="selectedImage" [src]="selectedImage" class="preview-img">
     </div>
 
+    <!-- FEED -->
     <div class="feed">
+
       <div *ngFor="let post of posts()" class="post-card card">
+
+        <!-- HEADER -->
         <div class="post-header">
-          <div class="avatar"></div>
-          <strong>{{ post.author }}</strong>
+          <div class="avatar">👤</div>
+          <strong>{{ post.author || 'Usuario' }}</strong>
         </div>
-        <p class="post-body">{{ post.content }}</p>
+
+        <!-- CONTENIDO -->
+        <p class="post-body">
+          {{ post.content || 'Sin contenido' }}
+        </p>
+
+        <!-- IMAGEN -->
         <img *ngIf="post.image" [src]="post.image" class="post-image">
-        
+
+        <!-- FOOTER -->
         <div class="post-footer">
-          <button (click)="toggleLike(post.id)" style="border: none;" [class.liked]="post.likes.includes(currentUser() || '')">
-            ❤ {{ post.likes.length }}
+          <button (click)="toggleLike(post.id)" class="like-btn"
+            [class.liked]="post.likes.includes(currentUser() || '')">
+
+            ❤️ {{ post.likes.length || 0 }}
           </button>
         </div>
+
       </div>
+
     </div>
+
   </div>
 </div>

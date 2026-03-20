@@ -24,7 +24,7 @@ export class Foro implements OnInit {
   newPostContent: string = '';
   selectedImage: string | null = null;
 
-  constructor(private foroService: ForoService) {}
+  constructor(private foroService: ForoService) { }
 
   ngOnInit() {
     this.loadPosts();
@@ -32,22 +32,16 @@ export class Foro implements OnInit {
 
   // 🔥 TRAER POSTS DESDE BACKEND
   loadPosts() {
-    this.foroService.getForos().subscribe((data: any[]) => {
-      const postsConvertidos: Post[] = data.map((f) => ({
-        id: f.id,
-        author: f.titulo,       
-        content: f.descripcion,
-        image: '',
-        likes: [],
-      }));
-
-      this.posts.set(postsConvertidos);
+    this.foroService.getForos().subscribe((data: Post[]) => {
+      this.posts.set(data); // 🔥 DIRECTO
     });
   }
-  login() {
-    this.isLoggedIn.set(true);
-    this.currentUser.set('Usuario');
-  }
+
+login() {
+  console.log("CLICK FUNCIONA");
+  this.isLoggedIn.set(true);
+  this.currentUser.set('Usuario');
+}
 
   // Maneja la carga de imágenes desde el input file
   onFileSelected(event: any) {
@@ -63,54 +57,57 @@ export class Foro implements OnInit {
 
   // 🔥 PUBLICAR EN BACKEND
   publishPost() {
-  if (!this.currentUser()) {
-    alert("Debes iniciar sesión");
-    return;
-  }
-
-  if (!this.newPostContent.trim()) return;
-
-  console.log("Enviando:", this.newPostContent);
-
-  const foro = {
-    titulo: this.currentUser(),
-    descripcion: this.newPostContent
-  };
-
-  this.foroService.crearForo(foro).subscribe({
-    next: () => {
-      console.log("POST CREADO ✅");
-      this.loadPosts();
-      this.newPostContent = '';
-      this.selectedImage = null;
-    },
-    error: (err) => {
-      console.error("ERROR BACKEND ❌", err);
-    }
-  });
-}
-
-  // ❤️ LIKE CON BACKEND
-  toggleLike(postId: number) {
-    const user = this.currentUser()!;
-     if (!this.isLoggedIn()) {
-      alert("Para MindPet, tu interacción es importante. ¡Inicia sesión para dar amor! 🐾");
+    if (!this.currentUser()) {
+      alert("Debes iniciar sesión");
       return;
     }
 
-    this.posts.update((posts) =>
-      posts.map((p) => {
-        if (p.id === postId) {
-          const hasLiked = p.likes.includes(user);
-          return {
-            ...p,
-            likes: hasLiked ? p.likes.filter((u) => u !== user) : [...p.likes, user],
-          };
-        }
-        return p;
-      }),
-    );
+    if (!this.newPostContent.trim()) return;
+
+    const foro: Post = {
+      id: 0,
+      author: this.currentUser()!,
+      content: this.newPostContent,
+      image: this.selectedImage || '',
+      likes: []
+    };
+
+    this.foroService.crearForo(foro).subscribe({
+      next: () => {
+        console.log("POST CREADO ✅");
+        this.loadPosts();
+        this.newPostContent = '';
+        this.selectedImage = null;
+      },
+      error: (err) => {
+        console.error("ERROR BACKEND ❌", err);
+      }
+    });
   }
 
-  
+  // ❤️ LIKE CON BACKEND
+  toggleLike(postId: number) {
+  if (!this.isLoggedIn()) {
+    alert("Inicia sesión 🐾");
+    return;
+  }
+
+  const user = this.currentUser()!;
+  const post = this.posts().find(p => p.id === postId);
+  if (!post) return;
+
+  const hasLiked = post.likes.includes(user);
+
+  const updatedPost: Post = {
+    ...post,
+    likes: hasLiked
+      ? post.likes.filter(u => u !== user)
+      : [...post.likes, user]
+  };
+
+  this.foroService.actualizarForo(post.id, updatedPost).subscribe(() => {
+    this.loadPosts(); // 🔥 sincroniza con BD
+  });
+}
+
 }

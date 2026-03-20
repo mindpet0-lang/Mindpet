@@ -1,5 +1,7 @@
 export interface Foro {
-  id?: number; 
-  titulo: string;
-  descripcion: string;
+  id?: number;
+  author: string;
+  content: string;
+  image?: string;
+  likes: string[];
 }
