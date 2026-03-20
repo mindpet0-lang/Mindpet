@@ -289,7 +289,7 @@
   border: none;
   background: transparent;
   cursor: pointer;
-  color: white;
+  color: rgb(0, 0, 0);
   font-size: 16px;
 }
 
@@ -353,6 +353,47 @@ html, body {
 
 .btn-delete:hover {
   background: #35e570;
+  color: white;
+  transform: scale(1.05);
+}
+
+.acciones-edicion {
+  display: flex;
+  gap: 12px;              /* 🔥 separación entre botones */
+  margin-top: 10px;       /* 🔥 los baja debajo del texto */
+}
+
+/* BOTÓN GUARDAR */
+.botonguardar {
+  background: #3f6d8c;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.botonguardar:hover {
+  background: #2ecc71;
+  transform: scale(1.05);
+}
+
+/* BOTÓN CANCELAR */
+.botoncancelar {
+  background: rgba(255,255,255,0.2);
+  color: black;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.botoncancelar:hover {
+  background: #e74c3c;
   color: white;
   transform: scale(1.05);
 }

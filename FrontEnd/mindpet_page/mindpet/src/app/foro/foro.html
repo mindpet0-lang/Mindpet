@@ -53,11 +53,11 @@
         </p>
 
         <!-- MODO EDICIÓN -->
-        <div *ngIf="editandoPostId === post.id">
+        <div *ngIf="editandoPostId === post.id" class="acciones-edicion">
           <textarea [(ngModel)]="editContent"></textarea>
 
-          <button (click)="guardarEdicion(post)">💾 Guardar</button>
-          <button (click)="editandoPostId = null">❌ Cancelar</button>
+          <button (click)="guardarEdicion(post)" class="botonguardar">Guardar</button>
+          <button (click)="editandoPostId = null" class="botoncancelar">Cancelar</button>
         </div>
 
         <!-- IMAGEN -->
