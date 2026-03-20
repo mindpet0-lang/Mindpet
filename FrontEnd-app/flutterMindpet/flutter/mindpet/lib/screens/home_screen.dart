@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/pet.dart';
 import '../widgets/top_status_bar.dart';
+import '../widgets/bottom_menu.dart';
 
 class HomeScreen extends StatelessWidget {
 
@@ -22,7 +23,7 @@ class HomeScreen extends StatelessWidget {
 
           /// FONDO
           Image.asset(
-            "assets/sala.png",
+            "assets/images/sala.png",
             width: double.infinity,
             height: double.infinity,
             fit: BoxFit.cover,
@@ -39,7 +40,7 @@ class HomeScreen extends StatelessWidget {
           /// MASCOTA
           Center(
             child: Image.asset(
-              "assets/pet.png",
+              "assets/images/pet.png",
               width: 200,
             ),
           ),
@@ -49,7 +50,7 @@ class HomeScreen extends StatelessWidget {
             bottom: 40,
             left: 0,
             right: 0,
-            child: menu(controller,0),
+            child: bottomMenu(controller,0),
           ),
 
         ],
@@ -58,48 +59,3 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-Widget menu(PageController controller, int currentPage) {
-
-  Widget buildIcon(IconData icon, int page) {
-
-    bool activo = currentPage == page;
-
-    return GestureDetector(
-      onTap: () {
-        controller.animateToPage(
-          page,
-          duration: const Duration(milliseconds: 400),
-          curve: Curves.easeInOut,
-        );
-      },
-
-      child: Container(
-        padding: const EdgeInsets.all(10),
-
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: activo ? Color.fromARGB(255, 81, 196, 255) : Colors.transparent,
-        ),
-
-        child: Icon(
-          icon,
-          size: 35,
-          color: activo ? Colors.black : const Color.fromARGB(255, 0, 0, 0),
-        ),
-      ),
-    );
-  }
-
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    children: [
-
-      buildIcon(Icons.home, 0),
-      buildIcon(Icons.shower, 1),
-      buildIcon(Icons.fastfood, 2),
-      buildIcon(Icons.nightlight_round, 3),
-      buildIcon(Icons.sports_esports, 4),
-
-    ],
-  );
-}

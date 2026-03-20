@@ -36,6 +36,8 @@ dependencies:
   provider: ^6.1.2
   percent_indicator: ^4.2.3
   shared_preferences: ^2.2.2
+  audioplayers: ^5.2.1
+  vibration: ^1.8.4
 
 
 
@@ -55,22 +57,24 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  uses-material-design: true
+
   assets:
-    - assets/pet.png
-    - assets/pet_bath.png
-    - assets/sala.png
-    - assets/bano.png
-    - assets/game.png
-    - assets/kitchen.png
-    - assets/pet_eat.png
-    - assets/pet_play.png
-    - assets/pet_sleep.png
-    - assets/sleep.png
+    - assets/images/pet.png
+    - assets/images/pet_bath.png
+    - assets/images/sala.png
+    - assets/images/bano.png
+    - assets/images/game.png
+    - assets/images/kitchen.png
+    - assets/images/pet_eat.png
+    - assets/images/pet_play.png
+    - assets/images/pet_sleep.png
+    - assets/images/sleep.png
+    - assets/sounds/click.mp3
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
-  uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
   # assets:
