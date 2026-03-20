@@ -1,52 +1,50 @@
 <div class="forum-wrapper">
 
-  <!-- NAV11 -->
   <nav class="mindpet-nav">
-    <span class="logo">🐾 MindPet</span>
+    <span class="logo" routerLink="/download" style="cursor:pointer">🐾 MindPet</span>
 
-    <button *ngIf="!isLoggedIn()" (click)="login()" class="btn-login" routerLink="/login">
-      Entrar
-    </button>
-
-    <span *ngIf="isLoggedIn()" class="user-badge">
-      Hola, {{ currentUser() }}
-    </span>
-
-    <div class="profile-header">
-  <div class="account-container" (click)="onProfileClick()">
-    <span class="material-icons">account_circle</span>
-  </div>
-
-  <div class="user-menu" *ngIf="isMenuOpen && user">
-    <div class="user-info">
-      <p class="user-name">{{ user.nombre }}</p>
-      <p class="user-email">{{ user.correo }}</p>
-    </div>
-    <hr>
-    <button class="btn-logout" (click)="onLogout()">
-      <span class="material-icons">logout</span>
-      Cerrar sesión
-    </button>
-  </div>
-</div>
+    <div class="nav-right" style="display: flex; align-items: center; gap: 15px;">
       
-  </div>
+      <button *ngIf="!isLoggedIn()" (click)="login()" class="btn-login" routerLink="/login">
+        Entrar
+      </button>
+
+      <ng-container *ngIf="isLoggedIn()">
+        <span class="user-badge">
+          Hola, {{ currentUser() }}
+        </span>
+
+        <div class="profile-header" style="position: relative;">
+          <div class="account-container" (click)="onProfileClick()" style="cursor: pointer;">
+            <span class="material-icons">account_circle</span>
+          </div>
+
+          <div class="user-menu" *ngIf="isMenuOpen && user" 
+               style="position: absolute; top: 50px; right: 0; background: white; min-width: 200px; padding: 15px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); z-index: 100;">
+            <div class="user-info">
+              <p class="user-name" style="font-weight: bold; margin: 0; color: #333; text-align: left;">{{ user.nombre }}</p>
+              <p class="user-email" style="font-size: 0.85rem; color: #777; margin: 5px 0; text-align: left;">{{ user.correo }}</p>
+            </div>
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 10px 0;">
+            <button class="btn-logout" (click)="onLogout()" 
+                    style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; background: none; border: 1px solid #ccc; padding: 8px; border-radius: 8px; cursor: pointer; color: #d32f2f; font-weight: bold;">
+              <span class="material-icons" style="font-size: 18px;">logout</span>
+              Cerrar sesión
+            </button>
+          </div>
+        </div>
+      </ng-container>
+    </div>
   </nav>
 
-  <!-- CONTENIDO -->
   <div class="content-container">
 
-    <!-- CREAR POST -->
     <div class="post-box card" *ngIf="isLoggedIn()">
-      <textarea [(ngModel)]="newPostContent" placeholder="¿Cómo te sientes hoy?" class="textarea">
-      </textarea>
+      <textarea [(ngModel)]="newPostContent" placeholder="¿Cómo te sientes hoy?" class="textarea"></textarea>
 
       <div class="actions">
         <input type="file" (change)="onFileSelected($event)" hidden #fileInput>
 
-        <button class="btn-outline btn btn-dark" (click)="fileInput.click()">
-          📸 Añadir Foto
-        </button>
 
         <button (click)="publishPost()" class="btn-publish">
           Publicar
@@ -56,53 +54,42 @@
       <img *ngIf="selectedImage" [src]="selectedImage" class="preview-img">
     </div>
 
-    <!-- FEED -->
     <div class="feed">
 
       <div *ngFor="let post of posts()" class="post-card card">
 
-        <!-- HEADER -->
         <div class="post-header">
           <div class="avatar">👤</div>
           <strong>{{ post.author || 'Usuario' }}</strong>
         </div>
 
-        <!-- CONTENIDO NORMAL -->
         <p *ngIf="editandoPostId !== post.id" class="post-body">
           {{ post.content || 'Sin contenido' }}
         </p>
 
-        <!-- MODO EDICIÓN -->
         <div *ngIf="editandoPostId === post.id" class="acciones-edicion">
-          <textarea [(ngModel)]="editContent"></textarea>
-
-          <button (click)="guardarEdicion(post)" class="botonguardar">Guardar</button>
-          <button (click)="editandoPostId = null" class="botoncancelar">Cancelar</button>
+          <textarea [(ngModel)]="editContent" class="textarea-edit"></textarea>
+          <div class="edit-buttons">
+            <button (click)="guardarEdicion(post)" class="botonguardar">Guardar</button>
+            <button (click)="editandoPostId = null" class="botoncancelar">Cancelar</button>
+          </div>
         </div>
 
-        <!-- IMAGEN -->
         <img *ngIf="post.image" [src]="post.image" class="post-image">
 
-        <!-- FOOTER -->
         <div class="post-footer">
 
-          <!-- ❤️ LIKE -->
           <button (click)="toggleLike(post.id)" class="like-btn" [class.liked]="post.likes.includes(currentUser()!)">
-
             ❤️ {{ post.likes.length || 0 }}
           </button>
 
-          <!-- editar y eliminar SOLO SI ES TU POST -->
           <div class="post-actions" *ngIf="currentUser() === post.author">
-
             <button class="btn-edit" (click)="editarPost(post)">
               ✏️ Editar
             </button>
-
             <button class="btn-delete" (click)="eliminarPost(post.id)">
               🗑 Eliminar
             </button>
-
           </div>
 
         </div>
