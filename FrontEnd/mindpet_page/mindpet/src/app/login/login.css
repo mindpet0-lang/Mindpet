@@ -3,6 +3,7 @@ body {
   background-size: cover;
   background-position: center;
 }
+
 .main-container {
   height: 100vh;
   display: flex;

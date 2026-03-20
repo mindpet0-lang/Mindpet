@@ -1,27 +1,40 @@
-<body background="assets/images/imagen-terapia.png">
+<body  background="assets/images/imagen-terapia.png">
 <div class="main-container">
-
   <div class="card">
-    <form >
-    <img src="assets/images/logo.png" class="logo" alt="Logo">
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+      <img src="assets/images/logo.png" class="logo" alt="Logo">
 
-    <h2>Iniciar sesión</h2>
+      <h2>Iniciar sesión</h2>
 
-    <div class="form-group">
-      <label>Correo</label>
-      <input type="email" >
-    </div>
+      <div class="form-group">
+        <label>Correo</label>
+        <input type="email" 
+               formControlName="correo" 
+               placeholder="ejemplo@correo.com">
+        
+        @if (correo?.invalid && correo?.touched) {
+          <small style="color: red;">Correo inválido</small>
+        }
+      </div>
 
-    <div class="form-group">
-      <label>Contraseña</label>
-      <input type="password">
-    </div>
+      <div class="form-group">
+        <label>Contraseña</label>
+        <input type="password" 
+               formControlName="contrasena"
+               placeholder="********">
+        
+        @if (contrasena?.invalid && contrasena?.touched) {
+          <small style="color: red;">La contraseña es requerida</small>
+        }
+      </div>
 
-    <button type="submit">Iniciar sesión</button>
+      <button type="submit" [disabled]="loginForm.invalid">
+        Iniciar sesión
+      </button>
 
-    <a class="forgot" href="#">¿Olvidaste la contraseña?</a>
+      <a class="forgot" href="#">¿Olvidaste la contraseña?</a>
     </form>
   </div>
-
 </div>
+  
 </body>

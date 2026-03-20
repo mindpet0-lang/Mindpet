@@ -13,6 +13,8 @@ import Swal from 'sweetalert2';
 export class Register {
   private authService = inject(AuthService);
   private router = inject(Router);
+  mostrarPassword = false;
+mostrarPasswordC = false;
 
   registerForm: FormGroup;
 
