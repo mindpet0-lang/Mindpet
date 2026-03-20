@@ -44,8 +44,17 @@ export class Foro implements OnInit {
 
   // 🔥 TRAER POSTS DESDE BACKEND
   loadPosts() {
-    this.foroService.getForos().subscribe((data: Post[]) => {
-      this.posts.set(data);
+    this.foroService.getForos().subscribe((data: any[]) => {
+
+      const postsConvertidos = data.map(f => ({
+        id: f.id,
+        author: f.author,        // 🔥 usa backend real
+        content: f.content,
+        image: f.image,
+        likes: f.likes || []
+      }));
+
+      this.posts.set(postsConvertidos);
     });
   }
 
@@ -69,6 +78,7 @@ export class Foro implements OnInit {
 
   // 🔥 PUBLICAR
   publishPost() {
+
     if (!this.currentUser()) {
       alert("Debes iniciar sesión");
       return;
@@ -76,11 +86,10 @@ export class Foro implements OnInit {
 
     if (!this.newPostContent.trim()) return;
 
-    const foro: Post = {
-      id: 0,
-      author: this.currentUser()!,
+    const foro = {
+      author: this.currentUser(),
       content: this.newPostContent,
-      image: this.selectedImage || '',
+      image: this.selectedImage,
       likes: []
     };
 
