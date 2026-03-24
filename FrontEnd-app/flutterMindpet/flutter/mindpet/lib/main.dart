@@ -7,6 +7,7 @@ import 'screens/bathroom_screen.dart';
 import 'screens/kitchen_screen.dart';
 import 'screens/sleep_screen.dart';
 import 'screens/game_room_screen.dart';
+import 'services/audio_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,7 +18,6 @@ void main() async {
 }
 
 class MyApp extends StatefulWidget {
-
   final Pet pet;
 
   const MyApp({super.key, required this.pet});
@@ -27,7 +27,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   late Pet pet;
   final PageController controller = PageController();
 
@@ -35,23 +34,21 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     pet = widget.pet;
+    AudioService.playMusic();
   }
 
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: PageView(
         controller: controller,
         children: [
-
           HomeScreen(pet: pet, controller: controller),
           BathroomScreen(pet: pet, controller: controller),
           KitchenScreen(pet: pet, controller: controller),
           SleepScreen(pet: pet, controller: controller),
           GameRoomScreen(pet: pet, controller: controller),
-
         ],
       ),
     );

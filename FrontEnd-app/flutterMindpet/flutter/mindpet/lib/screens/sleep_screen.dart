@@ -14,28 +14,58 @@ class SleepScreen extends StatefulWidget {
 }
 
 class _SleepScreenState extends State<SleepScreen> {
-  void dormir() {
-    setState(() {
-      widget.pet.dormir();
+  bool durmiendo = false;
+  double oscuridad = 0.0;
+
+  void dormir() async {
+    if (durmiendo) return;
+
+    durmiendo = true;
+
+    for (double i = 0; i <= 0.7; i += 0.1) {
+      await Future.delayed(const Duration(milliseconds: 100));
+
+      if (!mounted) return;
+
+      setState(() {
+        oscuridad = i;
+      });
+    }
+
+    Future.doWhile(() async {
+      await Future.delayed(const Duration(seconds: 1));
+
+      if (!mounted || widget.pet.energia >= 100) {
+        durmiendo = false;
+        return false;
+      }
+
+      setState(() {
+        widget.pet.energia += 2;
+      });
+
+      widget.pet.save();
+
+      return true;
     });
   }
 
   @override
-void initState() {
-  super.initState();
+  void initState() {
+    super.initState();
 
-  Future.doWhile(() async {
-    await Future.delayed(const Duration(seconds: 1));
+    Future.doWhile(() async {
+      await Future.delayed(const Duration(seconds: 1));
 
-    if (!mounted) return false;
+      if (!mounted) return false;
 
-    setState(() {
-      widget.pet.updateWithTime();
+      setState(() {
+        widget.pet.updateWithTime();
+      });
+
+      return true;
     });
-
-    return true;
-  });
-}
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,19 +88,21 @@ void initState() {
 
           Center(child: Image.asset("assets/images/pet.png", width: 200)),
 
+          Positioned.fill(
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              color:Colors.black.withValues(alpha: oscuridad),
+            ),
+          ),
+
           Positioned(
             bottom: 150,
             left: 0,
             right: 0,
             child: Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    widget.pet.dormir();
-                  });
-                  widget.pet.save();
-                },
-                child: const Text("Dormir"),
+              child: ElevatedButton( 
+                onPressed: dormir,
+                child: const Text("Apagar luz"),
               ),
             ),
           ),

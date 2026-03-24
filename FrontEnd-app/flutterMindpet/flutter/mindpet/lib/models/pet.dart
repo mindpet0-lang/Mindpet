@@ -50,7 +50,7 @@ class Pet {
 
     if (seconds > 0) {
 
-      energia -= seconds ~/ 5;
+      energia -= seconds ~/ 60; 
       felicidad -= seconds ~/ 6;
       higiene -= seconds ~/ 7;
       hambre += seconds ~/ 5;
@@ -91,7 +91,7 @@ class Pet {
       lastUpdate: prefs.getInt('lastUpdate'),
     );
 
-    pet.updateWithTime(); // 🔥 aplica tiempo pasado
+    pet.updateWithTime(); 
 
     return pet;
   }

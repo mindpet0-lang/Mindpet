@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/pet.dart';
+import '../screens/diario_screen.dart';
 
 class TopStatusBar extends StatelessWidget {
   final Pet pet;
@@ -17,14 +18,20 @@ class TopStatusBar extends StatelessWidget {
           children: [
             /// MENU
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                mostrarMenu(context);
+              },
               icon: const Icon(Icons.menu, size: 30),
             ),
 
             /// ESTADOS
             Row(
               children: [
-                stat(Icons.sentiment_satisfied, pet.felicidad, Color(0xFFFFA726)),
+                stat(
+                  Icons.sentiment_satisfied,
+                  pet.felicidad,
+                  Color(0xFFFFA726),
+                ),
                 stat(Icons.flash_on, pet.energia, Color(0xFFFFEB3B)),
                 stat(Icons.restaurant, 100 - pet.hambre, Color(0xFF8BC34A)),
                 stat(Icons.clean_hands, pet.higiene, Color(0xFF4FC3F7)),
@@ -89,4 +96,28 @@ class TopStatusBar extends StatelessWidget {
       ),
     );
   }
+
+void mostrarMenu(BuildContext context) {
+  showModalBottomSheet(
+    context: context,
+    builder: (context) {
+      return ListTile(
+        leading: const Icon(Icons.book),
+        title: const Text("Diario"),
+        onTap: () {
+
+          Navigator.pop(context); // cerrar menú
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) =>  DiarioScreen(),
+            ),
+          );
+        },
+      );
+    },
+  );
+}
+
 }
