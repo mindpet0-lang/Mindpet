@@ -7,13 +7,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
+import 'package:mindpet/models/pet.dart';
 import 'package:mindpet/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  testWidgets('Test basico', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget( MyApp());
+    await tester.pumpWidget(
+  MyApp(pet: Pet()),
+);
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);
