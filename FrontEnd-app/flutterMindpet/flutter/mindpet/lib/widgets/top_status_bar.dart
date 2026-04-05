@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mindpet/screens/chat_screen.dart';
 import '../models/pet.dart';
 import '../screens/diario_screen.dart';
 
@@ -101,20 +102,42 @@ void mostrarMenu(BuildContext context) {
   showModalBottomSheet(
     context: context,
     builder: (context) {
-      return ListTile(
-        leading: const Icon(Icons.book),
-        title: const Text("Diario"),
-        onTap: () {
+      // Usamos un Column para tener varias opciones en el menú
+      return Column(
+        mainAxisSize: MainAxisSize.min, // Ajusta el tamaño al contenido
+        children: [
+          /// OPCIÓN: DIARIO
+          ListTile(
+            leading: const Icon(Icons.book),
+            title: const Text("Diario"),
+            onTap: () {
+              Navigator.pop(context); // cerrar menú
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => DiarioScreen(),
+                ),
+              );
+            },
+          ),
 
-          Navigator.pop(context); // cerrar menú
-
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) =>  DiarioScreen(),
-            ),
-          );
-        },
+          /// OPCIÓN: CHAT CON IA (AQUÍ LA REDIRECCIÓN)
+          ListTile(
+            leading: const Icon(Icons.chat_bubble), // Icono de chat
+            title: const Text("Hablar con mi mascota"),
+            onTap: () {
+              Navigator.pop(context); // Cierra el menú antes de navegar
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => ChatScreen(), // Redirige a tu pantalla de chat
+                ),
+              );
+            },
+          ),
+          
+          const SizedBox(height: 10), // Espacio extra al final
+        ],
       );
     },
   );
