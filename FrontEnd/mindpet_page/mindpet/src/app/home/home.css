@@ -1,5 +1,5 @@
 .title {
-    font-size: 40px;
+    font-size: 30px;
     font-weight: bold;
     margin-top: 5%;
     margin-bottom: 20px;
@@ -147,7 +147,7 @@ object-fit: cover;
     border-radius: 10px;
     border: none;
     color: #000000;
-    font-size: 2vw;
+    font-size: 2.5vw;
     font-weight: bold;
     padding: 10px;
     padding-right: 20px;
@@ -179,7 +179,7 @@ object-fit: cover;
 
 .forotext{
     color: rgb(0, 0, 0);
-    font-size: 4vw;
+    font-size: 4.5vw;
     font-weight: bold;
     text-shadow: 2px 2px 4px rgba(160, 158, 158, 0.7);
     text-align: center;
@@ -199,4 +199,70 @@ object-fit: cover;
   margin-top: 5%;
   margin-bottom: 5%;
 
+}
+
+.profile-header {
+  position: absolute;
+  top: 14px;
+  right: 80px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; /* Alinea el menú a la derecha, bajo el icono */
+}
+
+  .material-icons { 
+    font-size: 34px; /* Un tamaño equilibrado */
+    color: #333; /* O un color más oscuro que resalte */
+    opacity: 0.9;
+  }
+
+  .user-menu {
+  position: absolute; /* Importante para que flote */
+  top: 60px; /* Ajusta según el tamaño de tu account-container */
+  right: 20;
+  background: white;
+  min-width: 200px;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  
+  /* Efecto de entrada */
+  animation: slideIn 0.2s ease-out;
+}
+
+.btn-logout {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #d32f2f;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.btn-login {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.btn-logout:hover {
+  background-color: #f5f5f5;
+  transform: translateY(-1px);
 }

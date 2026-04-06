@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core'; // Añadimos OnInit
 import { AuthService } from '../services/auth-service';
 import { Router } from '@angular/router';
 import { LoginResponse } from '../models/usuarios.model';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-download',
@@ -52,14 +53,26 @@ export class Download implements OnInit { // Implementamos OnInit
     this.isMenuOpen = !this.isMenuOpen;
   }
 
-  onLogout() {
-    // Usamos el método logout del servicio si lo tienes, o limpiamos manual
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    
-    this.isMenuOpen = false;
-    this.router.navigate(['/login']); 
-  }
+ onLogout() {
+  // 1. Limpieza de datos
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+  this.isMenuOpen = false;
+
+  // 2. Alerta y Recarga
+  Swal.fire({
+    icon: 'success',
+    title: '¡Hecho!',
+    text: `Sesión cerrada correctamente`,
+    timer: 1500,
+    showConfirmButton: false
+  }).then(() => {
+    // 3. Forzar la recarga total a la página de login o inicio
+    window.location.href = '/download'; 
+    // O si prefieres quedarte en la misma pero limpia:
+    // window.location.reload();
+  });
+}
 
   onDownload() {
     console.log('Token actual:', localStorage.getItem('token'));

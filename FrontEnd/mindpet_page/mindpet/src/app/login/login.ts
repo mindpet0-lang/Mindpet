@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router'; // 👈 Importamos ActivatedRoute
+import { Router, ActivatedRoute } from '@angular/router'; 
 import { AuthService } from '../services/auth-service';
 import Swal from 'sweetalert2';
 
@@ -14,7 +14,7 @@ export class Login {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
-  private route = inject(ActivatedRoute); // 👈 Inyectamos la ruta activa
+  private route = inject(ActivatedRoute); 
 
   loginForm: FormGroup = this.fb.group({
     correo: ['', [Validators.required, Validators.email]],
@@ -40,7 +40,7 @@ export class Login {
           localStorage.setItem("user_token", res.token || 'true');
           // Guardamos el objeto completo convertido a texto JSON
           localStorage.setItem("user", JSON.stringify(res.usuario));
-          // Importante: El Guard suele revisar un token para dejar pasar
+          // token para dejar pasar
           localStorage.setItem("user_token", res.token || 'true');
 
           Swal.fire({
@@ -51,7 +51,7 @@ export class Login {
             showConfirmButton: false
           }).then(() => {
 
-            const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/foro';
+            const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/home';
 
             this.router.navigateByUrl(returnUrl);
           });

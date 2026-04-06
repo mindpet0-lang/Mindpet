@@ -25,6 +25,31 @@
     </div>
   </div>
 </nav>
+<header class="profile-header">
+    <div class="account-container" (click)="onProfileClick()">
+      <span class="material-icons">account_circle</span>
+    </div>
+
+    <div class="user-menu" *ngIf="isMenuOpen">
+  <div class="user-info">
+    <p class="user-name">{{ user?.nombre }}</p>
+    <p class="user-email">{{ user?.correo }}</p>
+  </div>
+  <hr>
+
+  @if(user?.correo=="Inicia sesión"){
+      <button class="btn-login" [routerLink]="['/login']">
+    <span class="material-icons">logout</span>
+    iniciar sesión
+  </button>
+  }@else{
+  <button class="btn-logout" (click)="onLogout()">
+    <span class="material-icons">logout</span>
+    Cerrar sesión
+  </button>
+  }
+</div>
+  </header>
 <h6 class="display-1 text-left mb-4 sour-gummy" style="padding-top: 15%; padding-left: 5%; padding-right: 10%; font-weight: bold; font-size: 5vw;"><p>Cuida tu mente,</p>Cuida tu mindpet</h6>
 <!--End of Nav bar-->
   </div>
