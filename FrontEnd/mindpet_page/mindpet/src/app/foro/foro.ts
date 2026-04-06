@@ -3,6 +3,7 @@ import { ForoService } from '../services/foro.service';
 import { AuthService } from '../services/auth-service';
 import { Router } from '@angular/router';
 import { LoginResponse } from '../models/usuarios.model';
+import Swal from 'sweetalert2';
 
 interface Post {
   id: number;
@@ -74,13 +75,26 @@ export class Foro implements OnInit {
   }
 
   // Cierre de sesión
-  onLogout() {
-    this.authService.logout(); // Limpia token y user usando tu servicio
-    this.isMenuOpen = false;
-    this.isLoggedIn.set(false);
-    this.user = null;
-    this.router.navigate(['/login']);
-  }
+ onLogout() {
+  // 1. Limpieza de datos
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+  this.isMenuOpen = false;
+
+  // 2. Alerta y Recarga
+  Swal.fire({
+    icon: 'success',
+    title: '¡Hecho!',
+    text: `Sesión cerrada correctamente`,
+    timer: 1500,
+    showConfirmButton: false
+  }).then(() => {
+    // 3. Forzar la recarga total a la página de login o inicio
+    window.location.href = '/foro'; 
+    // O si prefieres quedarte en la misma pero limpia:
+    // window.location.reload();
+  });
+}
 
   // Traer posts desde el backend
   loadPosts() {
@@ -89,7 +103,7 @@ export class Foro implements OnInit {
     });
   }
 
-  // Simulación de login (opcional si ya usas el login real)
+
   login() {
     this.router.navigate(['/login']);
   }

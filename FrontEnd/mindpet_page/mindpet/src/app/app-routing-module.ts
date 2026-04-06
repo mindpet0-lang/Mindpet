@@ -16,21 +16,18 @@ const routes: Routes = [
   { path: 'welcome', component: Welcome },
   { path: 'register', component: Register },
   
-  // 2. Protegemos el Foro
   { 
     path: 'foro', 
     component: Foro, 
     canActivate: [authGuard] 
   },
   
-  // 3. Protegemos las Descargas
   { 
     path: 'download', 
     component: Download, 
     canActivate: [authGuard] 
   },
   
-  // Opcional: comodín para redirigir si la ruta no existe
   { path: '**', redirectTo: '' }
 ];
 
