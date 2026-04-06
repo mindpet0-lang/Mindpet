@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mindpet/screens/chat_screen.dart';
+import 'package:mindpet/screens/login_screen.dart';
 import '../models/pet.dart';
 import '../screens/diario_screen.dart';
 
@@ -136,6 +137,20 @@ void mostrarMenu(BuildContext context) {
             },
           ),
           
+          ListTile(
+            leading: const Icon(Icons.chat_bubble), // Icono de chat
+            title: const Text("Login prueba"),
+            onTap: () {
+              Navigator.pop(context); // Cierra el menú antes de navegar
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => LoginScreen() // Redirige a tu pantalla de chat
+                ),
+              );
+            },
+          ),
+
           const SizedBox(height: 10), // Espacio extra al final
         ],
       );
