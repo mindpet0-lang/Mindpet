@@ -7,15 +7,20 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mindpet/models/pet.dart';
 import 'package:mindpet/main.dart';
 
 void main() {
   testWidgets('Test basico', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(
-  MyApp(pet: Pet()),
-);
+// 1. Iniciamos la app con userId en null (como si fuera la primera vez)
+    await tester.pumpWidget(const MyApp(userId: null));
+
+    // 2. Verificamos que aparezca el texto de 'Iniciar sesión' 
+    // en lugar de buscar un contador que ya no existe.
+    expect(find.text('Iniciar sesión'), findsOneWidget);
+    
+    // 3. Verificamos que NO estamos en la pantalla de carga aún
+    expect(find.text('Cargando tu MindPet...'), findsNothing);
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

@@ -7,11 +7,13 @@ class HomeScreen extends StatelessWidget {
 
   final Pet pet;
   final PageController controller;
+  final int userId;
 
   const HomeScreen({
     super.key,
     required this.pet,
-    required this.controller
+    required this.controller,
+    required this.userId
   });
 
   @override
@@ -34,7 +36,7 @@ class HomeScreen extends StatelessWidget {
         top: 0,
         left: 0,
         right: 0,
-        child: TopStatusBar(pet: pet),
+        child: TopStatusBar(pet: pet,userId: userId,),
       ),
 
           /// MASCOTA

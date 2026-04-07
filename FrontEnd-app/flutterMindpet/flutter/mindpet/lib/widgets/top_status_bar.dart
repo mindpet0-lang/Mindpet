@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:mindpet/screens/chat_screen.dart';
-import 'package:mindpet/screens/login_screen.dart';
 import '../models/pet.dart';
 import '../screens/diario_screen.dart';
 
 class TopStatusBar extends StatelessWidget {
   final Pet pet;
+  final int userId;
 
-  const TopStatusBar({super.key, required this.pet});
+ const TopStatusBar({super.key, required this.pet, required this.userId});
 
   @override
   Widget build(BuildContext context) {
@@ -99,63 +99,47 @@ class TopStatusBar extends StatelessWidget {
     );
   }
 
-void mostrarMenu(BuildContext context) {
-  showModalBottomSheet(
-    context: context,
-    builder: (context) {
-      // Usamos un Column para tener varias opciones en el menú
-      return Column(
-        mainAxisSize: MainAxisSize.min, // Ajusta el tamaño al contenido
-        children: [
-          /// OPCIÓN: DIARIO
-          ListTile(
-            leading: const Icon(Icons.book),
-            title: const Text("Diario"),
-            onTap: () {
-              Navigator.pop(context); // cerrar menú
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => DiarioScreen(),
-                ),
-              );
-            },
-          ),
+  void mostrarMenu(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        // Usamos un Column para tener varias opciones en el menú
+        return Column(
+          mainAxisSize: MainAxisSize.min, // Ajusta el tamaño al contenido
+          children: [
+            /// OPCIÓN: DIARIO
+            ListTile(
+              leading: const Icon(Icons.book),
+              title: const Text("Diario"),
+              onTap: () {
+                Navigator.pop(context); // cerrar menú
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => DiarioScreen()),
+                );
+              },
+            ),
 
-          /// OPCIÓN: CHAT CON IA (AQUÍ LA REDIRECCIÓN)
-          ListTile(
-            leading: const Icon(Icons.chat_bubble), // Icono de chat
-            title: const Text("Hablar con mi mascota"),
-            onTap: () {
-              Navigator.pop(context); // Cierra el menú antes de navegar
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => ChatScreen(), // Redirige a tu pantalla de chat
-                ),
-              );
-            },
-          ),
-          
-          ListTile(
-            leading: const Icon(Icons.chat_bubble), // Icono de chat
-            title: const Text("Login prueba"),
-            onTap: () {
-              Navigator.pop(context); // Cierra el menú antes de navegar
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => LoginScreen() // Redirige a tu pantalla de chat
-                ),
-              );
-            },
-          ),
+            /// OPCIÓN: CHAT CON IA (AQUÍ LA REDIRECCIÓN)
+            ListTile(
+              leading: const Icon(Icons.chat_bubble), // Icono de chat
+              title: const Text("Hablar con mi mascota"),
+              onTap: () {
+                Navigator.pop(context); // Cierra el menú antes de navegar
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) =>
+                        ChatScreen(userId: userId,), // Redirige a tu pantalla de chat
+                  ),
+                );
+              },
+            ),
 
-          const SizedBox(height: 10), // Espacio extra al final
-        ],
-      );
-    },
-  );
-}
-
+            const SizedBox(height: 10), // Espacio extra al final
+          ],
+        );
+      },
+    );
+  }
 }

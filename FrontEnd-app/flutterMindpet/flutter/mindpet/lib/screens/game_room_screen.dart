@@ -6,6 +6,7 @@ import '../widgets/top_status_bar.dart';
 class GameRoomScreen extends StatefulWidget {
   final Pet pet;
   final PageController controller;
+  final int userId;
 
 
 
@@ -13,6 +14,7 @@ class GameRoomScreen extends StatefulWidget {
     super.key,
     required this.pet,
     required this.controller,
+    required this.userId
   });
 
   @override
@@ -59,7 +61,7 @@ void initState() {
             top: 0,
             left: 0,
             right: 0,
-            child: TopStatusBar(pet: widget.pet),
+            child: TopStatusBar(pet: widget.pet, userId: widget.userId,),
           ),
 
           Center(child: Image.asset("assets/images/pet.png", width: 200)),

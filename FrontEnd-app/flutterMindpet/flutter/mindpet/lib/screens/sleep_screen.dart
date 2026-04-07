@@ -6,8 +6,9 @@ import '../widgets/top_status_bar.dart';
 class SleepScreen extends StatefulWidget {
   final Pet pet;
   final PageController controller;
+  final int userId;
 
-  const SleepScreen({super.key, required this.pet, required this.controller});
+  const SleepScreen({super.key, required this.pet, required this.controller,required this.userId});
 
   @override
   State<SleepScreen> createState() => _SleepScreenState();
@@ -83,7 +84,7 @@ class _SleepScreenState extends State<SleepScreen> {
             top: 0,
             left: 0,
             right: 0,
-            child: TopStatusBar(pet: widget.pet),
+            child: TopStatusBar(pet: widget.pet,userId: widget.userId,),
           ),
 
           Center(child: Image.asset("assets/images/pet.png", width: 200)),

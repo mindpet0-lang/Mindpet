@@ -6,11 +6,14 @@ import '../widgets/top_status_bar.dart';
 class BathroomScreen extends StatefulWidget {
   final Pet pet;
   final PageController controller;
+  final int userId;
 
   const BathroomScreen({
     super.key,
     required this.pet,
     required this.controller,
+    required this.userId
+    
   });
 
   @override
@@ -104,7 +107,7 @@ class _BathroomScreenState extends State<BathroomScreen> {
             top: 0,
             left: 0,
             right: 0,
-            child: TopStatusBar(pet: widget.pet),
+            child: TopStatusBar(pet: widget.pet, userId:widget.userId ,),
           ),
 
           /// 3️⃣ MASCOTA (CENTRO)

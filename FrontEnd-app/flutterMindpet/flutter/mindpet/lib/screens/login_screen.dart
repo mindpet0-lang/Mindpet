@@ -1,158 +1,146 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'pet_loader.dart';
 
-void main() => runApp(const MyApp());
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'MindPet Login',
-      theme: ThemeData(primarySwatch: Colors.grey),
-      home: const LoginScreen(),
-    );
-  }
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool _isLoading = false;
+
+  Future<void> _handleLogin() async {
+    if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+      _showError("Por favor, llena todos los campos");
+      return;
+    }
+
+    setState(() => _isLoading = true);
+
+    try {
+      final response = await http.post(
+        Uri.parse('http://localhost:8080/usuarios/login'), 
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'correo': _emailController.text.trim().toLowerCase(),
+          'contrasena': _passwordController.text.trim(),
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final userData = jsonDecode(response.body);
+        
+        // 1. Extraemos el ID del JSON que responde Spring Boot
+        final int idRecuperado = userData['id']; 
+
+        // GUARDAR SESIÓN LOCALMENTE
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setInt('userId', idRecuperado); 
+        
+        if (mounted) {
+          // 2. PASAMOS EL ID AL PET LOADER (Aquí se quita la línea roja)
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PetLoader(userId: idRecuperado),
+            ),
+          );
+        }
+      } else {
+        _showError("Correo o contraseña incorrectos");
+      }
+    } catch (e) {
+      print("Error de conexión: $e");
+      _showError("No se pudo conectar con el servidor");
+    } finally {
+      setState(() => _isLoading = false);
+    }
+  }
+
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message), backgroundColor: Colors.redAccent),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Mantenemos el fondo blanco puro para que coincida con tu ilustración
-      backgroundColor: Colors.white, 
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
-          // 1. ILUSTRACIÓN DE FONDO (Alineada abajo)
           Align(
             alignment: Alignment.bottomCenter,
             child: Image.asset(
-              'images/imagen-terapia.png', // Verifica que esta ruta sea correcta
+              'images/imagen-terapia.png',
               width: MediaQuery.of(context).size.width,
               fit: BoxFit.fitWidth,
-              // Calidad alta para evitar la línea de división
               filterQuality: FilterQuality.high,
             ),
           ),
-
-          // 2. CONTENIDO SCROLLABLE
           SafeArea(
             child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 40.0),
                 child: Column(
                   children: [
                     const SizedBox(height: 40),
-                    
-                    // --- LOGO ---
-                    Image.asset(
-                      "images/logo.png", // Verifica que esta ruta sea correcta
-                      height: 150,
-                    ),
-                    const SizedBox(height: 20),
-                   
-                    
+                    Image.asset("images/logo.png", height: 150),
                     const SizedBox(height: 40),
-                    
-                    // --- TÍTULO ---
                     const Text(
-                      'Iniciar sesion',
-                      style: TextStyle(
-                        fontSize: 26,
-                        fontWeight: FontWeight.w900,
-                        fontFamily: 'ComicSans', // O la fuente que tengas en pubspec
-                      ),
+                      'Iniciar sesión',
+                      style: TextStyle(fontSize: 26, fontWeight: FontWeight.w900),
                     ),
                     const SizedBox(height: 25),
-
-                    // --- TARJETA DE FORMULARIO TRANSPARENTE ---
                     Container(
                       padding: const EdgeInsets.all(25),
                       decoration: BoxDecoration(
-                        // Usamos blanco con opacidad para que se vea el dibujo atrás
-                        color: Colors.grey.withOpacity(0.20), 
+                        color: Colors.grey.withOpacity(0.15),
                         borderRadius: BorderRadius.circular(25),
-                        border: Border.all(
-                          color: Colors.black.withOpacity(0.05),
-                          width: 1,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.04),
-                            blurRadius: 15,
-                            offset: const Offset(0, 8),
-                          ),
-                        ],
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'Correo', 
-                            style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w600)
-                          ),
+                          const Text('Correo', style: TextStyle(fontWeight: FontWeight.w600)),
                           const SizedBox(height: 8),
-                          _buildTextField(hint: 'ejemplo@correo.com'),
-                          
+                          _buildTextField(
+                            controller: _emailController, 
+                            hint: 'test@correo.com'
+                          ),
                           const SizedBox(height: 20),
-                          
-                          const Text(
-                            'Contraseña', 
-                            style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w600)
-                          ),
+                          const Text('Contraseña', style: TextStyle(fontWeight: FontWeight.w600)),
                           const SizedBox(height: 8),
-                          _buildTextField(isPassword: true, hint: '••••••••'),
-                          
+                          _buildTextField(
+                            controller: _passwordController, 
+                            isPassword: true, 
+                            hint: '••••••••'
+                          ),
                           const SizedBox(height: 30),
-                          
-                          // BOTÓN DE ACCESO
                           SizedBox(
                             width: double.infinity,
                             height: 55,
                             child: ElevatedButton(
-                              onPressed: () {
-                                // Lógica de autenticación aquí
-                              },
+                              onPressed: _isLoading ? null : _handleLogin,
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF2E2E2E), // Gris oscuro casi negro
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                elevation: 2,
+                                backgroundColor: const Color(0xFF2E2E2E),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                               ),
-                              child: const Text(
-                                'Iniciar sesion',
-                                style: TextStyle(
-                                  color: Colors.white, 
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold
-                                ),
-                              ),
-                            ),
-                          ),
-                          
-                          const SizedBox(height: 20),
-                          
-                          const Center(
-                            child: Text(
-                              'Olvidaste la contraseña?',
-                              style: TextStyle(
-                                decoration: TextDecoration.underline,
-                                fontSize: 13,
-                                color: Colors.black54,
-                              ),
+                              child: _isLoading 
+                                ? const CircularProgressIndicator(color: Colors.white)
+                                : const Text('Entrar', style: TextStyle(color: Colors.white, fontSize: 16)),
                             ),
                           ),
                         ],
                       ),
                     ),
-                    
-                    // Espacio final para asegurar que el dibujo sea visible al scrollear
-                    const SizedBox(height: 150), 
+                    const SizedBox(height: 150),
                   ],
                 ),
               ),
@@ -163,24 +151,21 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  // Widget personalizado para los campos de texto
-  Widget _buildTextField({bool isPassword = false, String? hint}) {
+  Widget _buildTextField({required TextEditingController controller, bool isPassword = false, String? hint}) {
     return TextField(
+      controller: controller,
       obscureText: isPassword,
-      cursorColor: Colors.black,
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: TextStyle(color: Colors.grey[400], fontSize: 14),
         filled: true,
         fillColor: Colors.white,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: Colors.grey[200]!),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.black12),
+          borderSide: const BorderSide(color: Colors.blueAccent),
         ),
       ),
     );
