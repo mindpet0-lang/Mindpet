@@ -45,6 +45,7 @@ class _SleepScreenState extends State<SleepScreen> {
       if (!mounted || widget.pet.energia >= 100) {
         durmiendo = false;
          estadoSleep = despierta;
+         size = 250;
         return false;
       }
 
