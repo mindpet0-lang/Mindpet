@@ -16,11 +16,16 @@ class SleepScreen extends StatefulWidget {
 class _SleepScreenState extends State<SleepScreen> {
   bool durmiendo = false;
   double oscuridad = 0.0;
+  String despierta = "images/nutria-parada.gif";
+  String dormida = "images/nutria-durmiendo.gif";
+  String estadoSleep = "images/nutria-parada.gif";
 
   void dormir() async {
     if (durmiendo) return;
 
     durmiendo = true;
+    estadoSleep = dormida;
+    
 
     for (double i = 0; i <= 0.7; i += 0.1) {
       await Future.delayed(const Duration(milliseconds: 100));
@@ -37,6 +42,7 @@ class _SleepScreenState extends State<SleepScreen> {
 
       if (!mounted || widget.pet.energia >= 100) {
         durmiendo = false;
+         estadoSleep = despierta;
         return false;
       }
 
@@ -86,7 +92,7 @@ class _SleepScreenState extends State<SleepScreen> {
             child: TopStatusBar(pet: widget.pet),
           ),
 
-          Center(child: Image.asset("assets/images/pet.png", width: 200)),
+          Center(child: Image.asset( estadoSleep , width: 250)),
 
           Positioned.fill(
             child: AnimatedContainer(

@@ -51,10 +51,17 @@ class LoginScreen extends StatelessWidget {
                     // --- LOGO ---
                     Image.asset(
                       "images/logo.png", // Verifica que esta ruta sea correcta
-                      height: 150,
+                      height: 100,
                     ),
                     const SizedBox(height: 20),
-                   
+                    const Text(
+                      'MINDPET',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold, 
+                        fontSize: 18,
+                        letterSpacing: 1.2
+                      ),
+                    ),
                     
                     const SizedBox(height: 40),
                     
@@ -74,7 +81,7 @@ class LoginScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(25),
                       decoration: BoxDecoration(
                         // Usamos blanco con opacidad para que se vea el dibujo atrás
-                        color: Colors.grey.withOpacity(0.20), 
+                        color: Colors.white.withOpacity(0.65), 
                         borderRadius: BorderRadius.circular(25),
                         border: Border.all(
                           color: Colors.black.withOpacity(0.05),

@@ -56,7 +56,7 @@ void initState() {
             child: TopStatusBar(pet: widget.pet),
           ),
 
-          Center(child: Image.asset("assets/images/pet.png", width: 200)),
+          Center(child: Image.asset("images/nutria-parada.gif", width: 250)),
 
           Positioned(
             bottom: 150,

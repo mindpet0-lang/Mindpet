@@ -40,8 +40,8 @@ class HomeScreen extends StatelessWidget {
           /// MASCOTA
           Center(
             child: Image.asset(
-              "assets/images/pet.png",
-              width: 200,
+              "images/nutria-acostada.gif",
+              width: 400,
             ),
           ),
 
