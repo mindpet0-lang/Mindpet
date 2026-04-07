@@ -14,15 +14,11 @@ class KitchenScreen extends StatefulWidget {
 }
 
 class _KitchenScreenState extends State<KitchenScreen> {
-  String estadoEat = "mages/nutria-parada.gif";
-  String comiendo = "mages/nutria-comiendo.gif";
-  String normal = "mages/nutria-parada.gif";
 
 
   void comer() {
     setState(() {
       widget.pet.comer();
-      estadoEat = comiendo;
     });
   }
 
@@ -62,7 +58,7 @@ void initState() {
             child: TopStatusBar(pet: widget.pet),
           ),
 
-          Center(child: Image.asset("images/nutria-parada.gif", width: 250)),
+          Center(child: Image.asset( "images/nutria-parada.gif", width: 250)),
 
           Positioned(
             bottom: 150,
@@ -73,6 +69,7 @@ void initState() {
                 onPressed: () {
                   setState(() {
                     widget.pet.comer();
+                    
                   });
                   widget.pet.save();
                 },

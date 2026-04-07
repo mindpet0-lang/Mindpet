@@ -19,12 +19,14 @@ class _SleepScreenState extends State<SleepScreen> {
   String despierta = "images/nutria-parada.gif";
   String dormida = "images/nutria-durmiendo.gif";
   String estadoSleep = "images/nutria-parada.gif";
+  double size = 250;
 
   void dormir() async {
     if (durmiendo) return;
 
     durmiendo = true;
     estadoSleep = dormida;
+    size = 450;
     
 
     for (double i = 0; i <= 0.7; i += 0.1) {
@@ -92,7 +94,7 @@ class _SleepScreenState extends State<SleepScreen> {
             child: TopStatusBar(pet: widget.pet),
           ),
 
-          Center(child: Image.asset( estadoSleep , width: 250)),
+          Center(child: Image.asset( estadoSleep , width: size)),
 
           Positioned.fill(
             child: AnimatedContainer(
