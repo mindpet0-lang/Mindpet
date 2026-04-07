@@ -40,7 +40,7 @@ class Pet {
     if (energia < 0) energia = 0;
   }
 
-  /// 🔥 BAJAR ESTADOS CON EL TIEMPO
+  /// BAJAR ESTADOS CON EL TIEMPO
   void updateWithTime() {
 
     int now = DateTime.now().millisecondsSinceEpoch;

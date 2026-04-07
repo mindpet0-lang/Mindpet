@@ -111,7 +111,7 @@ class _BathroomScreenState extends State<BathroomScreen> {
           ),
 
           /// 3️⃣ MASCOTA (CENTRO)
-          Center(child: Image.asset("assets/images/pet.png", width: 200)),
+          Center(child: Image.asset("images/nutria-parada.gif", width: 250)),
 
           /// 4️⃣ OBJETOS (🔥 AQUÍ VA TU SISTEMA NUEVO)
           Positioned(
@@ -134,8 +134,8 @@ class _BathroomScreenState extends State<BathroomScreen> {
                       children: [
                         Image.asset(
                           objetos[objetoActual] == "jabon"
-                              ? "assets/jabon.png"
-                              : "assets/ducha.png",
+                              ? "images/jabon.png"
+                              : "images/ducha.png",
                           width: 80,
                         ),
 
