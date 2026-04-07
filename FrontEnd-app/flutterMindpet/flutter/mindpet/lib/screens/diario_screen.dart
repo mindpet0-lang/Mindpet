@@ -3,6 +3,8 @@ import 'package:mindpet/screens/nueva_entrada_screen.dart';
 import '../widgets/tarjeta_emocion.dart';
 
 class DiarioScreen extends StatefulWidget {
+  const DiarioScreen({super.key});
+
   @override
   State<DiarioScreen> createState() => _DiarioScreenState();
 }

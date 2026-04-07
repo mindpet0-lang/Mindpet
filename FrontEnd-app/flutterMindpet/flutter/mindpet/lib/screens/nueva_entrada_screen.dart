@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class NuevaEntradaScreen extends StatefulWidget {
+  const NuevaEntradaScreen({super.key});
+
   @override
   State<NuevaEntradaScreen> createState() => _NuevaEntradaScreenState();
 }
