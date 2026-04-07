@@ -108,7 +108,7 @@ class _SleepScreenState extends State<SleepScreen> {
             child: Center(
               child: ElevatedButton( 
                 onPressed: dormir,
-                child: const Text("Apagar luz"),
+                child: const Text("Dormir"),
               ),
             ),
           ),

@@ -14,9 +14,15 @@ class KitchenScreen extends StatefulWidget {
 }
 
 class _KitchenScreenState extends State<KitchenScreen> {
+  String estadoEat = "mages/nutria-parada.gif";
+  String comiendo = "mages/nutria-comiendo.gif";
+  String normal = "mages/nutria-parada.gif";
+
+
   void comer() {
     setState(() {
       widget.pet.comer();
+      estadoEat = comiendo;
     });
   }
 
