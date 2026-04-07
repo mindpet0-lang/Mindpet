@@ -46,7 +46,6 @@ export class Home implements OnInit {
   onProfileClick() {
     this.isMenuOpen = !this.isMenuOpen;
     console.log('¿Menú abierto?:', this.isMenuOpen);
-    console.log('Datos del usuario:', this.user);
   }
 
   toggleMenu() {
