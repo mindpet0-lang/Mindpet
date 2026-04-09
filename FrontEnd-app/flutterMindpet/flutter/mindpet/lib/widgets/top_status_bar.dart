@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mindpet/screens/chat_screen.dart';
+import 'package:mindpet/screens/tienda_screen.dart';
 import '../models/pet.dart';
 import '../screens/diario_screen.dart';
 
@@ -7,7 +8,7 @@ class TopStatusBar extends StatelessWidget {
   final Pet pet;
   final int userId;
 
- const TopStatusBar({super.key, required this.pet, required this.userId});
+  const TopStatusBar({super.key, required this.pet, required this.userId});
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +43,12 @@ class TopStatusBar extends StatelessWidget {
 
             /// TIENDA
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => TiendaScreen()),
+                );
+              },
               icon: const Icon(Icons.shopping_cart, size: 30),
             ),
           ],
@@ -129,8 +135,9 @@ class TopStatusBar extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) =>
-                        ChatScreen(userId: userId,), // Redirige a tu pantalla de chat
+                    builder: (_) => ChatScreen(
+                      userId: userId,
+                    ), // Redirige a tu pantalla de chat
                   ),
                 );
               },
