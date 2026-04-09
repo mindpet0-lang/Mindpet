@@ -5,12 +5,10 @@ class DiarioService {
 
   final String baseUrl = "http://localhost:8080/diarios";
 
-  int usuarioId = 1; // 🔐 Simulación de usuario logueado
+  int usuarioId = 1; // 🔐 luego será dinámico
 
   Future<List<dynamic>> obtenerDiarios() async {
-    final response = await http.get(
-      Uri.parse("$baseUrl/usuario/$usuarioId"),
-    );
+    final response = await http.get(Uri.parse("$baseUrl/usuario/$usuarioId"));
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
@@ -19,14 +17,46 @@ class DiarioService {
     }
   }
 
-  Future<void> crearDiario(String contenido, String fecha) async {
-    await http.post(
+  Future<void> crearDiario(
+    String contenido,
+    String fecha,
+    String emocion,
+  ) async {
+    final response = await http.post(
       Uri.parse(baseUrl),
       headers: {"Content-Type": "application/json"},
       body: jsonEncode({
         "contenido": contenido,
         "fecha": fecha,
-        "usuarioId": usuarioId // 🔐 IMPORTANTE
+        "emocion": emocion,
+        "usuarioId": usuarioId,
+      }),
+    );
+
+    print("POST STATUS: ${response.statusCode}");
+    print("POST BODY: ${response.body}");
+  }
+
+  Future<void> eliminarDiario(int id) async {
+  await http.delete(
+    Uri.parse("$baseUrl/$id/usuario/$usuarioId"),
+  );
+}
+
+  Future<void> actualizarDiario(
+    int id,
+    String contenido,
+    String fecha,
+    String emocion,
+  ) async {
+    await http.put(
+      Uri.parse("$baseUrl/$id"),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({
+        "contenido": contenido,
+        "fecha": fecha,
+        "emocion": emocion,
+        "usuarioId": usuarioId,
       }),
     );
   }

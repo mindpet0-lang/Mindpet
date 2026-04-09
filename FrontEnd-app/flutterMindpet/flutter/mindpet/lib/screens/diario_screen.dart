@@ -24,7 +24,7 @@ class _DiarioScreenState extends State<DiarioScreen> {
 
   @override
   Widget build(BuildContext context) {
-    
+
     return Scaffold(
       backgroundColor: const Color(0xffdbe7ef),
 
@@ -50,20 +50,18 @@ class _DiarioScreenState extends State<DiarioScreen> {
 
           final nuevaEntrada = await Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (context) => NuevaEntradaScreen(),
-            ),
+            MaterialPageRoute(builder: (context) => NuevaEntradaScreen()),
           );
 
           if (nuevaEntrada != null) {
 
-            // ✅ Guardar en backend
             await diarioService.crearDiario(
               nuevaEntrada["texto"],
               nuevaEntrada["titulo"],
+              nuevaEntrada["emocion"],
             );
 
-            // ✅ Recargar datos
+
             await cargarDiarios();
           }
 
@@ -74,18 +72,60 @@ class _DiarioScreenState extends State<DiarioScreen> {
         padding: const EdgeInsets.all(20),
 
         child: entradas.isEmpty
-            ? const Center(child: Text("No hay entradas 😢"))
+            ? const Center(
+                child: Text("No hay diarios aún. ¡Agrega tu primer diario!"),
+              )
             : ListView.builder(
                 itemCount: entradas.length,
                 itemBuilder: (context, index) {
 
                   final entrada = entradas[index];
 
-                  return TarjetaEmocion(
-                    emocion: entrada["emocion"],
-                    titulo: entrada["titulo"],
-                    texto: entrada["texto"],
-                    color: entrada["color"],
+                  return Dismissible(
+                    key: Key(entrada["id"].toString()),
+                    direction: DismissDirection.endToStart,
+
+                    background: Container(
+                      alignment: Alignment.centerRight,
+                      padding: const EdgeInsets.only(right: 20),
+                      color: Colors.red,
+                      child: const Icon(Icons.delete, color: Colors.white),
+                    ),
+
+                    onDismissed: (direction) async {
+                      await diarioService.eliminarDiario(entrada["id"]);
+                      cargarDiarios();
+                    },
+
+                    child: GestureDetector(
+                      onLongPress: () async {
+                        final editado = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                NuevaEntradaScreen(entrada: entrada),
+                          ),
+                        );
+
+                        if (editado != null) {
+                          await diarioService.actualizarDiario(
+                            entrada["id"],
+                            editado["texto"],
+                            editado["titulo"],
+                            editado["emocion"],
+                          );
+
+                          cargarDiarios();
+                        }
+                      },
+
+                      child: TarjetaEmocion(
+                        emocion: entrada["emocion"],
+                        titulo: entrada["titulo"],
+                        texto: entrada["texto"],
+                        color: entrada["color"],
+                      ),
+                    ),
                   );
                 },
               ),
@@ -93,21 +133,66 @@ class _DiarioScreenState extends State<DiarioScreen> {
     );
   }
 
-  // ✅ CARGAR DATOS DESDE API
+  // 🎨 COLOR DINÁMICO
+  Color obtenerColorPorEmocion(String emocion) {
+  emocion = emocion.toLowerCase();
+
+  if (emocion.contains("alegr")) return Colors.green;
+  if (emocion.contains("triste")) return Colors.blue;
+  if (emocion.contains("enojo")) return Colors.red;
+  if (emocion.contains("ansiedad")) return Colors.purple;
+  if (emocion.contains("miedo")) return Colors.deepPurple;
+  if (emocion.contains("estr")) return Colors.orange;
+  if (emocion.contains("calma")) return Colors.teal;
+  if (emocion.contains("amor")) return Colors.pink;
+  if (emocion.contains("cansancio")) return Colors.brown;
+  if (emocion.contains("confusi")) return Colors.indigo;
+  if (emocion.contains("motiv")) return Colors.lightGreen;
+  if (emocion.contains("soledad")) return Colors.blueGrey;
+
+  return Colors.grey;
+}
+
+  // 😊 NORMALIZAR EMOCIÓN
+  String normalizarEmocion(String? emocion) {
+  emocion = (emocion ?? "").toLowerCase();
+
+  if (emocion.contains("alegr") || emocion.contains("feliz") || emocion.contains("😊")) return "Alegría";
+  if (emocion.contains("triste") || emocion.contains("😢")) return "Tristeza";
+  if (emocion.contains("enojo") || emocion.contains("😡")) return "Enojo";
+  if (emocion.contains("ansiedad")) return "Ansiedad";
+  if (emocion.contains("miedo")) return "Miedo";
+  if (emocion.contains("estr")) return "Estrés";
+  if (emocion.contains("calma")) return "Calma";
+  if (emocion.contains("amor")) return "Amor";
+  if (emocion.contains("cansancio") || emocion.contains("😴")) return "Cansancio";
+  if (emocion.contains("confusi")) return "Confusión";
+  if (emocion.contains("motiv")) return "Motivación";
+  if (emocion.contains("soledad")) return "Soledad";
+
+  return "Alegría";
+}
+
+  // 🔄 CARGAR DATOS
   Future<void> cargarDiarios() async {
     try {
       final data = await diarioService.obtenerDiarios();
 
-      print("DATA: $data");
+
 
       setState(() {
         entradas = data.map<Map<String, dynamic>>((e) {
+
+          String emocion = normalizarEmocion(e["emocion"]);
+
           return {
-            "emocion": "😊",
+            "id": e["id"], // 🔥 CLAVE
+            "emocion": emocion,
             "titulo": e["fecha"],
             "texto": e["contenido"],
-            "color": Colors.white
+            "color": obtenerColorPorEmocion(emocion),
           };
+
         }).toList();
       });
 
