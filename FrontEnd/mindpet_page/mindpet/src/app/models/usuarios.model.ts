@@ -1,10 +1,10 @@
 export interface UserRegister {
-    nombre: string;
-    correo: string;
-    contrasena: string;
-    fechaNacimiento: string;
-    terminos: boolean;
-  }
+  nombre: string;
+  correo: string;
+  contrasena: string;
+  fechaNacimiento: string;
+  terminos: boolean;
+}
 
 
 export interface LoginRequest {
@@ -15,9 +15,13 @@ export interface LoginRequest {
 
 export interface LoginResponse {
   token: string;
-  usuario: {
-    id: number;
-    nombre: string;
-    correo: string;
-  };
+  id: number;
+  nombre: string;
+  correo: string;
+}
+
+export interface User {
+  id: number;
+  nombre: string;
+  correo: string;
 }

@@ -9,7 +9,6 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class Welcome implements OnInit {
 
-// 1. DECLARAR LA PROPIEDAD AQUÍ (Esto quita el error TS2339)
   returnUrl: string = '/foro'; 
 
   private route = inject(ActivatedRoute);

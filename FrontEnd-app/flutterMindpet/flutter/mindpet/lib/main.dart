@@ -3,6 +3,7 @@ import 'screens/login_screen.dart';
 import 'screens/pet_loader.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+
 void main() async {
   // 1. Aseguramos que los servicios de Flutter estén listos
   WidgetsFlutterBinding.ensureInitialized();

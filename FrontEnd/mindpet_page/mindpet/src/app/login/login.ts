@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router'; 
+import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../services/auth-service';
 import Swal from 'sweetalert2';
 
@@ -14,7 +14,7 @@ export class Login {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
-  private route = inject(ActivatedRoute); 
+  private route = inject(ActivatedRoute);
 
   loginForm: FormGroup = this.fb.group({
     correo: ['', [Validators.required, Validators.email]],
@@ -36,37 +36,41 @@ export class Login {
         next: (res) => {
           Swal.close();
 
+          // Guardar token correctamente
+          localStorage.setItem("user_token", res.token);
+
           // GUARDAR DATOS DE FORMA SEGURA
-          localStorage.setItem("user_token", res.token || 'true');
-          // Guardamos el objeto completo convertido a texto JSON
-          localStorage.setItem("user", JSON.stringify(res.usuario));
-          // token para dejar pasar
-          localStorage.setItem("user_token", res.token || 'true');
+          const userData = {
+            id: res.id,
+            nombre: res.nombre,
+            correo: res.correo
+          };
+
+          localStorage.setItem("user", JSON.stringify(userData));
 
           Swal.fire({
             icon: 'success',
             title: '¡Bienvenido!',
-            text: `Hola ${res.usuario.nombre}`,
+            text: `Hola ${res.nombre}`, 
             timer: 1500,
             showConfirmButton: false
           }).then(() => {
 
             const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/home';
-
             this.router.navigateByUrl(returnUrl);
           });
-        },
+    },
 
 
 
-        error: (err) => {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Credenciales incorrectas o problema de conexión.'
-          });
-        }
+    error: (err) => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Credenciales incorrectas o problema de conexión.'
       });
     }
+  });
+}
   }
 }

@@ -94,7 +94,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("MindPet AI", style: GoogleFonts.poppins(color: Colors.white)),
+        title: Text("MindPet ia", style: GoogleFonts.poppins(color: Colors.white)),
         backgroundColor: Colors.blueAccent,
       ),
       body: Column(
