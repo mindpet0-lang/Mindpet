@@ -2,7 +2,7 @@ import { Component, signal, OnInit } from '@angular/core';
 import { ForoService } from '../services/foro.service';
 import { AuthService } from '../services/auth-service';
 import { Router } from '@angular/router';
-import { LoginResponse } from '../models/usuarios.model';
+import { User } from '../models/usuarios.model';
 import Swal from 'sweetalert2';
 
 interface Post {
@@ -27,7 +27,7 @@ export class Foro implements OnInit {
 
   // 🔥 Lógica del Menú de Usuario
   isMenuOpen = false;
-  user: LoginResponse['usuario'] | null = null;
+  user: User | null = null;
 
   // Manejo de nuevo post
   newPostContent: string = '';
@@ -39,7 +39,6 @@ export class Foro implements OnInit {
 
   constructor(
     private foroService: ForoService,
-    private authService: AuthService,
     private router: Router
   ) { }
 

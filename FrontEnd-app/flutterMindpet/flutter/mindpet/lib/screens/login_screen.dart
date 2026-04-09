@@ -36,13 +36,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (response.statusCode == 200) {
         final userData = jsonDecode(response.body);
+
+        final String token = userData['token'];
         
         // 1. Extraemos el ID del JSON que responde Spring Boot
         final int idRecuperado = userData['id']; 
 
         // GUARDAR SESIÓN LOCALMENTE
         final prefs = await SharedPreferences.getInstance();
-        await prefs.setInt('userId', idRecuperado); 
+        await prefs.setInt('userId', idRecuperado);
+        await prefs.setString('token', token);
         
         if (mounted) {
           // 2. PASAMOS EL ID AL PET LOADER (Aquí se quita la línea roja)

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'; // Añadí inject y OnInit
-import { LoginResponse } from '../models/usuarios.model';
+import { LoginResponse, User } from '../models/usuarios.model';
 import { AuthService } from '../services/auth-service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
@@ -15,7 +15,7 @@ export class Home implements OnInit {
   
   // 1. Tipamos la variable 'user' usando la interfaz. 
   // Esto hará que TS te avise si usas .email en lugar de .correo
-  user: LoginResponse['usuario'] | null = null;
+  user: User | null = null;
 
   constructor(private authService: AuthService, private router: Router) {}
 

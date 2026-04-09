@@ -91,57 +91,100 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("MindPet AI", style: GoogleFonts.poppins(color: Colors.white)),
-        backgroundColor: Colors.blueAccent,
+Widget build(BuildContext context) {
+  return Stack(
+    children: [
+
+      // 🔹 Imagen de fondo
+      Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("images/fondochat.png"),
+            fit: BoxFit.cover,
+          ),
+        ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              controller: _scrollController,
-              itemCount: _mensajes.length,
-              itemBuilder: (context, index) {
-                final m = _mensajes[index];
-                final esUser = m["tipo"] == "user";
-                return Align(
-                  alignment: esUser ? Alignment.centerRight : Alignment.centerLeft,
-                  child: Container(
-                    margin: const EdgeInsets.all(8),
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: esUser ? Colors.blue[100] : Colors.grey[200],
-                      borderRadius: BorderRadius.circular(15),
+
+      // 🔹 Tu UI encima
+      Scaffold(
+        backgroundColor: Colors.transparent, // 👈 CLAVE
+        appBar: AppBar(
+          title: Text(
+            "MindPet ia",
+            style: GoogleFonts.poppins(
+              color: const Color.fromARGB(255, 0, 0, 0),
+            ),
+          ),
+          backgroundColor: Colors.transparent, // 👈 CLAVE
+          elevation: 0, // 👈 QUITA SOMBRA
+        ),
+
+        body: Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                controller: _scrollController,
+                itemCount: _mensajes.length,
+                itemBuilder: (context, index) {
+                  final m = _mensajes[index];
+                  final esUser = m["tipo"] == "user";
+
+                  return Align(
+                    alignment: esUser
+                        ? Alignment.centerRight
+                        : Alignment.centerLeft,
+                    child: Container(
+                      margin: const EdgeInsets.all(8),
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: esUser
+                            ? const Color.fromARGB(200, 140, 202, 252)
+                            : const Color.fromARGB(200, 192, 220, 247),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Text(
+                        m["texto"]!,
+                        style: GoogleFonts.roboto(),
+                      ),
                     ),
-                    child: Text(m["texto"]!, style: GoogleFonts.roboto()),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
-          ),
-          if (_estaCargando) const LinearProgressIndicator(),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _controller,
-                    decoration: const InputDecoration(hintText: "Escribe aquí..."),
-                    onSubmitted: (_) => _enviarMensajeAlServidor(),
+
+            if (_estaCargando) const LinearProgressIndicator(),
+
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _controller,
+                      decoration: InputDecoration(
+                        hintText: "Escribe aquí...",
+                        filled: true,
+                        fillColor: Colors.white70, // 👈 para que se vea bien
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                      ),
+                      onSubmitted: (_) => _enviarMensajeAlServidor(),
+                    ),
                   ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.send),
-                  onPressed: _estaCargando ? null : _enviarMensajeAlServidor,
-                ),
-              ],
+                  IconButton(
+                    icon: const Icon(Icons.send),
+                    onPressed: _estaCargando
+                        ? null
+                        : _enviarMensajeAlServidor,
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-    );
+    ],
+  );
   }
 }

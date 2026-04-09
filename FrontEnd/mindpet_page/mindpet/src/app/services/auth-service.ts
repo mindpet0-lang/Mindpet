@@ -24,7 +24,14 @@ export class AuthService {
       tap(res => {
         // Guardamos el token en el almacenamiento local del navegador
         localStorage.setItem('token', res.token);
-        localStorage.setItem('user', JSON.stringify(res.usuario));
+        
+        const userData = {
+        id: res.id,
+        nombre: res.nombre,
+        correo: res.correo
+      };
+
+        localStorage.setItem('user', JSON.stringify(userData));
       })
     );
   }
