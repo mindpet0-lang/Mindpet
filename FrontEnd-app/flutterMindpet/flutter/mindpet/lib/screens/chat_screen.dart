@@ -99,7 +99,7 @@ Widget build(BuildContext context) {
       Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("images/fondochat.png"),
+            image: AssetImage("images/fondochat2.jpg"),
             fit: BoxFit.cover,
           ),
         ),
@@ -138,8 +138,8 @@ Widget build(BuildContext context) {
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
                         color: esUser
-                            ? const Color.fromARGB(200, 140, 202, 252)
-                            : const Color.fromARGB(200, 192, 220, 247),
+                            ? const Color.fromARGB(251, 140, 202, 252)
+                            : const Color.fromARGB(248, 192, 220, 247),
                         borderRadius: BorderRadius.circular(15),
                       ),
                       child: Text(

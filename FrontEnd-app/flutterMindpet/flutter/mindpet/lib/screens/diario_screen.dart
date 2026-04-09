@@ -25,111 +25,124 @@ class _DiarioScreenState extends State<DiarioScreen> {
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
-      backgroundColor: const Color(0xffdbe7ef),
-
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
-        title: const Text(
-          "Diario",
-          style: TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
+    return Stack(
+      children: [
+        
+        Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("images/fondodiario.png"),
+            fit: BoxFit.cover,
           ),
         ),
       ),
-
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.blue,
-        child: const Icon(Icons.add),
-
-        onPressed: () async {
-
-          final nuevaEntrada = await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => NuevaEntradaScreen()),
-          );
-
-          if (nuevaEntrada != null) {
-
-            await diarioService.crearDiario(
-              nuevaEntrada["texto"],
-              nuevaEntrada["titulo"],
-              nuevaEntrada["emocion"],
+        
+        Scaffold(
+        backgroundColor: Colors.transparent,
+      
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          centerTitle: true,
+          title: const Text(
+            "Diario",
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+        ),
+      
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.blue,
+          child: const Icon(Icons.add),
+      
+          onPressed: () async {
+      
+            final nuevaEntrada = await Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => NuevaEntradaScreen()),
             );
-
-
-            await cargarDiarios();
-          }
-
-        },
-      ),
-
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-
-        child: entradas.isEmpty
-            ? const Center(
-                child: Text("No hay diarios aún. ¡Agrega tu primer diario!"),
-              )
-            : ListView.builder(
-                itemCount: entradas.length,
-                itemBuilder: (context, index) {
-
-                  final entrada = entradas[index];
-
-                  return Dismissible(
-                    key: Key(entrada["id"].toString()),
-                    direction: DismissDirection.endToStart,
-
-                    background: Container(
-                      alignment: Alignment.centerRight,
-                      padding: const EdgeInsets.only(right: 20),
-                      color: Colors.red,
-                      child: const Icon(Icons.delete, color: Colors.white),
-                    ),
-
-                    onDismissed: (direction) async {
-                      await diarioService.eliminarDiario(entrada["id"]);
-                      cargarDiarios();
-                    },
-
-                    child: GestureDetector(
-                      onLongPress: () async {
-                        final editado = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                NuevaEntradaScreen(entrada: entrada),
-                          ),
-                        );
-
-                        if (editado != null) {
-                          await diarioService.actualizarDiario(
-                            entrada["id"],
-                            editado["texto"],
-                            editado["titulo"],
-                            editado["emocion"],
-                          );
-
-                          cargarDiarios();
-                        }
-                      },
-
-                      child: TarjetaEmocion(
-                        emocion: entrada["emocion"],
-                        titulo: entrada["titulo"],
-                        texto: entrada["texto"],
-                        color: entrada["color"],
+      
+            if (nuevaEntrada != null) {
+      
+              await diarioService.crearDiario(
+                nuevaEntrada["texto"],
+                nuevaEntrada["titulo"],
+                nuevaEntrada["emocion"],
+              );
+      
+      
+              await cargarDiarios();
+            }
+      
+          },
+        ),
+      
+        body: Padding(
+          padding: const EdgeInsets.all(20),
+      
+          child: entradas.isEmpty
+              ? const Center(
+                  child: Text("No hay diarios aún. ¡Agrega tu primer diario!"),
+                )
+              : ListView.builder(
+                  itemCount: entradas.length,
+                  itemBuilder: (context, index) {
+      
+                    final entrada = entradas[index];
+      
+                    return Dismissible(
+                      key: Key(entrada["id"].toString()),
+                      direction: DismissDirection.endToStart,
+      
+                      background: Container(
+                        alignment: Alignment.centerRight,
+                        padding: const EdgeInsets.only(right: 20),
+                        color: Colors.red,
+                        child: const Icon(Icons.delete, color: Colors.white),
                       ),
-                    ),
-                  );
-                },
-              ),
-      ),
+      
+                      onDismissed: (direction) async {
+                        await diarioService.eliminarDiario(entrada["id"]);
+                        cargarDiarios();
+                      },
+      
+                      child: GestureDetector(
+                        onLongPress: () async {
+                          final editado = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  NuevaEntradaScreen(entrada: entrada),
+                            ),
+                          );
+      
+                          if (editado != null) {
+                            await diarioService.actualizarDiario(
+                              entrada["id"],
+                              editado["texto"],
+                              editado["titulo"],
+                              editado["emocion"],
+                            );
+      
+                            cargarDiarios();
+                          }
+                        },
+      
+                        child: TarjetaEmocion(
+                          emocion: entrada["emocion"],
+                          titulo: entrada["titulo"],
+                          texto: entrada["texto"],
+                          color: entrada["color"],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+        ),
+      ),]
     );
   }
 
