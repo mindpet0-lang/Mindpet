@@ -5,7 +5,7 @@ class DiarioService {
 
   final String baseUrl = "http://localhost:8080/diarios";
 
-  int usuarioId = 1; // 🔐 luego será dinámico
+  int usuarioId = 1; // es para el usuario de prueba, luego se reemplazará por el id del usuario logueado
 
   Future<List<dynamic>> obtenerDiarios() async {
     final response = await http.get(Uri.parse("$baseUrl/usuario/$usuarioId"));

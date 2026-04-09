@@ -137,17 +137,17 @@ class _DiarioScreenState extends State<DiarioScreen> {
   Color obtenerColorPorEmocion(String emocion) {
   emocion = emocion.toLowerCase();
 
-  if (emocion.contains("alegr")) return Colors.green;
-  if (emocion.contains("triste")) return Colors.blue;
+  if (emocion.contains("alegria")) return Colors.green;
+  if (emocion.contains("tristeza")) return Colors.blue;
   if (emocion.contains("enojo")) return Colors.red;
   if (emocion.contains("ansiedad")) return Colors.purple;
   if (emocion.contains("miedo")) return Colors.deepPurple;
-  if (emocion.contains("estr")) return Colors.orange;
+  if (emocion.contains("estrés")) return Colors.orange;
   if (emocion.contains("calma")) return Colors.teal;
   if (emocion.contains("amor")) return Colors.pink;
   if (emocion.contains("cansancio")) return Colors.brown;
-  if (emocion.contains("confusi")) return Colors.indigo;
-  if (emocion.contains("motiv")) return Colors.lightGreen;
+  if (emocion.contains("confusion")) return Colors.indigo;
+  if (emocion.contains("motivacion")) return Colors.lightGreen;
   if (emocion.contains("soledad")) return Colors.blueGrey;
 
   return Colors.grey;
