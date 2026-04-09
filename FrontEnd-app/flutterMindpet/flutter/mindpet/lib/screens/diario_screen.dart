@@ -22,76 +22,81 @@ class _DiarioScreenState extends State<DiarioScreen> {
     cargarDiarios();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    
-    return Scaffold(
-      backgroundColor: const Color(0xffdbe7ef),
+ @override
+Widget build(BuildContext context) {
+  return Stack(
+    children: [
 
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
-        title: const Text(
-          "Diario",
-          style: TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
+      // 🔹 Imagen de fondo
+      Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("images/fondodiario.png"),
+            fit: BoxFit.cover,
           ),
         ),
       ),
 
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.blue,
-        child: const Icon(Icons.add),
-
-        onPressed: () async {
-
-          final nuevaEntrada = await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => NuevaEntradaScreen(),
+      // 🔹 Scaffold encima (transparente)
+      Scaffold(
+        backgroundColor: Colors.transparent, // 👈 clave
+        appBar: AppBar(
+          backgroundColor: Colors.transparent, // 👈 clave
+          elevation: 0,
+          centerTitle: true,
+          title: const Text(
+            "Diario",
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
             ),
-          );
+          ),
+        ),
 
-          if (nuevaEntrada != null) {
-
-            // ✅ Guardar en backend
-            await diarioService.crearDiario(
-              nuevaEntrada["texto"],
-              nuevaEntrada["titulo"],
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.blue,
+          child: const Icon(Icons.add),
+          onPressed: () async {
+            final nuevaEntrada = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => NuevaEntradaScreen(),
+              ),
             );
 
-            // ✅ Recargar datos
-            await cargarDiarios();
-          }
+            if (nuevaEntrada != null) {
+              await diarioService.crearDiario(
+                nuevaEntrada["texto"],
+                nuevaEntrada["titulo"],
+              );
+              await cargarDiarios();
+            }
+          },
+        ),
 
-        },
+        body: Padding(
+          padding: const EdgeInsets.all(20),
+          child: entradas.isEmpty
+              ? const Center(child: Text("No hay entradas 😢"))
+              : ListView.builder(
+                  itemCount: entradas.length,
+                  itemBuilder: (context, index) {
+                    final entrada = entradas[index];
+
+                    return TarjetaEmocion(
+                      emocion: entrada["emocion"],
+                      titulo: entrada["titulo"],
+                      texto: entrada["texto"],
+                      color: entrada["color"],
+                    );
+                  },
+                ),
+        ),
       ),
-
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-
-        child: entradas.isEmpty
-            ? const Center(child: Text("No hay entradas 😢"))
-            : ListView.builder(
-                itemCount: entradas.length,
-                itemBuilder: (context, index) {
-
-                  final entrada = entradas[index];
-
-                  return TarjetaEmocion(
-                    emocion: entrada["emocion"],
-                    titulo: entrada["titulo"],
-                    texto: entrada["texto"],
-                    color: entrada["color"],
-                  );
-                },
-              ),
-      ),
-    );
-  }
+    ],
+  );
+}
 
   // ✅ CARGAR DATOS DESDE API
   Future<void> cargarDiarios() async {
