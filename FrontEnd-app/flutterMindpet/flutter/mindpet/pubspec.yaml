@@ -63,16 +63,30 @@ flutter:
 
   assets:
   
-    - assets/images/pet.png
-    - assets/images/pet_bath.png
+
     - assets/images/sala.png
     - assets/images/bano.png
     - assets/images/game.png
     - assets/images/kitchen.png
-    - assets/images/pet_play.png
-    - assets/images/pet_sleep.png
     - assets/images/sleep.png
     - assets/sounds/click.wav
     - assets/sounds/fondo.mp3
+    - assets/images/fish.png
+    - assets/images/fondochat.png
+    - assets/images/fondochat2.jpg
+    - assets/images/fondodiario.png
+    - assets/images/hairbrush.png
+    - assets/images/imagen-terapia.png
+    - assets/images/jabon.png
+    - assets/images/juice.png
+    - assets/images/meat.png
+    - assets/images/milk.png
+    - assets/images/sandwich.png
+    - assets/images/shampoo.png
+    - assets/images/soap.png
+    - assets/images/soda.png
+    - assets/images/soup.png
+    - assets/images/toothpaste.png
+    - assets/images/water.png
 
 
