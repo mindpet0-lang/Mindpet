@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mindpet/screens/chat_screen.dart';
+import 'package:mindpet/screens/tienda_screen.dart';
 import '../models/pet.dart';
 import '../screens/diario_screen.dart';
 
@@ -45,7 +46,12 @@ class TopStatusBar extends StatelessWidget {
 
             /// TIENDA
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => TiendaScreen()),
+                );
+              },
               icon: const Icon(Icons.shopping_cart, size: 30),
             ),
           ],

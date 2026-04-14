@@ -1,7 +1,9 @@
+
 import 'dart:convert';
 import 'dart:io'; // Para manejar excepciones de socket
 import 'package:http/http.dart' as http;
 import '../models/pet.dart'; // Asegúrate de usar el modelo Pet que extiende ChangeNotifier
+
 
 class MascotaService {
   // Cambia esto según tu caso:
