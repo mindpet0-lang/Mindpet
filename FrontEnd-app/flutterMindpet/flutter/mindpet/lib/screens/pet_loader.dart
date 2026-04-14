@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:mindpet/screens/maingame_screen.dart';
-
-// IMPORTANTE: Ajusta estas rutas según el nombre de tu proyecto
+import 'package:http/http.dart' as http;
+import 'dart:convert'; // Asegúrate de importar tu Home
 import '../models/pet.dart';
-import '../services/audio_service.dart';
+import 'maingame_screen.dart'; // Importa tu modelo Pet
 
 class PetLoader extends StatefulWidget {
   final int userId;
 
-  const PetLoader({super.key , required this.userId});
+  const PetLoader({super.key, required this.userId});
 
   @override
   State<PetLoader> createState() => _PetLoaderState();
@@ -18,46 +17,69 @@ class _PetLoaderState extends State<PetLoader> {
   @override
   void initState() {
     super.initState();
-    _iniciarJuego();
+    // Iniciamos la carga apenas entre a la pantalla
+    _loadAndNavigate();
   }
 
-  Future<void> _iniciarJuego() async {
+  Future<void> _loadAndNavigate() async {
+    final String cleanId = widget.userId.toString().trim();
+    // Si usas emulador recuerda cambiar a 10.0.2.2
+    final url = Uri.parse('http://localhost:8080/mascotas/usuario/$cleanId');
+
     try {
-      // 1. Cargamos los datos de la mascota
-      final pet = await Pet.load();
+      final response = await http.get(url);
 
-      // 2. Iniciamos la música
-      AudioService.playMusic();
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
 
-      // 3. Saltamos al juego principal
-      if (mounted) {
+        // Convertimos el JSON al objeto Pet que ya configuramos
+        Pet mascotaCargada = Pet.fromJson(data);
+
+        if (!mounted) return;
+
+        // Redirigimos a HomeScreen pasando la mascota cargada
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => MainGameScreen(pet: pet, userId: widget.userId),
+            builder: (context) => MainGameScreen(
+              pet: mascotaCargada, 
+              userId: widget.userId,
+            ),
           ),
         );
+      } else {
+        _handleError("No se encontró la mascota en el servidor");
       }
     } catch (e) {
-      // Si hay un error cargando (por ejemplo, no hay internet),
-      // podrías mostrar un mensaje o volver al login
-      print("Error cargando mascota: $e");
+      _handleError("Error de conexión: Revisa tu servidor Spring Boot");
     }
+  }
+
+  void _handleError(String message) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message), backgroundColor: Colors.red),
+    );
+    // Opcional: Volver al login si falla
+    Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircularProgressIndicator(color: Colors.blue),
-            SizedBox(height: 20),
-            Text(
-              "Cargando tu MindPet...",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            // Tu animación de la nutria o un loader circular
+            const CircularProgressIndicator(color: Colors.blueAccent),
+            const SizedBox(height: 20),
+            Image.asset("images/nutria-parada.gif", width: 150),
+            const SizedBox(height: 20),
+            const Text(
+              "Despertando a tu mascota...",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
             ),
           ],
         ),

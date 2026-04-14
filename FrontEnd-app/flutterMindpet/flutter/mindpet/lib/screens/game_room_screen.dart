@@ -8,8 +8,6 @@ class GameRoomScreen extends StatefulWidget {
   final PageController controller;
   final int userId;
 
-
-
   const GameRoomScreen({
     super.key,
     required this.pet,
@@ -22,36 +20,73 @@ class GameRoomScreen extends StatefulWidget {
 }
 
 class _GameRoomScreenState extends State<GameRoomScreen> {
-  void jugar() {
-    setState(() {
-      widget.pet.jugar();
+  String imgNutria = "images/nutria-parada.gif";
+  bool jugando = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _iniciarReloj();
+  }
+
+  void _iniciarReloj() {
+    Future.doWhile(() async {
+      await Future.delayed(const Duration(seconds: 1));
+      if (!mounted) return false;
+      setState(() {
+        widget.pet.updateWithTime();
+      });
+      return true;
     });
   }
 
-  @override
-void initState() {
-  super.initState();
+  void jugar() async {
+    if (jugando || widget.pet.isSleeping) return;
 
-  Future.doWhile(() async {
-    await Future.delayed(const Duration(seconds: 1));
-
-    if (!mounted) return false;
+    // Validación de estados bajos
+    if (widget.pet.energia < 20) {
+      _mostrarMensaje("¡Tu nutria está muy cansada para jugar! 😴");
+      return;
+    }
+    if (widget.pet.hambre < 20) {
+      _mostrarMensaje("¡Tiene demasiada hambre para jugar! 🍔");
+      return;
+    }
 
     setState(() {
-      widget.pet.updateWithTime();
+      jugando = true;
+      imgNutria = "images/nutria-jugando.gif"; // Asegúrate de tener esta animación
     });
 
-    return true;
-  });
-}
+    widget.pet.jugar();
+    await widget.pet.saveLocal();
+    await widget.pet.saveToServer(widget.pet.id);
+
+    // Tiempo de juego
+    await Future.delayed(const Duration(seconds: 3));
+
+    if (mounted) {
+      setState(() {
+        jugando = false;
+        imgNutria = "images/nutria-parada.gif";
+      });
+    }
+  }
+
+  void _mostrarMensaje(String texto) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(texto), backgroundColor: Colors.redAccent),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
+          // Fondo de cuarto de juegos
           Image.asset(
-            "assets/images/game.png",
+            "images/game.png",
             width: double.infinity,
             height: double.infinity,
             fit: BoxFit.cover,
@@ -61,24 +96,33 @@ void initState() {
             top: 0,
             left: 0,
             right: 0,
-            child: TopStatusBar(pet: widget.pet, userId: widget.userId,),
+            child: TopStatusBar(pet: widget.pet, userId: widget.userId),
           ),
 
-          Center(child: Image.asset("images/nutria-parada.gif", width: 250)),
+          // Renderizado de la Nutria
+          Center(
+            child: widget.pet.isSleeping
+                ? _buildSleepingPlaceholder()
+                : Image.asset(imgNutria, width: 250),
+          ),
 
+          // Botón de Jugar
           Positioned(
             bottom: 150,
             left: 0,
             right: 0,
             child: Center(
               child: ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    widget.pet.jugar();
-                  });
-                  widget.pet.save();
-                },
-                child: const Text("Jugar"),
+                onPressed: (widget.pet.isSleeping || jugando) ? null : jugar,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orangeAccent,
+                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+                ),
+                child: Text(
+                  jugando ? "¡Diversión!" : "Jugar",
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
               ),
             ),
           ),
@@ -89,6 +133,30 @@ void initState() {
             right: 0,
             child: bottomMenu(widget.controller, 4),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSleepingPlaceholder() {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(Icons.bedtime, color: Color.fromARGB(255, 255, 255, 255), size: 50),
+          const SizedBox(height: 10),
+                  Container(
+                        padding: const EdgeInsets.all(10),
+                        color: Colors.black54,
+                        child: const Text(
+                          "Tu mascota está durmiendo...",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
         ],
       ),
     );

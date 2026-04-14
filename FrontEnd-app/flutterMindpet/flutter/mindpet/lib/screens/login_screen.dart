@@ -26,7 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://localhost:8080/usuarios/login'), 
+        Uri.parse('http://localhost:8080/usuarios/login'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'correo': _emailController.text.trim().toLowerCase(),
@@ -38,17 +38,18 @@ class _LoginScreenState extends State<LoginScreen> {
         final userData = jsonDecode(response.body);
 
         final String token = userData['token'];
-        
+
         // 1. Extraemos el ID del JSON que responde Spring Boot
-        final int idRecuperado = userData['id']; 
+        final int idRecuperado = userData['id'];
 
         // GUARDAR SESIÓN LOCALMENTE
         final prefs = await SharedPreferences.getInstance();
         await prefs.setInt('userId', idRecuperado);
         await prefs.setString('token', token);
-        
+
         if (mounted) {
-          // 2. PASAMOS EL ID AL PET LOADER (Aquí se quita la línea roja)
+          final int idRecuperado = int.parse(userData['id'].toString());
+
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -99,7 +100,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(height: 40),
                     const Text(
                       'Iniciar sesión',
-                      style: TextStyle(fontSize: 26, fontWeight: FontWeight.w900),
+                      style: TextStyle(
+                        fontSize: 26,
+                        fontWeight: FontWeight.w900,
+                      ),
                     ),
                     const SizedBox(height: 25),
                     Container(
@@ -111,19 +115,25 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text('Correo', style: TextStyle(fontWeight: FontWeight.w600)),
+                          const Text(
+                            'Correo',
+                            style: TextStyle(fontWeight: FontWeight.w600),
+                          ),
                           const SizedBox(height: 8),
                           _buildTextField(
-                            controller: _emailController, 
-                            hint: 'test@correo.com'
+                            controller: _emailController,
+                            hint: 'test@correo.com',
                           ),
                           const SizedBox(height: 20),
-                          const Text('Contraseña', style: TextStyle(fontWeight: FontWeight.w600)),
+                          const Text(
+                            'Contraseña',
+                            style: TextStyle(fontWeight: FontWeight.w600),
+                          ),
                           const SizedBox(height: 8),
                           _buildTextField(
-                            controller: _passwordController, 
-                            isPassword: true, 
-                            hint: '••••••••'
+                            controller: _passwordController,
+                            isPassword: true,
+                            hint: '••••••••',
                           ),
                           const SizedBox(height: 30),
                           SizedBox(
@@ -133,11 +143,21 @@ class _LoginScreenState extends State<LoginScreen> {
                               onPressed: _isLoading ? null : _handleLogin,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xFF2E2E2E),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
                               ),
-                              child: _isLoading 
-                                ? const CircularProgressIndicator(color: Colors.white)
-                                : const Text('Entrar', style: TextStyle(color: Colors.white, fontSize: 16)),
+                              child: _isLoading
+                                  ? const CircularProgressIndicator(
+                                      color: Colors.white,
+                                    )
+                                  : const Text(
+                                      'Entrar',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                      ),
+                                    ),
                             ),
                           ),
                         ],
@@ -154,7 +174,11 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildTextField({required TextEditingController controller, bool isPassword = false, String? hint}) {
+  Widget _buildTextField({
+    required TextEditingController controller,
+    bool isPassword = false,
+    String? hint,
+  }) {
     return TextField(
       controller: controller,
       obscureText: isPassword,

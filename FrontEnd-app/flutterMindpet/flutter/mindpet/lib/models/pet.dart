@@ -1,98 +1,142 @@
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Pet {
-
+class Pet extends ChangeNotifier{
+  final int id;
   int energia;
   int felicidad;
   int higiene;
   int hambre;
-  int lastUpdate; // tiempo guardado
+  int lastUpdate;
+  bool isSleeping;
 
   Pet({
+    required this.id,
     this.energia = 80,
     this.felicidad = 80,
     this.higiene = 80,
     this.hambre = 20,
+    this.isSleeping = false,
     int? lastUpdate,
   }) : lastUpdate = lastUpdate ?? DateTime.now().millisecondsSinceEpoch;
 
-  /// ACCIONES
-  void banarse() {
-    higiene += 20;
-    if (higiene > 100) higiene = 100;
+  factory Pet.fromJson(Map<String, dynamic> json) {
+    Pet pet = Pet(
+      id: json['id'],
+      energia: json['energia'] ?? 80,
+      felicidad: json['felicidad'] ?? 80,
+      higiene: json['higiene'] ?? 80,
+      hambre: json['hambre'] ?? 20,
+      isSleeping: json['isSleeping'] ?? false,
+      lastUpdate: json['lastUpdate'],
+    );
+    pet.updateWithTime(); 
+    return pet;
   }
 
-  void comer() {
-    hambre -= 20;
-    if (hambre < 0) hambre = 0;
-  }
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'energia': energia,
+    'felicidad': felicidad,
+    'higiene': higiene,
+    'hambre': hambre,
+    'isSleeping': isSleeping,
+    'lastUpdate': lastUpdate,
+  };
 
-  void dormir() {
-    energia += 30;
-    if (energia > 100) energia = 100;
-  }
-
-  void jugar() {
-    felicidad += 20;
-    energia -= 15;
-
-    if (felicidad > 100) felicidad = 100;
-    if (energia < 0) energia = 0;
-  }
-
-  /// BAJAR ESTADOS CON EL TIEMPO
   void updateWithTime() {
-
     int now = DateTime.now().millisecondsSinceEpoch;
     int diff = now - lastUpdate;
-
     int seconds = diff ~/ 1000;
 
     if (seconds > 0) {
-
-      energia -= seconds ~/ 60; 
-      felicidad -= seconds ~/ 6;
-      higiene -= seconds ~/ 7;
-      hambre += seconds ~/ 5;
+      if (isSleeping) {
+        energia += seconds ~/ 30; // Recupera 1 punto cada 30 seg durmiendo
+      } else {
+        energia -= seconds ~/ 60; // Pierde 1 punto por minuto despierta
+      }
+      
+      felicidad -= seconds ~/ 300;
+      higiene -= seconds ~/ 600;
+      hambre -= seconds ~/ 120;
 
       _clamp();
-
       lastUpdate = now;
+
+      // Si durmiendo llegó al 100%, despertar automáticamente
+      if (isSleeping && energia >= 100) {
+        isSleeping = false;
+      }
     }
   }
 
   void _clamp() {
     energia = energia.clamp(0, 100);
     felicidad = felicidad.clamp(0, 100);
-    higiene = higiene.clamp(0, 100);
+    higiene = higiene.clamp(0, 100); // Corrección: higiene
     hambre = hambre.clamp(0, 100);
   }
 
-  /// 💾 GUARDAR
-  Future<void> save() async {
+  Future<void> saveLocal() async {
     final prefs = await SharedPreferences.getInstance();
-
-    prefs.setInt('energia', energia);
-    prefs.setInt('felicidad', felicidad);
-    prefs.setInt('higiene', higiene);
-    prefs.setInt('hambre', hambre);
-    prefs.setInt('lastUpdate', lastUpdate);
+    await prefs.setString('pet_data', jsonEncode(toJson()));
   }
 
-  /// 📥 CARGAR
-  static Future<Pet> load() async {
-    final prefs = await SharedPreferences.getInstance();
-
-    Pet pet = Pet(
-      energia: prefs.getInt('energia') ?? 80,
-      felicidad: prefs.getInt('felicidad') ?? 80,
-      higiene: prefs.getInt('higiene') ?? 80,
-      hambre: prefs.getInt('hambre') ?? 20,
-      lastUpdate: prefs.getInt('lastUpdate'),
-    );
-
-    pet.updateWithTime(); 
-
-    return pet;
+  Future<bool> saveToServer(int mascotaId) async {
+    try {
+      final url = Uri.parse('http://localhost:8080/mascotas/update/$mascotaId');
+      final response = await http.put(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(toJson()),
+      );
+      return response.statusCode == 200;
+    } catch (e) {
+      return false;
+    }
   }
+
+bool comer() {
+    // Si ya está en 100 o más, está totalmente llena
+    if (hambre >= 100) {
+      return false; 
+    }
+
+    hambre += 20; // SUMAMOS comida
+    if (hambre > 100) hambre = 100;
+    
+    felicidad += 5;
+    if (felicidad > 100) felicidad = 100;
+
+    lastUpdate = DateTime.now().millisecondsSinceEpoch;
+    notifyListeners();
+    return true;
+  }
+
+  bool jugar() {
+    // No puede jugar si está muy cansada o tiene mucha hambre
+    if (energia < 20 || hambre < 20) {
+      return false;
+    }
+
+    felicidad += 20;
+    energia -= 15; // Jugar cansa
+    hambre -= 10;   // Jugar da hambre (baja la saciedad)
+
+    _clamp();
+    lastUpdate = DateTime.now().millisecondsSinceEpoch;
+    notifyListeners();
+    return true;
+  }
+
+
+  void notificar() {
+    notifyListeners();
+  }
+
+
+  
 }
+

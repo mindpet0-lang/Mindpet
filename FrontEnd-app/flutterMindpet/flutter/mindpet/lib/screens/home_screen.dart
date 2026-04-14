@@ -4,17 +4,17 @@ import '../widgets/top_status_bar.dart';
 import '../widgets/bottom_menu.dart';
 
 class HomeScreen extends StatelessWidget {
-
   final Pet pet;
   final PageController controller;
   final int userId;
 
   const HomeScreen({
-    super.key,
-    required this.pet,
+    super.key, 
+    required this.pet, 
     required this.controller,
     required this.userId
   });
+  
 
   @override
   Widget build(BuildContext context) {
@@ -39,12 +39,29 @@ class HomeScreen extends StatelessWidget {
         child: TopStatusBar(pet: pet,userId: userId,),
       ),
 
-          /// MASCOTA
-          Center(
-            child: Image.asset(
-              "images/nutria-acostada.gif",
-              width: 400,
-            ),
+          /// MASCOTA (CON LÓGICA DE VISIBILIDAD)
+          // Usamos Consumer para que la pantalla se entere si la nutria se despierta
+        Center(
+            child: pet.isSleeping
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.bedtime, color: Colors.white, size: 50),
+                      const SizedBox(height: 10),
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        color: Colors.black54,
+                        child: const Text(
+                          "Tu mascota está durmiendo...",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                : Image.asset("images/nutria-acostada.gif", width: 400),
           ),
 
           /// MENU
@@ -60,4 +77,3 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-

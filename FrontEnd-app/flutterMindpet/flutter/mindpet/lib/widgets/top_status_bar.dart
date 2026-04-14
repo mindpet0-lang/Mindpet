@@ -7,7 +7,7 @@ class TopStatusBar extends StatelessWidget {
   final Pet pet;
   final int userId;
 
- const TopStatusBar({super.key, required this.pet, required this.userId});
+  const TopStatusBar({super.key, required this.pet, required this.userId});
 
   @override
   Widget build(BuildContext context) {
@@ -32,11 +32,14 @@ class TopStatusBar extends StatelessWidget {
                 stat(
                   Icons.sentiment_satisfied,
                   pet.felicidad,
-                  Color(0xFFFFA726),
+                  const Color(0xFFFFA726),
                 ),
-                stat(Icons.flash_on, pet.energia, Color(0xFFFFEB3B)),
-                stat(Icons.restaurant, 100 - pet.hambre, Color(0xFF8BC34A)),
-                stat(Icons.clean_hands, pet.higiene, Color(0xFF4FC3F7)),
+                stat(Icons.flash_on, pet.energia, const Color(0xFFFFEB3B)),
+
+                // CAMBIO AQUÍ: Quita el "100 -"
+                stat(Icons.restaurant, pet.hambre, const Color(0xFF8BC34A)),
+
+                stat(Icons.clean_hands, pet.higiene, const Color(0xFF4FC3F7)),
               ],
             ),
 
@@ -129,8 +132,9 @@ class TopStatusBar extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) =>
-                        ChatScreen(userId: userId,), // Redirige a tu pantalla de chat
+                    builder: (_) => ChatScreen(
+                      userId: userId,
+                    ), // Redirige a tu pantalla de chat
                   ),
                 );
               },
