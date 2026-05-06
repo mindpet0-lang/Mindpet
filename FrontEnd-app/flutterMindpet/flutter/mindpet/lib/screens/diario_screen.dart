@@ -85,7 +85,7 @@ class _DiarioScreenState extends State<DiarioScreen> {
       
           child: entradas.isEmpty
               ? const Center(
-                  child: Text("No hay diarios aún. ¡Agrega tu primer diario!"),
+                  child: Text("No hay nada aún. ¡Agrega tu primer nota!"),
                 )
               : ListView.builder(
                   itemCount: entradas.length,

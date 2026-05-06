@@ -35,7 +35,7 @@ class TiendaScreen extends StatelessWidget {
                 ),
               ),
 
-              Image.asset("assets/nutria.png", height: 180),
+              Image.asset("images/nutria-acostada.gif", height: 180),
 
               const SizedBox(height: 20),
 
