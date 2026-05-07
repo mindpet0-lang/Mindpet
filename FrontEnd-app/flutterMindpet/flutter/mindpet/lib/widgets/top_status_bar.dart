@@ -49,7 +49,7 @@ class TopStatusBar extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => TiendaScreen()),
+                  MaterialPageRoute(builder: (context) => TiendaScreen(userId: userId,)),
                 );
               },
               icon: const Icon(Icons.shopping_cart, size: 30),

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import '../data/items_data.dart';
-import '../widgets/item_card.dart';
+import '../data/items_data.dart'; // Asegúrate de que aquí los items coincidan con el modelo
 import '../models/item.dart';
-import '../services/money_service.dart';
+import '../services/api_service.dart';
 import 'carrito_screen.dart';
 
 class ComidaScreen extends StatefulWidget {
-  const ComidaScreen({super.key});
+  final int userId;
+  const ComidaScreen({super.key, required this.userId});
 
   @override
   State<ComidaScreen> createState() => _ComidaScreenState();
@@ -19,37 +19,12 @@ class _ComidaScreenState extends State<ComidaScreen> {
   @override
   void initState() {
     super.initState();
-    cargarMonedas();
+    _actualizarMonedas();
   }
 
-  void cargarMonedas() async {
-    monedas = await MoneyService.getMoney();
-    setState(() {});
-  }
-
-  void comprar(Item item) async {
-    if (monedas >= item.precio) {
-      monedas -= item.precio;
-      carrito.add(item);
-
-      await MoneyService.saveMoney(monedas);
-
-      setState(() {});
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.green,
-          content: Text("${item.nombre} agregado 🛒"),
-        ),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          backgroundColor: Colors.red,
-          content: Text("No tienes monedas 😢"),
-        ),
-      );
-    }
+  void _actualizarMonedas() async {
+    int m = await ApiService.getMonedas(widget.userId);
+    setState(() => monedas = m);
   }
 
   @override
@@ -60,77 +35,49 @@ class _ComidaScreenState extends State<ComidaScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.shopping_cart),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => CarritoScreen(carrito: carrito),
-                ),
-              );
+            onPressed: () async {
+              final result = await Navigator.push(context, MaterialPageRoute(
+                builder: (_) => CarritoScreen(carrito: carrito, categoria: "COMIDA", userId: widget.userId)
+              ));
+              if (result == true) {
+                setState(() => carrito.clear());
+                _actualizarMonedas();
+              }
             },
           )
         ],
       ),
-
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-
-              // 🍔 COMIDA
-              const Center(
-                child: Text(
-                  "🍔 Comida",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-              ),
-
-              GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: comidaItems.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                ),
-                itemBuilder: (_, i) {
-                  final item = comidaItems[i];
-                  return ItemCard(
-                    item: item,
-                    onBuy: () => comprar(item),
-                  );
-                },
-              ),
-
-              const SizedBox(height: 20),
-
-              // 🥤 BEBIDAS
-              const Center(
-                child: Text(
-                  "🥤 Bebidas",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-              ),
-
-              GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: bebidaItems.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                ),
-                itemBuilder: (_, i) {
-                  final item = bebidaItems[i];
-                  return ItemCard(
-                    item: item,
-                    onBuy: () => comprar(item),
-                  );
-                },
-              ),
-            ],
-          ),
-        ),
+      body: GridView.builder(
+        padding: const EdgeInsets.all(10),
+        itemCount: comidaItems.length,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, childAspectRatio: 0.8),
+        itemBuilder: (_, i) {
+          final itemData = comidaItems[i];
+          return Card(
+            child: Column(
+              children: [
+                Image.asset(itemData.imagen, height: 80),
+                Text(itemData.nombre),
+                Text("💛 ${itemData.precio}"),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      // Si ya existe en el carrito, no lo duplicamos en la lista, el carro maneja cantidad
+                      if (!carrito.any((e) => e.nombre == itemData.nombre)) {
+                        carrito.add(Item(
+                          nombre: itemData.nombre, 
+                          precio: itemData.precio, 
+                          imagen: itemData.imagen
+                        ));
+                      }
+                    });
+                  }, 
+                  child: const Text("Añadir")
+                )
+              ],
+            ),
+          );
+        },
       ),
     );
   }
