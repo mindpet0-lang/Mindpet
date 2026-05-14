@@ -5,7 +5,7 @@ import '../models/pet.dart';
 import '../widgets/top_status_bar.dart';
 
 class BathroomScreen extends StatefulWidget {
-  // Eliminamos 'pet' del constructor para usar Provider
+  final Pet pet;
   final PageController controller;
   final int userId;
 
@@ -13,6 +13,7 @@ class BathroomScreen extends StatefulWidget {
     super.key,
     required this.controller,
     required this.userId,
+    required this.pet,
   });
 
   @override
@@ -24,18 +25,11 @@ class _BathroomScreenState extends State<BathroomScreen> {
   int objetoActual = 0;
   List<String> objetos = ["jabon", "ducha"];
   bool jabonUsado = false;
-<<<<<<< Updated upstream
   late String imgNutria; // Usa 'late'
-=======
-  
-  // Ruta inicial corregida según tu carpeta de assets
-  String imgNutria = "assets/images/mascota gifs/de pie/nutria parada.gif";
->>>>>>> Stashed changes
 
   @override
   void initState() {
     super.initState();
-<<<<<<< Updated upstream
     imgNutria = widget.pet.imagenActual; // Inicializa aquí
     _iniciarReloj();
   }
@@ -49,10 +43,6 @@ class _BathroomScreenState extends State<BathroomScreen> {
       });
       return true;
     });
-=======
-    // Ya no necesitas iniciar un reloj manual aquí porque el modelo Pet 
-    // ya tiene su propio Timer interno
->>>>>>> Stashed changes
   }
 
   void siguiente() =>
@@ -62,95 +52,49 @@ class _BathroomScreenState extends State<BathroomScreen> {
   );
 
   void usarObjeto() async {
-<<<<<<< Updated upstream
-  if (widget.pet.isSleeping || animandoAccion) return;
-=======
-    // Obtenemos la instancia de Pet sin escuchar (listen: false) para ejecutar métodos
-    final pet = Provider.of<Pet>(context, listen: false);
+    if (widget.pet.isSleeping || animandoAccion) return;
 
-    if (pet.isSleeping || animandoAccion) return;
->>>>>>> Stashed changes
+    String objeto = objetos[objetoActual];
 
-  String objeto = objetos[objetoActual];
-
-<<<<<<< Updated upstream
-  if (objeto == "jabon") {
-    setState(() {
-      jabonUsado = true;
-      animandoAccion = true;
-      // AJUSTA ESTAS RUTAS A TUS CARPETAS REALES
-      imgNutria = "assets/images/nutria/bano/nutria_jabon.gif"; 
-    });
-    widget.pet.higiene = (widget.pet.higiene + 30).clamp(0, 100);
-    
-  } else if (objeto == "ducha") {
-    if (!jabonUsado) {
-      _mensaje("¡Primero necesitas enjabonarla! 🧼");
-      return;
-=======
     if (objeto == "jabon") {
       setState(() {
         jabonUsado = true;
         animandoAccion = true;
-        // Asegúrate de que estos GIFs existan en tu carpeta de assets
-        imgNutria = "assets/images/mascota gifs/nutria-jabon.gif"; 
+        imgNutria = "images/nutria/banio/jabonflores.gif";
       });
-      
-      pet.higiene = (pet.higiene + 30).clamp(0, 100);
-      
+      widget.pet.higiene = (widget.pet.higiene + 30).clamp(0, 100);
     } else if (objeto == "ducha") {
       if (!jabonUsado) {
         _mensaje("¡Primero necesitas enjabonarla! 🧼");
         return;
       }
-
       setState(() {
         animandoAccion = true;
-        imgNutria = "assets/images/mascota gifs/nutria-ducha.gif"; 
+        imgNutria = "images/nutria/banio/jabonflores-ducha.gif";
       });
-
-      pet.higiene = 100;
+      widget.pet.higiene = 100;
       jabonUsado = false;
     }
 
-    pet.lastUpdate = DateTime.now().millisecondsSinceEpoch;
-    pet.notifyListeners(); // Notifica el cambio de higiene
-    
-    await pet.saveLocal();
-    await pet.saveToServer(pet.id);
+    // Notificar a los listeners para que la barra de arriba se actualice
+    widget.pet.notifyListeners();
 
+    await widget.pet.saveLocal();
     await Future.delayed(const Duration(seconds: 3));
 
     if (mounted) {
       setState(() {
         animandoAccion = false;
-        // Al terminar, volvemos al getter dinámico para mostrar si sigue sucia o no
-        imgNutria = pet.imagenActual; 
+        if (!animandoAccion) {
+          if (jabonUsado) {
+            imgNutria = "images/nutria/banio/jabonflores-enjabonada.gif";
+          } else {
+            imgNutria = widget.pet.imagenActual;
+          }
+        }
       });
->>>>>>> Stashed changes
     }
-    setState(() {
-      animandoAccion = true;
-      imgNutria = "assets/images/nutria/bano/nutria_ducha.gif"; 
-    });
-    widget.pet.higiene = 100;
-    jabonUsado = false;
   }
-
-  // Notificar a los listeners para que la barra de arriba se actualice
-  widget.pet.notifyListeners(); 
-
-  await widget.pet.saveLocal();
-  await Future.delayed(const Duration(seconds: 3));
-
-  if (mounted) {
-    setState(() {
-      animandoAccion = false;
-      // Al terminar la animación, vuelve al estado actual (que ahora debería ser limpia)
-      imgNutria = widget.pet.imagenActual; 
-    });
-  }
-}
 
   void _mensaje(String texto) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(texto)));
@@ -177,106 +121,47 @@ class _BathroomScreenState extends State<BathroomScreen> {
                 top: 0,
                 left: 0,
                 right: 0,
-                child: TopStatusBar(pet: pet, userId: widget.userId),
+                child: TopStatusBar(pet: widget.pet, userId: widget.userId),
               ),
 
-<<<<<<< Updated upstream
-          /// 3️⃣ MASCOTA
-          Center(
-            child: ListenableBuilder(
-              listenable: widget.pet,
-              builder: (context, child) {
-                // Si no estamos en medio de una animación de jabón o ducha,
-                // dejamos que el modelo decida qué GIF mostrar
-                if (!animandoAccion) {
-                  imgNutria = widget.pet.imagenActual;
-                }
-
-                return widget.pet.isSleeping
-                    ? _buildSleepingPlaceholder()
-                    : Image.asset(
-                        imgNutria,
-                        width: 250,
-                        // Evita el error 404 si la ruta falla por algún motivo
-                        errorBuilder: (context, error, stackTrace) =>
-                            const Icon(
-                              Icons.pets,
-                              size: 100,
-                              color: Colors.white54,
-                            ),
-                      );
-              },
-            ),
-          ),
-
-          /// 4️⃣ SELECTOR DE OBJETOS (Solo visible si no duerme)
-          if (!widget.pet.isSleeping)
-            Positioned(
-              bottom: 110,
-              left: 0,
-              right: 0,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                    onPressed: animandoAccion ? null : anterior,
-                    icon: const Icon(
-                      Icons.arrow_left,
-                      size: 50,
-                      color: Colors.white,
-                    ),
-                  ),
-                  Column(
-                    children: [
-                      AnimatedOpacity(
-                        duration: const Duration(milliseconds: 200),
-                        opacity: animandoAccion ? 0.5 : 1.0,
-                        child: Image.asset(
-                          objetos[objetoActual] == "jabon"
-                              ? "images/jabon.png"
-                              : "images/ducha.png",
-                          width: 80,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      ElevatedButton(
-                        onPressed: animandoAccion ? null : usarObjeto,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blueAccent,
-                        ),
-                        child: Text(
-                          animandoAccion
-                              ? "..."
-                              : "Usar ${objetos[objetoActual]}",
-                        ),
-                      ),
-                    ],
-                  ),
-                  IconButton(
-                    onPressed: animandoAccion ? null : siguiente,
-                    icon: const Icon(
-                      Icons.arrow_right,
-                      size: 50,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-=======
               /// 3️⃣ MASCOTA
               Center(
-                child: pet.isSleeping
-                    ? _buildSleepingPlaceholder()
-                    : Image.asset(
-                        // Si no hay acción, usa el getter dinámico
-                        animandoAccion ? imgNutria : pet.imagenActual, 
-                        width: 250,
-                      ),
+                child: ListenableBuilder(
+                  listenable: widget.pet,
+                  builder: (context, child) {
+                    // Si no estamos en medio de una animación de jabón o ducha,
+                    // dejamos que el modelo decida qué GIF mostrar
+                    if (!animandoAccion) {
+                      if (jabonUsado) {
+                        imgNutria =
+                            "images/nutria/banio/jabonflores-enjabonada.gif";
+                      } else {
+                        imgNutria = widget.pet.imagenActual;
+                      }
+                    }
+
+                    return widget.pet.isSleeping
+                        ? _buildSleepingPlaceholder()
+                        : Image.asset(
+                            imgNutria,
+                            key: ValueKey(
+                              imgNutria + animandoAccion.toString(),
+                            ),
+                            width: 250,
+                            gaplessPlayback: false,
+                            errorBuilder: (context, error, stackTrace) =>
+                                const Icon(
+                                  Icons.pets,
+                                  size: 100,
+                                  color: Colors.white54,
+                                ),
+                          );
+                  },
+                ),
               ),
 
-              /// 4️⃣ SELECTOR DE OBJETOS
-              if (!pet.isSleeping)
+              /// 4️⃣ SELECTOR DE OBJETOS (Solo visible si no duerme)
+              if (!widget.pet.isSleeping)
                 Positioned(
                   bottom: 110,
                   left: 0,
@@ -286,7 +171,11 @@ class _BathroomScreenState extends State<BathroomScreen> {
                     children: [
                       IconButton(
                         onPressed: animandoAccion ? null : anterior,
-                        icon: const Icon(Icons.arrow_left, size: 50, color: Colors.white),
+                        icon: const Icon(
+                          Icons.arrow_left,
+                          size: 50,
+                          color: Colors.white,
+                        ),
                       ),
                       Column(
                         children: [
@@ -295,27 +184,36 @@ class _BathroomScreenState extends State<BathroomScreen> {
                             opacity: animandoAccion ? 0.5 : 1.0,
                             child: Image.asset(
                               objetos[objetoActual] == "jabon"
-                                  ? "assets/images/jabon.png" // Ruta corregida
-                                  : "assets/images/ducha.png",
+                                  ? "images/jabon.png"
+                                  : "images/ducha.png",
                               width: 80,
                             ),
                           ),
                           const SizedBox(height: 10),
                           ElevatedButton(
                             onPressed: animandoAccion ? null : usarObjeto,
-                            style: ElevatedButton.styleFrom(backgroundColor: Colors.blueAccent),
-                            child: Text(animandoAccion ? "..." : "Usar ${objetos[objetoActual]}"),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blueAccent,
+                            ),
+                            child: Text(
+                              animandoAccion
+                                  ? "..."
+                                  : "Usar ${objetos[objetoActual]}",
+                            ),
                           ),
                         ],
                       ),
                       IconButton(
                         onPressed: animandoAccion ? null : siguiente,
-                        icon: const Icon(Icons.arrow_right, size: 50, color: Colors.white),
+                        icon: const Icon(
+                          Icons.arrow_right,
+                          size: 50,
+                          color: Colors.white,
+                        ),
                       ),
                     ],
                   ),
                 ),
->>>>>>> Stashed changes
 
               /// 5️⃣ MENÚ INFERIOR
               Positioned(
@@ -332,7 +230,6 @@ class _BathroomScreenState extends State<BathroomScreen> {
   }
 
   Widget _buildSleepingPlaceholder() {
-<<<<<<< Updated upstream
     return Container(
       padding: const EdgeInsets.all(20),
 
@@ -358,25 +255,6 @@ class _BathroomScreenState extends State<BathroomScreen> {
           ),
         ],
       ),
-=======
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        const Icon(Icons.bedtime, color: Colors.white, size: 50),
-        const SizedBox(height: 10),
-        Container(
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: Colors.black54,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: const Text(
-            "Tu mascota está durmiendo...",
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-          ),
-        ),
-      ],
->>>>>>> Stashed changes
     );
   }
 }

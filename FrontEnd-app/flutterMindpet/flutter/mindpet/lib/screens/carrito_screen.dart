@@ -60,8 +60,11 @@ class _CarritoScreenState extends State<CarritoScreen> {
                             IconButton(
                               icon: const Icon(Icons.remove_circle_outline), 
                               onPressed: () => setState(() {
-                                if (item.cantidad > 1) item.cantidad--; 
-                                else widget.carrito.removeAt(i);
+                                if (item.cantidad > 1) {
+                                  item.cantidad--;
+                                } else {
+                                  widget.carrito.removeAt(i);
+                                }
                               })
                             ),
                             Text('${item.cantidad}', style: const TextStyle(fontWeight: FontWeight.bold)),

@@ -57,14 +57,8 @@ class DetalleDiarioScreen extends StatelessWidget {
               // Estado emocional estilo selector
               Row(
                 children: [
-<<<<<<< Updated upstream
                   const Text("Estado emocional: ", style: TextStyle(fontSize: 14, color: Colors.black87)),
                   const SizedBox(width: 8),
-=======
-                  const SizedBox(width: 8),
-                  Icon(Icons.circle, color: entrada['color'] ?? Colors.blue, size: 10),
-                  const SizedBox(width: 5),
->>>>>>> Stashed changes
                   Text(
                     entrada['emocion'],
                     style: const TextStyle(fontSize: 14, color: Colors.black87),

@@ -27,7 +27,6 @@ class Pet extends ChangeNotifier {
     _startRealtimeUpdate();
   }
 
-<<<<<<< Updated upstream
   // Getter dinámico para los GIFs basado en tus carpetas
   String get imagenActual {
     String path = "images/nutria/parada";
@@ -39,7 +38,7 @@ class Pet extends ChangeNotifier {
 
     if (h && u && s) return "$path/hambrienta-sucia-sueno.gif";
     if (h && u) return "$path/hambrienta-sucia.gif";
-    if (u && s) return "$path/sucia con sueno.gif";
+    if (u && s) return "$path/sucia-sueno.gif";
     if (h && s) return "$path/hambrienta-sueno.gif";
     if (h) return "$path/hambrienta.gif";
     if (u) return "$path/sucia.gif";
@@ -68,9 +67,6 @@ class Pet extends ChangeNotifier {
     }
   }
   // Mantenemos tu lógica de carga de datos
-=======
-  // --- SERIALIZACIÓN (Corrección de errores anteriores) ---
->>>>>>> Stashed changes
   factory Pet.fromJson(Map<String, dynamic> json) {
     Pet pet = Pet(
       id: json['id'],
@@ -91,8 +87,6 @@ class Pet extends ChangeNotifier {
     'lastUpdate': lastUpdate,
   };
 
-<<<<<<< Updated upstream
-=======
   // --- LÓGICA DE TIEMPO REAL ---
   void _startRealtimeUpdate() {
     _timer = Timer.periodic(const Duration(minutes: 1), (timer) {
@@ -107,62 +101,7 @@ class Pet extends ChangeNotifier {
     super.dispose();
   }
 
-  // --- SELECTOR DE ANIMACIÓN DINÁMICA ---
-  String get imagenActual {
-    bool tieneHambre = hambre <= 35;
-    bool tieneSueno = energia <= 35;
-    bool estaSucia = higiene <= 35;
 
-    String pathBase = "images/mascota gifs/de pie/";
-
-    // Combinaciones triples y dobles según tus archivos
-    if (tieneHambre && estaSucia && tieneSueno) {
-      return "${pathBase}hambrienta-sucia-sueño.gif";
-    }
-    if (tieneHambre && estaSucia) {
-      return "${pathBase}hambrienta-sucia.gif";
-    }
-    if (estaSucia && tieneSueno) {
-      return "${pathBase}con-sueño.gif";
-    }
-    if (tieneHambre && tieneSueno) {
-      return "${pathBase}hambrienta-sueño.gif";
-    }
-
-    // Estados individuales
-    if (tieneHambre) return "${pathBase}hambrienta.gif";
-    if (estaSucia) return "${pathBase}sucia.gif";
-    if (tieneSueno) return "${pathBase}con sueño.gif";
-
-    return "${pathBase}nutria parada.gif";
-  }
-
-  // --- ACTUALIZACIÓN DE ESTADÍSTICAS ---
-  void updateWithTime() {
-    int now = DateTime.now().millisecondsSinceEpoch;
-    int diff = now - lastUpdate;
-    int seconds = diff ~/ 1000;
-
-    if (seconds > 0) {
-      if (isSleeping) {
-        energia += seconds ~/ 30; // Recupera 1 punto cada 30 seg
-      } else {
-        energia -= seconds ~/ 60; // Pierde 1 punto cada 60 seg
-      }
-      
-      felicidad -= seconds ~/ 300;
-      higiene -= seconds ~/ 600;
-      hambre -= seconds ~/ 120; 
-
-      _clamp();
-      lastUpdate = now;
-
-      if (isSleeping && energia >= 100) {
-        isSleeping = false;
-      }
-    }
-  }
->>>>>>> Stashed changes
 
   void _clamp() {
     energia = energia.clamp(0, 100);
@@ -171,21 +110,7 @@ class Pet extends ChangeNotifier {
     hambre = hambre.clamp(0, 100);
   }
 
-<<<<<<< Updated upstream
-  // Tus funciones de acciones originales
-  bool comer() {
-    if (hambre >= 100) return false;
-    hambre = (hambre + 20).clamp(0, 100);
-    felicidad = (felicidad + 5).clamp(0, 100);
-    lastUpdate = DateTime.now().millisecondsSinceEpoch;
-    notifyListeners();
-    return true;
-  }
-
-  // Métodos de persistencia
-=======
   // --- PERSISTENCIA Y ACCIONES ---
->>>>>>> Stashed changes
   Future<void> saveLocal() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('pet_data', jsonEncode(toJson()));
@@ -199,9 +124,6 @@ class Pet extends ChangeNotifier {
     } catch (e) { return false; }
   }
 
-<<<<<<< Updated upstream
-void notificar() {
-=======
   bool comer() {
     if (hambre >= 100) return false;
 
@@ -230,7 +152,6 @@ void notificar() {
   }
 
   void notificar() {
->>>>>>> Stashed changes
   notifyListeners();
 }
 }

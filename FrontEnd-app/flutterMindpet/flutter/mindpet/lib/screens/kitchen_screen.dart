@@ -63,7 +63,7 @@ class _KitchenScreenState extends State<KitchenScreen> {
 
     setState(() {
       comiendo = true;
-      imgNutria = "images/nutria-comiendo.gif"; 
+      imgNutria;
     });
 
     widget.pet.comer(); 
@@ -241,15 +241,18 @@ class _KitchenScreenState extends State<KitchenScreen> {
             child: ListenableBuilder(
               listenable: widget.pet,
               builder: (context, child) {
+                late double size = 250;
                 if (!comiendo) {
-                  imgNutria = widget.pet.imagenActual;
+                  imgNutria = widget.pet.imagenActual;                  
+                }else{
+                  imgNutria = "images/nutria-comiendo.gif";
+                  size = 300;
                 }
-
                 return widget.pet.isSleeping
                     ? _buildSleepingPet()
                     : Image.asset(
                         imgNutria, 
-                        width: 250,
+                        width: size,
                         errorBuilder: (context, error, stackTrace) => 
                           const Icon(Icons.pets, size: 100, color: Colors.white54),
                       );

@@ -124,11 +124,7 @@ class TopStatusBar extends StatelessWidget {
                 Navigator.pop(context); // cerrar menú
                 Navigator.push(
                   context,
-<<<<<<< Updated upstream
                   MaterialPageRoute(builder: (_) => DiarioScreen(userId: userId)),
-=======
-                  MaterialPageRoute(builder: (_) => DiarioScreen(userId: userId,)),
->>>>>>> Stashed changes
                 );
               },
             ),
