@@ -22,7 +22,7 @@ class KitchenScreen extends StatefulWidget {
 }
 
 class _KitchenScreenState extends State<KitchenScreen> {
-  String imgNutria = "images/nutria-parada.gif";
+  late String imgNutria; 
   bool comiendo = false;
   
   final PageController _pageController = PageController(viewportFraction: 0.35);
@@ -34,13 +34,18 @@ class _KitchenScreenState extends State<KitchenScreen> {
   @override
   void initState() {
     super.initState();
+    imgNutria = widget.pet.imagenActual; 
     _iniciarReloj();
     _cargarInventario();
   }
 
   void _cargarInventario() async {
+    if (!mounted) return;
     setState(() => cargando = true);
+    
     List<dynamic> items = await ApiService.getInventarioComida(widget.userId);
+    
+    if (!mounted) return; // Arreglo para evitar error tras respuesta de API
     setState(() {
       inventarioComida = items;
       cargando = false;
@@ -52,51 +57,57 @@ class _KitchenScreenState extends State<KitchenScreen> {
     if (comiendo || widget.pet.isSleeping) return;
 
     if (widget.pet.hambre >= 100) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("¡Tu nutria está llena!")),
-      );
+      _mensaje("¡Tu nutria está llena!");
       return;
     }
 
     setState(() {
       comiendo = true;
-      imgNutria = "images/nutria-comiendo.gif";
+      imgNutria = "images/nutria-comiendo.gif"; 
     });
 
     widget.pet.comer(); 
-    
+    widget.pet.notifyListeners(); 
+
     bool exito = await ApiService.consumirItem(widget.userId, item['nombre']);
     
     if (exito) {
       await widget.pet.saveLocal();
       await widget.pet.saveToServer(widget.pet.id);
 
-      setState(() {
-        if (item['cantidad'] > 1) {
-          item['cantidad']--;
-        } else {
-          inventarioComida.removeAt(_currentIndex);
-          if (_currentIndex >= inventarioComida.length && _currentIndex > 0) {
-            _currentIndex--;
+      if (mounted) { // Arreglo para actualizar inventario visualmente
+        setState(() {
+          if (item['cantidad'] > 1) {
+            item['cantidad']--;
+          } else {
+            inventarioComida.removeAt(_currentIndex);
+            if (_currentIndex >= inventarioComida.length && _currentIndex > 0) {
+              _currentIndex--;
+            }
           }
-        }
-      });
+        });
+      }
     }
 
     await Future.delayed(const Duration(seconds: 2));
 
-    if (mounted) {
+    if (mounted) { // Arreglo crítico para finalizar la animación
       setState(() {
         comiendo = false;
-        imgNutria = "images/nutria-parada.gif";
+        imgNutria = widget.pet.imagenActual; 
       });
     }
+  }
+
+  void _mensaje(String texto) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(texto)));
   }
 
   void _iniciarReloj() {
     Future.doWhile(() async {
       await Future.delayed(const Duration(seconds: 1));
-      if (!mounted) return false;
+      if (!mounted) return false; // Arreglo para detener el bucle si se cierra la pantalla
       setState(() {
         widget.pet.updateWithTime();
       });
@@ -123,63 +134,58 @@ class _KitchenScreenState extends State<KitchenScreen> {
         Expanded(
           child: SizedBox(
             height: 150,
-            child: // Busca esta parte dentro de tu _buildSelector
-PageView.builder(
-  controller: _pageController,
-  itemCount: inventarioComida.length,
-  onPageChanged: (index) => setState(() => _currentIndex = index),
-  itemBuilder: (context, index) {
-    final item = inventarioComida[index];
-    bool esSeleccionado = (_currentIndex == index);
-    
-    // AJUSTE DE VISIBILIDAD:
-    double escala = esSeleccionado ? 1.1 : 0.8; // Laterales un poco más grandes
-    double opacidad = esSeleccionado ? 1.0 : 0.6; // Opacidad aumentada para que se vean
+            child: PageView.builder(
+              controller: _pageController,
+              itemCount: inventarioComida.length,
+              onPageChanged: (index) {
+                if (mounted) setState(() => _currentIndex = index);
+              },
+              itemBuilder: (context, index) {
+                final item = inventarioComida[index];
+                bool esSeleccionado = (_currentIndex == index);
+                
+                double escala = esSeleccionado ? 1.1 : 0.8; 
+                double opacidad = esSeleccionado ? 1.0 : 0.6; 
 
-    return GestureDetector(
-      onTap: () {
-        if (esSeleccionado) {
-          _procesarAlimentacion(item);
-        } else {
-          _pageController.animateToPage(index, 
-            duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
-        }
-      },
-      child: AnimatedOpacity(
-        duration: const Duration(milliseconds: 300),
-        opacity: opacidad,
-        child: Transform.scale(
-          scale: escala,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Icono de toque solo si está seleccionado
-              Opacity(
-                opacity: esSeleccionado ? 1.0 : 0.0,
-              ),
-              
-              Image.asset(item['imagen'], height: 75, fit: BoxFit.contain),
-              
-              const SizedBox(height: 5),
-
-              // Cantidad (Solo mostramos el número si es el seleccionado para no saturar)
-              // O puedes dejarlo para todos, tú decides:
-              Text(
-                "${item['cantidad']}", 
-                style: TextStyle(
-                  color: esSeleccionado ? Colors.black : Colors.black38, 
-                  fontSize: 22,       
-                  fontWeight: FontWeight.w900, 
-                  letterSpacing: -1,   
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  },
-),
+                return GestureDetector(
+                  onTap: () {
+                    if (esSeleccionado) {
+                      _procesarAlimentacion(item);
+                    } else {
+                      _pageController.animateToPage(index, 
+                        duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+                    }
+                  },
+                  child: AnimatedOpacity(
+                    duration: const Duration(milliseconds: 300),
+                    opacity: opacidad,
+                    child: Transform.scale(
+                      scale: escala,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Opacity(
+                            opacity: esSeleccionado ? 1.0 : 0.0,
+                            child: const SizedBox.shrink(),
+                          ),
+                          Image.asset(item['imagen'], height: 75, fit: BoxFit.contain),
+                          const SizedBox(height: 5),
+                          Text(
+                            "${item['cantidad']}", 
+                            style: TextStyle(
+                              color: esSeleccionado ? Colors.black : Colors.black38, 
+                              fontSize: 22,       
+                              fontWeight: FontWeight.w900, 
+                              letterSpacing: -1,   
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
           ),
         ),
 
@@ -232,9 +238,23 @@ PageView.builder(
           ),
 
           Center(
-            child: widget.pet.isSleeping
-                ? _buildSleepingPet()
-                : Image.asset(imgNutria, width: 250),
+            child: ListenableBuilder(
+              listenable: widget.pet,
+              builder: (context, child) {
+                if (!comiendo) {
+                  imgNutria = widget.pet.imagenActual;
+                }
+
+                return widget.pet.isSleeping
+                    ? _buildSleepingPet()
+                    : Image.asset(
+                        imgNutria, 
+                        width: 250,
+                        errorBuilder: (context, error, stackTrace) => 
+                          const Icon(Icons.pets, size: 100, color: Colors.white54),
+                      );
+              },
+            ),
           ),
 
           Positioned(

@@ -20,12 +20,13 @@ class GameRoomScreen extends StatefulWidget {
 }
 
 class _GameRoomScreenState extends State<GameRoomScreen> {
-  String imgNutria = "images/nutria-parada.gif";
+  late String imgNutria;
   bool jugando = false;
 
   @override
   void initState() {
     super.initState();
+    imgNutria = widget.pet.imagenActual; 
     _iniciarReloj();
   }
 
@@ -48,17 +49,15 @@ class _GameRoomScreenState extends State<GameRoomScreen> {
       _mostrarMensaje("¡Tu nutria está muy cansada para jugar! 😴");
       return;
     }
-    if (widget.pet.hambre < 20) {
-      _mostrarMensaje("¡Tiene demasiada hambre para jugar! 🍔");
-      return;
-    }
+    //if (widget.pet.hambre < 20) {
+    //  _mostrarMensaje("¡Tiene demasiada hambre para jugar! 🍔");
+    //  return;
+    //}
 
     setState(() {
       jugando = true;
-      imgNutria = "images/nutria-jugando.gif"; // Asegúrate de tener esta animación
     });
 
-    widget.pet.jugar();
     await widget.pet.saveLocal();
     await widget.pet.saveToServer(widget.pet.id);
 
@@ -68,7 +67,7 @@ class _GameRoomScreenState extends State<GameRoomScreen> {
     if (mounted) {
       setState(() {
         jugando = false;
-        imgNutria = "images/nutria-parada.gif";
+        imgNutria;
       });
     }
   }

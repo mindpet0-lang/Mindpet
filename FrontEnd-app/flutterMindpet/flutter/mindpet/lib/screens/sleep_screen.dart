@@ -20,24 +20,19 @@ class SleepScreen extends StatefulWidget {
 }
 
 class _SleepScreenState extends State<SleepScreen> {
-  // Variables locales para la animación de la UI
   double _oscuridad = 0.0;
-  final String _imgDespierta = "images/nutria-parada.gif";
+  // Asegúrate de que estas rutas coincidan con tus assets
   final String _imgDormida = "images/nutria-durmiendo.gif";
   double _sizeNutria = 250;
 
   @override
   void initState() {
     super.initState();
-    
-    // Si al entrar ya estaba durmiendo (por carga de DB), ajustamos la UI
     if (widget.pet.isSleeping) {
       _oscuridad = 0.7;
       _sizeNutria = 450;
       _iniciarBucleEnergia();
     }
-
-    // Bucle para que las barras de estado bajen/suban en tiempo real mientras ves la pantalla
     _actualizarUIContinuamente();
   }
 
@@ -115,77 +110,92 @@ class _SleepScreenState extends State<SleepScreen> {
     await widget.pet.saveToServer(widget.pet.id);
   }
   
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    body: Stack(
+      children: [
+        // Fondo (Mantén tu código actual)
+        Image.asset(
+          "assets/images/sleep.png",
+          width: double.infinity,
+          height: double.infinity,
+          fit: BoxFit.cover,
+        ),
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          // Fondo
-          Image.asset(
-            "assets/images/sleep.png",
-            width: double.infinity,
-            height: double.infinity,
-            fit: BoxFit.cover,
+        // Status Bar (Mantén tu código actual)
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          child: TopStatusBar(pet: widget.pet, userId: widget.userId),
+        ),
+
+        // Nutria animada con LÓGICA DINÁMICA
+        Center(
+          child: ListenableBuilder(
+            listenable: widget.pet,
+            builder: (context, child) {
+              // DETERMINAR LA IMAGEN:
+              // Si duerme: usamos la fija de sueño.
+              // Si está despierta: usamos la que el modelo decida (hambre/suciedad).
+              String imagenAMostrar = widget.pet.isSleeping 
+                  ? _imgDormida 
+                  : widget.pet.imagenActual;
+
+              return AnimatedContainer(
+                duration: const Duration(milliseconds: 500),
+                width: _sizeNutria,
+                child: Image.asset(
+                  imagenAMostrar,
+                  errorBuilder: (context, error, stackTrace) => 
+                      const Icon(Icons.pets, size: 100, color: Colors.white24),
+                ),
+              );
+            },
           ),
+        ),
 
-          // Status Bar
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: TopStatusBar(pet: widget.pet, userId: widget.userId),
-          ),
-
-          // Nutria animada
-          Center(
+        // Capa de oscuridad (Mantén tu código actual)
+        Positioned.fill(
+          child: IgnorePointer(
             child: AnimatedContainer(
-              duration: const Duration(milliseconds: 500),
-              width: _sizeNutria,
-              child: Image.asset(widget.pet.isSleeping ? _imgDormida : _imgDespierta),
+              duration: const Duration(milliseconds: 300),
+              color: Colors.black.withOpacity(_oscuridad),
             ),
           ),
+        ),
 
-          // Capa de oscuridad
-          Positioned.fill(
-            child: IgnorePointer(
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                color: Colors.black.withOpacity(_oscuridad),
+        // Botón de Dormir / Despertar (Mantén tu código actual)
+        Positioned(
+          bottom: 150,
+          left: 0,
+          right: 0,
+          child: Center(
+            child: ElevatedButton(
+              onPressed: widget.pet.isSleeping ? _despertar : _dormir,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF2E2E2E),
+                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              ),
+              child: Text(
+                widget.pet.isSleeping ? "Despertar" : "Dormir",
+                style: const TextStyle(color: Colors.white, fontSize: 18),
               ),
             ),
           ),
+        ),
 
-          // Botón de Dormir / Despertar
-          Positioned(
-            bottom: 150,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: ElevatedButton(
-                onPressed: widget.pet.isSleeping ? _despertar : _dormir,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF2E2E2E),
-                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                ),
-                child: Text(
-                  widget.pet.isSleeping ? "Despertar" : "Dormir",
-                  style: const TextStyle(color: Colors.white, fontSize: 18),
-                ),
-              ),
-            ),
-          ),
-
-          // Menú
-          Positioned(
-            bottom: 40,
-            left: 0,
-            right: 0,
-            child: bottomMenu(widget.controller, 3),
-          ),
-        ],
-      ),
-    );
-  }
+        // Menú (Mantén tu código actual)
+        Positioned(
+          bottom: 40,
+          left: 0,
+          right: 0,
+          child: bottomMenu(widget.controller, 3),
+        ),
+      ],
+    ),
+  );
+}
 }

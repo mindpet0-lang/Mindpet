@@ -38,15 +38,15 @@ class _PetLoaderState extends State<PetLoader> {
         if (!mounted) return;
 
         // Redirigimos a HomeScreen pasando la mascota cargada
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MainGameScreen(
-              pet: mascotaCargada, 
-              userId: widget.userId,
-            ),
-          ),
-        );
+Navigator.pushReplacement(
+  context,
+  MaterialPageRoute(
+    builder: (context) => MainGameScreen(
+      pet: mascotaCargada,
+      userId: widget.userId, // Pásalo directamente aquí
+    ),
+  ),
+);
       } else {
         _handleError("No se encontró la mascota en el servidor");
       }

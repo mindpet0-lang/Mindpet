@@ -2,13 +2,11 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class DiarioService {
-
   final String baseUrl = "http://localhost:8080/diarios";
 
-  int usuarioId = 1; // es para el usuario de prueba, luego se reemplazará por el id del usuario logueado
-
-  Future<List<dynamic>> obtenerDiarios() async {
-    final response = await http.get(Uri.parse("$baseUrl/usuario/$usuarioId"));
+  // Obtenemos los diarios filtrados por el ID del usuario
+  Future<List<dynamic>> obtenerDiarios(int userId) async {
+    final response = await http.get(Uri.parse("$baseUrl/usuario/$userId"));
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
@@ -18,8 +16,9 @@ class DiarioService {
   }
 
   Future<void> crearDiario(
+    int userId, // Recibe el ID del usuario logueado
     String contenido,
-    String fecha,
+    String titulo,
     String emocion,
   ) async {
     final response = await http.post(
@@ -27,36 +26,35 @@ class DiarioService {
       headers: {"Content-Type": "application/json"},
       body: jsonEncode({
         "contenido": contenido,
-        "fecha": fecha,
+        "titulo": titulo,
         "emocion": emocion,
-        "usuarioId": usuarioId,
+        "usuarioId": userId,
       }),
     );
-
-    print("POST STATUS: ${response.statusCode}");
-    print("POST BODY: ${response.body}");
   }
 
-  Future<void> eliminarDiario(int id) async {
-  await http.delete(
-    Uri.parse("$baseUrl/$id/usuario/$usuarioId"),
-  );
-}
+  Future<void> eliminarDiario(int diarioId, int userId) async {
+    // Es buena práctica pasar ambos para validar que el usuario borra lo suyo
+    await http.delete(
+      Uri.parse("$baseUrl/$diarioId/usuario/$userId"),
+    );
+  }
 
   Future<void> actualizarDiario(
-    int id,
+    int diarioId,
+    int userId,
     String contenido,
-    String fecha,
+    String titulo,
     String emocion,
   ) async {
     await http.put(
-      Uri.parse("$baseUrl/$id"),
+      Uri.parse("$baseUrl/$diarioId"),
       headers: {"Content-Type": "application/json"},
       body: jsonEncode({
         "contenido": contenido,
-        "fecha": fecha,
+        "titulo": titulo,
         "emocion": emocion,
-        "usuarioId": usuarioId,
+        "usuarioId": userId,
       }),
     );
   }

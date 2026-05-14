@@ -41,27 +41,37 @@ class HomeScreen extends StatelessWidget {
 
           /// MASCOTA (CON LÓGICA DE VISIBILIDAD)
           // Usamos Consumer para que la pantalla se entere si la nutria se despierta
-        Center(
-            child: pet.isSleeping
-                ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.bedtime, color: Colors.white, size: 50),
-                      const SizedBox(height: 10),
-                      Container(
-                        padding: const EdgeInsets.all(10),
-                        color: Colors.black54,
-                        child: const Text(
-                          "Tu mascota está durmiendo...",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
+       /// MASCOTA (CON LÓGICA DE VISIBILIDAD)
+          Center(
+            child: ListenableBuilder(
+              listenable: pet, // Escucha directamente al objeto pet que ya tienes
+              builder: (context, child) {
+                return pet.isSleeping
+                    ? Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.bedtime, color: Colors.white, size: 50),
+                          const SizedBox(height: 10),
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            color: Colors.black54,
+                            child: const Text(
+                              "Tu mascota está durmiendo...",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ],
-                  )
-                : Image.asset("images/nutria-acostada.gif", width: 400),
+                        ],
+                      )
+                    : Image.asset(
+                        pet.imagenActual, // Usa la lógica de estados de pet.dart
+                        width: 250,
+                       
+                      );
+              },
+            ),
           ),
 
           /// MENU
