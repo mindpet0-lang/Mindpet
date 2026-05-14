@@ -197,6 +197,7 @@ class _DiarioScreenState extends State<DiarioScreen> {
   }
 
   // 🎨 LÓGICA DE COLORES POR EMOCIÓN
+<<<<<<< Updated upstream
 Color obtenerColorPorEmocion(String emocion) {
   emocion = emocion.toLowerCase();
 
@@ -236,4 +237,27 @@ Color obtenerColorPorEmocion(String emocion) {
 
   return "Otros";
 }
+=======
+  Color obtenerColorPorEmocion(String emocion) {
+    emocion = emocion.toLowerCase();
+    if (emocion.contains("alegria")) return Colors.green.withOpacity(0.7);
+    if (emocion.contains("tristeza")) return Colors.blue.withOpacity(0.7);
+    if (emocion.contains("enojo")) return Colors.red.withOpacity(0.7);
+    if (emocion.contains("ansiedad")) return Colors.purple.withOpacity(0.7);
+    if (emocion.contains("calma")) return Colors.teal.withOpacity(0.7);
+    if (emocion.contains("amor")) return Colors.pink.withOpacity(0.7);
+    return Colors.grey.withOpacity(0.7);
+  }
+
+  // 😊 NORMALIZACIÓN DE TEXTO
+  String normalizarEmocion(String? emocion) {
+    emocion = (emocion ?? "").toLowerCase();
+    if (emocion.contains("alegr") || emocion.contains("feliz")) return "Alegría";
+    if (emocion.contains("triste")) return "Tristeza";
+    if (emocion.contains("enojo")) return "Enojo";
+    if (emocion.contains("calma")) return "Calma";
+    if (emocion.contains("amor")) return "Amor";
+    return "Otros";
+  }
+>>>>>>> Stashed changes
 }

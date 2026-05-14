@@ -9,20 +9,25 @@ class Pet extends ChangeNotifier {
   int energia;
   int felicidad;
   int higiene;
-  int hambre;
+  int hambre; // Funciona como nivel de saciedad
   int lastUpdate;
   bool isSleeping;
+  
+  Timer? _timer;
 
   Pet({
     required this.id,
     this.energia = 80,
     this.felicidad = 80,
     this.higiene = 80,
-    this.hambre = 20,
+    this.hambre = 80, 
     this.isSleeping = false,
     int? lastUpdate,
-  }) : lastUpdate = lastUpdate ?? DateTime.now().millisecondsSinceEpoch;
+  }) : lastUpdate = lastUpdate ?? DateTime.now().millisecondsSinceEpoch {
+    _startRealtimeUpdate();
+  }
 
+<<<<<<< Updated upstream
   // Getter dinámico para los GIFs basado en tus carpetas
   String get imagenActual {
     String path = "images/nutria/parada";
@@ -63,13 +68,16 @@ class Pet extends ChangeNotifier {
     }
   }
   // Mantenemos tu lógica de carga de datos
+=======
+  // --- SERIALIZACIÓN (Corrección de errores anteriores) ---
+>>>>>>> Stashed changes
   factory Pet.fromJson(Map<String, dynamic> json) {
     Pet pet = Pet(
       id: json['id'],
       energia: json['energia'] ?? 80,
       felicidad: json['felicidad'] ?? 80,
       higiene: json['higiene'] ?? 80,
-      hambre: json['hambre'] ?? 20,
+      hambre: json['hambre'] ?? 80,
       isSleeping: json['isSleeping'] ?? false,
       lastUpdate: json['lastUpdate'],
     );
@@ -83,6 +91,78 @@ class Pet extends ChangeNotifier {
     'lastUpdate': lastUpdate,
   };
 
+<<<<<<< Updated upstream
+=======
+  // --- LÓGICA DE TIEMPO REAL ---
+  void _startRealtimeUpdate() {
+    _timer = Timer.periodic(const Duration(minutes: 1), (timer) {
+      updateWithTime();
+      notifyListeners(); 
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  // --- SELECTOR DE ANIMACIÓN DINÁMICA ---
+  String get imagenActual {
+    bool tieneHambre = hambre <= 35;
+    bool tieneSueno = energia <= 35;
+    bool estaSucia = higiene <= 35;
+
+    String pathBase = "images/mascota gifs/de pie/";
+
+    // Combinaciones triples y dobles según tus archivos
+    if (tieneHambre && estaSucia && tieneSueno) {
+      return "${pathBase}hambrienta-sucia-sueño.gif";
+    }
+    if (tieneHambre && estaSucia) {
+      return "${pathBase}hambrienta-sucia.gif";
+    }
+    if (estaSucia && tieneSueno) {
+      return "${pathBase}con-sueño.gif";
+    }
+    if (tieneHambre && tieneSueno) {
+      return "${pathBase}hambrienta-sueño.gif";
+    }
+
+    // Estados individuales
+    if (tieneHambre) return "${pathBase}hambrienta.gif";
+    if (estaSucia) return "${pathBase}sucia.gif";
+    if (tieneSueno) return "${pathBase}con sueño.gif";
+
+    return "${pathBase}nutria parada.gif";
+  }
+
+  // --- ACTUALIZACIÓN DE ESTADÍSTICAS ---
+  void updateWithTime() {
+    int now = DateTime.now().millisecondsSinceEpoch;
+    int diff = now - lastUpdate;
+    int seconds = diff ~/ 1000;
+
+    if (seconds > 0) {
+      if (isSleeping) {
+        energia += seconds ~/ 30; // Recupera 1 punto cada 30 seg
+      } else {
+        energia -= seconds ~/ 60; // Pierde 1 punto cada 60 seg
+      }
+      
+      felicidad -= seconds ~/ 300;
+      higiene -= seconds ~/ 600;
+      hambre -= seconds ~/ 120; 
+
+      _clamp();
+      lastUpdate = now;
+
+      if (isSleeping && energia >= 100) {
+        isSleeping = false;
+      }
+    }
+  }
+>>>>>>> Stashed changes
 
   void _clamp() {
     energia = energia.clamp(0, 100);
@@ -91,6 +171,7 @@ class Pet extends ChangeNotifier {
     hambre = hambre.clamp(0, 100);
   }
 
+<<<<<<< Updated upstream
   // Tus funciones de acciones originales
   bool comer() {
     if (hambre >= 100) return false;
@@ -102,6 +183,9 @@ class Pet extends ChangeNotifier {
   }
 
   // Métodos de persistencia
+=======
+  // --- PERSISTENCIA Y ACCIONES ---
+>>>>>>> Stashed changes
   Future<void> saveLocal() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('pet_data', jsonEncode(toJson()));
@@ -115,7 +199,38 @@ class Pet extends ChangeNotifier {
     } catch (e) { return false; }
   }
 
+<<<<<<< Updated upstream
 void notificar() {
+=======
+  bool comer() {
+    if (hambre >= 100) return false;
+
+    hambre += 20;
+    if (hambre > 100) hambre = 100;
+    
+    felicidad += 5;
+    if (felicidad > 100) felicidad = 100;
+
+    lastUpdate = DateTime.now().millisecondsSinceEpoch;
+    notifyListeners();
+    return true;
+  }
+
+  bool jugar() {
+    if (energia < 20 || hambre < 20) return false;
+
+    felicidad += 20;
+    energia -= 15;
+    hambre -= 10; 
+
+    _clamp();
+    lastUpdate = DateTime.now().millisecondsSinceEpoch;
+    notifyListeners();
+    return true;
+  }
+
+  void notificar() {
+>>>>>>> Stashed changes
   notifyListeners();
 }
 }

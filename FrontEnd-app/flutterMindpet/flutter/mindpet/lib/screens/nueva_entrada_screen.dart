@@ -12,6 +12,10 @@ class _NuevaEntradaScreenState extends State<NuevaEntradaScreen> {
   String emocion = "Tristeza";
   Color color = Colors.blue;
 
+<<<<<<< Updated upstream
+=======
+  // Los declaramos pero los inicializaremos en el initState
+>>>>>>> Stashed changes
   late TextEditingController titulo;
   late TextEditingController texto;
 
@@ -34,6 +38,10 @@ class _NuevaEntradaScreenState extends State<NuevaEntradaScreen> {
   void initState() {
     super.initState();
     
+<<<<<<< Updated upstream
+=======
+    // 1. Inicializar controladores con datos existentes si estamos editando
+>>>>>>> Stashed changes
     titulo = TextEditingController(
       text: widget.entrada != null ? widget.entrada!["titulo"] : ""
     );
@@ -41,11 +49,21 @@ class _NuevaEntradaScreenState extends State<NuevaEntradaScreen> {
       text: widget.entrada != null ? widget.entrada!["texto"] : ""
     );
 
+<<<<<<< Updated upstream
     if (widget.entrada != null) {
       emocion = widget.entrada!["emocion"];
       final seleccionada = emociones.firstWhere(
         (e) => e["nombre"] == emocion,
         orElse: () => emociones[1],
+=======
+    // 2. Ajustar la emoción inicial si estamos editando
+    if (widget.entrada != null) {
+      emocion = widget.entrada!["emocion"];
+      // Buscamos el color correspondiente a esa emoción
+      final seleccionada = emociones.firstWhere(
+        (e) => e["nombre"] == emocion,
+        orElse: () => emociones[1], // Tristeza por defecto
+>>>>>>> Stashed changes
       );
       color = seleccionada["color"];
     }
@@ -53,6 +71,10 @@ class _NuevaEntradaScreenState extends State<NuevaEntradaScreen> {
 
   @override
   void dispose() {
+<<<<<<< Updated upstream
+=======
+    // 3. Es importante liberar la memoria de los controladores
+>>>>>>> Stashed changes
     titulo.dispose();
     texto.dispose();
     super.dispose();
@@ -151,6 +173,7 @@ class _NuevaEntradaScreenState extends State<NuevaEntradaScreen> {
                 backgroundColor: Colors.blue,
                 child: const Icon(Icons.check, color: Colors.white),
                 onPressed: () {
+<<<<<<< Updated upstream
                   // Validación: comprobamos que no estén vacíos
                   if (titulo.text.trim().isEmpty || texto.text.trim().isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -168,6 +191,15 @@ class _NuevaEntradaScreenState extends State<NuevaEntradaScreen> {
                       "color": color,
                     });
                   }
+=======
+                  // Devolvemos el mapa con los datos actualizados
+                  Navigator.pop(context, {
+                    "emocion": emocion,
+                    "titulo": titulo.text,
+                    "texto": texto.text,
+                    "color": color,
+                  });
+>>>>>>> Stashed changes
                 },
               ),
             ),
