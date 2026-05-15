@@ -6,6 +6,7 @@ El sistema permite registrar, consultar, actualizar y eliminar usuarios mediante
 Este proyecto implementa una arquitectura Cliente-Servidor donde el backend en Spring Boot gestiona la lógica y la conexión con la base de datos.
 
 Integrantes
+
 Laura Sofia Martinez
 Juan Diego Solano
 Isabella Valentina Sanchez
