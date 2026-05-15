@@ -5,45 +5,60 @@ El sistema permite registrar, consultar, actualizar y eliminar usuarios mediante
 
 Este proyecto implementa una arquitectura Cliente-Servidor donde el backend en Spring Boot gestiona la lógica y la conexión con la base de datos.
 
-📌 Características
+Integrantes
+Laura Sofia Martinez
+Juan Diego Solano
+Isabella Valentina Sanchez
+Sarid Nicole Quiroga
+1. Clonar el repositorio
+git clone https://github.com/mindpet0-lang/backend_backup.git
 
-Registro de usuarios
+Abrir el proyecto
+Abrir el proyecto en un entorno de desarrollo compatible con Java como:
 
-Consulta de usuarios
+IntelliJ IDEA Visual Studio Code 3. Instalar dependencias
 
-Actualización de información
+El proyecto utiliza Maven para la gestión de dependencias. Las dependencias se descargan automáticamente desde el archivo pom.xml.
 
-Eliminación de registros
+En IntelliJ IDEA se puede seleccionar:
 
-API REST
+Load Maven Project Reload Maven Project 4. Configurar la base de datos
 
-Conexión con base de datos MySQL
+Configurar MySQL y verificar las credenciales de conexión en el archivo de configuración del proyecto.
 
-Arquitectura en capas
+Ejecutar el proyecto
+Ejecutar la clase principal:
 
+MindPetApplication.java
 
-⚙️ Tecnologías utilizadas
-Backend
+El servidor iniciará correctamente y permitirá acceder a los endpoints del backend.
 
-☕ Java
+Tecnologías utilizadas Java Spring Boot Maven MySQL JWT JPA / Hibernate Estructura del proyecto
 
-🌱 Spring Boot
+El proyecto está organizado por capas:
 
-📦 Maven
+Controller Service Repository Model Config Funcionalidades principales Gestión de usuarios Gestión de mascotas Sistema de foros Diario de mascotas Inventario Seguridad con JWT
 
-🗄️ MySQL
+Ejecución local
+1 Clonar el repositorio:
 
-🔗 JPA / Hibernate
+git clone https://github.com/mindpet0-lang/backend_backup.git
 
-📑 Lombok
+2 Abrir el proyecto en IntelliJ IDEA o Visual Studio Code. 3 Verificar que Java JDK y Maven estén instalados. 4 Descargar las dependencias Maven desde el archivo pom.xml. 5 Configurar la conexión a MySQL en el archivo de propiedades del proyecto. 6 Ejecutar la clase principal: MindPetApplication.java
 
+7 Esperar a que Spring Boot inicie correctamente.
 
-Herramientas
+El backend quedará ejecutándose localmente en el puerto configurado del proyecto.
 
-IntelliJ IDEA
+Evidencias
+Funcionamiento del proyecto
+El proyecto permite gestionar diferentes módulos relacionados con mascotas, usuarios y funcionalidades del sistema MindPet.
 
-MySQL Workbench
-
-Postman (pruebas de API)
-
-Git & GitHub
+Evidencias incluidas
+Configuración del backend en Spring Boot.
+Gestión de dependencias con Maven.
+Estructura organizada por capas.
+Conexión con base de datos MySQL.
+Implementación de seguridad con JWT.
+Capturas o pruebas
+Las evidencias del funcionamiento pueden visualizarse mediante la ejecución local del proyecto desde la clase principal MindPetApplication.java.
