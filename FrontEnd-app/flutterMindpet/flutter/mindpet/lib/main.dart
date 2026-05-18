@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart'; // IMPORTANTE: Agregado para usar Provider
 import 'screens/login_screen.dart';
-import 'screens/pet_loader.dart';
+import 'widgets/pet_loader.dart';
 import 'models/pet.dart'; // IMPORTANTE: Asegúrate de importar tu modelo Pet
 import 'package:shared_preferences/shared_preferences.dart';
-
 
 void main() async {
 

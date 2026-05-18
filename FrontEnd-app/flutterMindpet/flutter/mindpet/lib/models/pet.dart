@@ -53,19 +53,23 @@ class Pet extends ChangeNotifier {
 
     if (seconds > 0) {
       if (isSleeping) {
+        // CORRECCIÓN: Sigue sumando energía pasivamente si duerme, pero NO la despierta automáticamente.
         energia = (energia + seconds ~/ 30).clamp(0, 100);
       } else {
         energia = (energia - seconds ~/ 60).clamp(0, 100);
       }
       higiene = (higiene - seconds ~/ 600).clamp(0, 100);
       hambre = (hambre - seconds ~/ 120).clamp(0, 100);
+      felicidad = (felicidad- seconds ~/ 120).clamp(0, 100);
       
       lastUpdate = now;
-      if (isSleeping && energia >= 100) isSleeping = false;
       
-      notifyListeners(); // IMPORTANTE: Esto quita el error de la pantalla roja al actualizar
+      // SOLUCIÓN: Eliminamos la línea que ponía 'isSleeping = false' de manera automática.
+      
+      notifyListeners(); 
     }
   }
+
   // Mantenemos tu lógica de carga de datos
   factory Pet.fromJson(Map<String, dynamic> json) {
     Pet pet = Pet(
@@ -100,8 +104,6 @@ class Pet extends ChangeNotifier {
     _timer?.cancel();
     super.dispose();
   }
-
-
 
   void _clamp() {
     energia = energia.clamp(0, 100);
@@ -152,6 +154,6 @@ class Pet extends ChangeNotifier {
   }
 
   void notificar() {
-  notifyListeners();
-}
+    notifyListeners();
+  }
 }

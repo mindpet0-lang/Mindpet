@@ -85,7 +85,7 @@ class _GameRoomScreenState extends State<GameRoomScreen> {
         children: [
           // Fondo de cuarto de juegos
           Image.asset(
-            "images/game.png",
+            "images/fondo/game.png",
             width: double.infinity,
             height: double.infinity,
             fit: BoxFit.cover,

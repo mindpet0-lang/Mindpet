@@ -98,7 +98,7 @@ Widget build(BuildContext context) {
       Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("images/fondochat2.jpg"),
+            image: AssetImage("images/fondo/fondochat2.jpg"),
             fit: BoxFit.cover,
           ),
         ),

@@ -52,49 +52,64 @@ class _BathroomScreenState extends State<BathroomScreen> {
   );
 
   void usarObjeto() async {
-    if (widget.pet.isSleeping || animandoAccion) return;
+  if (widget.pet.isSleeping || animandoAccion) return;
 
-    String objeto = objetos[objetoActual];
+  String objeto = objetos[objetoActual];
 
-    if (objeto == "jabon") {
-      setState(() {
-        jabonUsado = true;
-        animandoAccion = true;
-        imgNutria = "images/nutria/banio/jabonflores.gif";
-      });
-      widget.pet.higiene = (widget.pet.higiene + 30).clamp(0, 100);
-    } else if (objeto == "ducha") {
-      if (!jabonUsado) {
-        _mensaje("¡Primero necesitas enjabonarla! 🧼");
-        return;
-      }
-      setState(() {
-        animandoAccion = true;
-        imgNutria = "images/nutria/banio/jabonflores-ducha.gif";
-      });
-      widget.pet.higiene = 100;
-      jabonUsado = false;
+  // Cada GIF tendrá su propia duración
+  int duracion = 3;
+
+  if (objeto == "jabon") {
+    duracion = 3;
+
+    setState(() {
+      jabonUsado = true;
+      animandoAccion = true;
+      imgNutria = "images/nutria/banio/jabonflores.gif";
+    });
+
+    widget.pet.higiene = (widget.pet.higiene + 30).clamp(0, 100);
+
+  } else if (objeto == "ducha") {
+    if (!jabonUsado) {
+      _mensaje("¡Primero necesitas enjabonarla! 🧼");
+      return;
     }
 
-    // Notificar a los listeners para que la barra de arriba se actualice
-    widget.pet.notifyListeners();
+    duracion = 8;
 
-    await widget.pet.saveLocal();
-    await Future.delayed(const Duration(seconds: 3));
+    setState(() {
+      animandoAccion = true;
+      imgNutria = "images/nutria/banio/jabonflores-ducha.gif";
+    });
 
-    if (mounted) {
-      setState(() {
-        animandoAccion = false;
-        if (!animandoAccion) {
-          if (jabonUsado) {
-            imgNutria = "images/nutria/banio/jabonflores-enjabonada.gif";
-          } else {
-            imgNutria = widget.pet.imagenActual;
-          }
-        }
-      });
-    }
+    widget.pet.higiene = 100;
+    jabonUsado = false;
   }
+
+  // Actualizar barras de estado
+  widget.pet.notifyListeners();
+
+  // Guardar datos
+  await widget.pet.saveLocal();
+
+  // Esperar el tiempo correcto del GIF
+  await Future.delayed(Duration(seconds: duracion));
+
+  // Volver al estado normal
+  if (mounted) {
+    setState(() {
+      animandoAccion = false;
+
+      if (jabonUsado) {
+        imgNutria =
+            "images/nutria/banio/jabonflores-enjabonada.gif";
+      } else {
+        imgNutria = widget.pet.imagenActual;
+      }
+    });
+  }
+}
 
   void _mensaje(String texto) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(texto)));
@@ -110,7 +125,7 @@ class _BathroomScreenState extends State<BathroomScreen> {
             children: [
               /// 1️⃣ FONDO
               Image.asset(
-                "assets/images/bano.png",
+                "assets/images/fondo/bano.png",
                 width: double.infinity,
                 height: double.infinity,
                 fit: BoxFit.cover,

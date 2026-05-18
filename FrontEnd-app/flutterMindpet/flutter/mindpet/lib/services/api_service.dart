@@ -61,7 +61,13 @@ static Future<bool> sumarMonedasPrueba(int userId) async {
 
 // Traer la comida que el usuario compró (usa el endpoint que ya tienes de inventario)
 static Future<List<dynamic>> getInventarioComida(int userId) async {
-  final response = await http.get(Uri.parse("$baseUrl/tienda/inventario/$userId/comida"));
+  final response = await http.get(Uri.parse("$baseUrl/tienda/inventario/$userId/comida-completa"));
+  return response.statusCode == 200 ? json.decode(response.body) : [];
+}
+
+// Traer los jabones que el usuario compró (usa el endpoint que ya tienes de inventario)
+static Future<List<dynamic>> getInventarioAseo(int userId) async {
+  final response = await http.get(Uri.parse("$baseUrl/tienda/inventario/$userId/aseo"));
   return response.statusCode == 200 ? json.decode(response.body) : [];
 }
 

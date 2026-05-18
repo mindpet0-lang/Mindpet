@@ -22,9 +22,10 @@ class KitchenScreen extends StatefulWidget {
 }
 
 class _KitchenScreenState extends State<KitchenScreen> {
-  late String imgNutria; 
+  late String imgNutria;
   bool comiendo = false;
-  
+  bool tomando = false;
+
   final PageController _pageController = PageController(viewportFraction: 0.35);
   int _currentIndex = 0;
 
@@ -34,7 +35,7 @@ class _KitchenScreenState extends State<KitchenScreen> {
   @override
   void initState() {
     super.initState();
-    imgNutria = widget.pet.imagenActual; 
+    imgNutria = widget.pet.imagenActual;
     _iniciarReloj();
     _cargarInventario();
   }
@@ -42,9 +43,9 @@ class _KitchenScreenState extends State<KitchenScreen> {
   void _cargarInventario() async {
     if (!mounted) return;
     setState(() => cargando = true);
-    
+
     List<dynamic> items = await ApiService.getInventarioComida(widget.userId);
-    
+
     if (!mounted) return; // Arreglo para evitar error tras respuesta de API
     setState(() {
       inventarioComida = items;
@@ -54,28 +55,35 @@ class _KitchenScreenState extends State<KitchenScreen> {
   }
 
   void _procesarAlimentacion(Map<String, dynamic> item) async {
-    if (comiendo || widget.pet.isSleeping) return;
+    // Verificamos ambas condiciones de animación
+    if (comiendo || tomando || widget.pet.isSleeping) return;
 
     if (widget.pet.hambre >= 100) {
       _mensaje("¡Tu nutria está llena!");
       return;
     }
 
+    // Detectamos si el item actual es una bebida
+    bool esBebida = item['categoria'] == 'BEBIDA';
+
     setState(() {
-      comiendo = true;
-      imgNutria;
+      if (esBebida) {
+        tomando = true;
+      } else {
+        comiendo = true;
+      }
     });
 
-    widget.pet.comer(); 
-    widget.pet.notifyListeners(); 
+    widget.pet.comer();
+    widget.pet.notifyListeners();
 
     bool exito = await ApiService.consumirItem(widget.userId, item['nombre']);
-    
+
     if (exito) {
       await widget.pet.saveLocal();
       await widget.pet.saveToServer(widget.pet.id);
 
-      if (mounted) { // Arreglo para actualizar inventario visualmente
+      if (mounted) {
         setState(() {
           if (item['cantidad'] > 1) {
             item['cantidad']--;
@@ -89,12 +97,14 @@ class _KitchenScreenState extends State<KitchenScreen> {
       }
     }
 
+    // Tiempo que dura la animación (2 segundos)
     await Future.delayed(const Duration(seconds: 2));
 
-    if (mounted) { // Arreglo crítico para finalizar la animación
+    if (mounted) {
       setState(() {
         comiendo = false;
-        imgNutria = widget.pet.imagenActual; 
+        tomando = false; // <-- Apagamos el estado de tomar
+        imgNutria = widget.pet.imagenActual;
       });
     }
   }
@@ -107,7 +117,8 @@ class _KitchenScreenState extends State<KitchenScreen> {
   void _iniciarReloj() {
     Future.doWhile(() async {
       await Future.delayed(const Duration(seconds: 1));
-      if (!mounted) return false; // Arreglo para detener el bucle si se cierra la pantalla
+      if (!mounted)
+        return false; // Arreglo para detener el bucle si se cierra la pantalla
       setState(() {
         widget.pet.updateWithTime();
       });
@@ -119,8 +130,14 @@ class _KitchenScreenState extends State<KitchenScreen> {
     if (cargando) return const Center(child: CircularProgressIndicator());
     if (inventarioComida.isEmpty) {
       return const Center(
-        child: Text("Sin comida. ¡Ve a la tienda!", 
-        style: TextStyle(color: Colors.white, backgroundColor: Colors.black45, fontSize: 16))
+        child: Text(
+          "Sin comida. ¡Ve a la tienda!",
+          style: TextStyle(
+            color: Colors.white,
+            backgroundColor: Colors.black45,
+            fontSize: 16,
+          ),
+        ),
       );
     }
 
@@ -128,7 +145,10 @@ class _KitchenScreenState extends State<KitchenScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _buildArrow(Icons.arrow_back_ios_new, () {
-          _pageController.previousPage(duration: const Duration(milliseconds: 300), curve: Curves.easeOutBack);
+          _pageController.previousPage(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeOutBack,
+          );
         }),
 
         Expanded(
@@ -143,17 +163,20 @@ class _KitchenScreenState extends State<KitchenScreen> {
               itemBuilder: (context, index) {
                 final item = inventarioComida[index];
                 bool esSeleccionado = (_currentIndex == index);
-                
-                double escala = esSeleccionado ? 1.1 : 0.8; 
-                double opacidad = esSeleccionado ? 1.0 : 0.6; 
+
+                double escala = esSeleccionado ? 1.1 : 0.8;
+                double opacidad = esSeleccionado ? 1.0 : 0.6;
 
                 return GestureDetector(
                   onTap: () {
                     if (esSeleccionado) {
                       _procesarAlimentacion(item);
                     } else {
-                      _pageController.animateToPage(index, 
-                        duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+                      _pageController.animateToPage(
+                        index,
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                      );
                     }
                   },
                   child: AnimatedOpacity(
@@ -168,15 +191,21 @@ class _KitchenScreenState extends State<KitchenScreen> {
                             opacity: esSeleccionado ? 1.0 : 0.0,
                             child: const SizedBox.shrink(),
                           ),
-                          Image.asset(item['imagen'], height: 75, fit: BoxFit.contain),
+                          Image.asset(
+                            item['imagen'],
+                            height: 75,
+                            fit: BoxFit.contain,
+                          ),
                           const SizedBox(height: 5),
                           Text(
-                            "${item['cantidad']}", 
+                            "${item['cantidad']}",
                             style: TextStyle(
-                              color: esSeleccionado ? Colors.black : Colors.black38, 
-                              fontSize: 22,       
-                              fontWeight: FontWeight.w900, 
-                              letterSpacing: -1,   
+                              color: esSeleccionado
+                                  ? Colors.black
+                                  : Colors.black38,
+                              fontSize: 22,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: -1,
                             ),
                           ),
                         ],
@@ -190,7 +219,10 @@ class _KitchenScreenState extends State<KitchenScreen> {
         ),
 
         _buildArrow(Icons.arrow_forward_ios, () {
-          _pageController.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.easeOutBack);
+          _pageController.nextPage(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeOutBack,
+          );
         }),
       ],
     );
@@ -200,7 +232,10 @@ class _KitchenScreenState extends State<KitchenScreen> {
     return IconButton(
       icon: Container(
         padding: const EdgeInsets.all(8),
-        decoration: const BoxDecoration(color: Colors.white30, shape: BoxShape.circle),
+        decoration: const BoxDecoration(
+          color: Colors.white30,
+          shape: BoxShape.circle,
+        ),
         child: Icon(icon, color: Colors.white, size: 20),
       ),
       onPressed: onPressed,
@@ -215,8 +250,14 @@ class _KitchenScreenState extends State<KitchenScreen> {
         const SizedBox(height: 20),
         Container(
           padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(color: Colors.black54, borderRadius: BorderRadius.circular(15)),
-          child: const Text("Zzz... Durmiendo", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          decoration: BoxDecoration(
+            color: Colors.black54,
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: const Text(
+            "Zzz... Durmiendo",
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
         ),
       ],
     );
@@ -228,12 +269,16 @@ class _KitchenScreenState extends State<KitchenScreen> {
       body: Stack(
         children: [
           Image.asset(
-            "assets/images/kitchen.png", 
-            width: double.infinity, height: double.infinity, fit: BoxFit.cover,
+            "assets/images/fondo/kitchen.png",
+            width: double.infinity,
+            height: double.infinity,
+            fit: BoxFit.cover,
           ),
 
           Positioned(
-            top: 0, left: 0, right: 0,
+            top: 0,
+            left: 0,
+            right: 0,
             child: TopStatusBar(pet: widget.pet, userId: widget.userId),
           ),
 
@@ -242,31 +287,38 @@ class _KitchenScreenState extends State<KitchenScreen> {
               listenable: widget.pet,
               builder: (context, child) {
                 late double size = 250;
-                if (!comiendo) {
-                  imgNutria = widget.pet.imagenActual;                  
-                }else{
-                  imgNutria = "images/nutria-comiendo.gif";
+
+                if (comiendo) {
+                  imgNutria = "images/nutria/kitchen/nutria-comiendo.gif";
                   size = 300;
+                } else if (tomando) {
+                  imgNutria = "images/nutria/kitchen/tomando.png";
+                  size = 300;
+                } else {
+                  imgNutria = widget.pet.imagenActual;
                 }
+
                 return widget.pet.isSleeping
                     ? _buildSleepingPet()
                     : Image.asset(
-                        imgNutria, 
+                        imgNutria,
                         width: size,
-                        errorBuilder: (context, error, stackTrace) => 
-                          const Icon(Icons.pets, size: 100, color: Colors.white54),
+                        errorBuilder: (context, error, stackTrace) =>
+                            const Icon(
+                              Icons.pets,
+                              size: 100,
+                              color: Colors.white54,
+                            ),
                       );
               },
             ),
           ),
 
+          Positioned(bottom: 130, left: 0, right: 0, child: _buildSelector()),
           Positioned(
-            bottom: 130,
-            left: 0, right: 0,
-            child: _buildSelector(),
-          ),  
-          Positioned(
-            bottom: 40, left: 0, right: 0,
+            bottom: 40,
+            left: 0,
+            right: 0,
             child: bottomMenu(widget.controller, 2),
           ),
         ],

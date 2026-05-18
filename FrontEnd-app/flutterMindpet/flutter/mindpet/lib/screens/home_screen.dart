@@ -26,7 +26,7 @@ class HomeScreen extends StatelessWidget {
 
           /// FONDO
           Image.asset(
-            "assets/images/sala.png",
+            "assets/images/fondo/sala.png",
             width: double.infinity,
             height: double.infinity,
             fit: BoxFit.cover,

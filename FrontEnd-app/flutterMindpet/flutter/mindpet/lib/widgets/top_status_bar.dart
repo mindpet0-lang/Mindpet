@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mindpet/screens/chat_screen.dart';
-import 'package:mindpet/screens/tienda_screen.dart';
+import 'package:mindpet/screens/tienda/tienda_screen.dart';
 import '../models/pet.dart';
-import '../screens/diario_screen.dart';
+import '../screens/diario/diario_screen.dart';
 
 class TopStatusBar extends StatelessWidget {
   final Pet pet;

@@ -64,15 +64,15 @@ flutter:
   assets:
   
 
-    - assets/images/sala.png
-    - assets/images/bano.png
-    - assets/images/game.png
-    - assets/images/kitchen.png
-    - assets/images/sleep.png
+    - assets/images/fondo/sala.png
+    - assets/images/fondo/bano.png
+    - assets/images/fondo/game.png
+    - assets/images/fondo/kitchen.png
+    - assets/images/fondo/sleep.png
     - assets/sounds/click.wav
     - assets/sounds/fondo.mp3
-    - assets/images/fondochat2.jpg
-    - assets/images/fondodiario.png
-    - assets/images/imagen-terapia.png
+    - assets/images/fondo/fondochat2.jpg
+    - assets/images/fondo/fondodiario.png
+    - assets/images/fondo/imagen-terapia.png
 
 
