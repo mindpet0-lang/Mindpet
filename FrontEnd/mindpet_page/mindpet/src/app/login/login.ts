@@ -43,7 +43,8 @@ export class Login {
           const userData = {
             id: res.id,
             nombre: res.nombre,
-            correo: res.correo
+            correo: res.correo,
+            fotoPerfil: res.fotoPerfil
           };
 
           localStorage.setItem("user", JSON.stringify(userData));

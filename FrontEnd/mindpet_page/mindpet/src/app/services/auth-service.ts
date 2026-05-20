@@ -28,7 +28,8 @@ export class AuthService {
         const userData = {
         id: res.id,
         nombre: res.nombre,
-        correo: res.correo
+        correo: res.correo,
+        fotoPerfil: res.fotoPerfil
       };
 
         localStorage.setItem('user', JSON.stringify(userData));
@@ -50,5 +51,20 @@ export class AuthService {
     const user = localStorage.getItem('user');
     return user ? JSON.parse(user) : null;
   }
+
+  actualizarPerfil(id: number, data: any) {
+  return this.http.put(`${this.API_URL}/${id}/perfil`, data);
+}
+
+cambiarPassword(id: number, data: any) {
+  return this.http.put(`${this.API_URL}/${id}/password`, data);
+}
+
+subirFoto(id: number, file: File) {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  return this.http.post(`http://localhost:8080/usuarios/${id}/foto`, formData);
+}
 
 }

@@ -1,0 +1,55 @@
+<div class="perfil-bg">
+
+  <div class="perfil-overlay">
+
+    <!-- 🔙 BOTÓN VOLVER -->
+    <div class="back-button" (click)="volver()">
+      <span class="material-icons">arrow_back</span>
+    </div>
+
+    <h1 class="title">Ajustes</h1>
+
+    <div class="perfil-cards">
+
+      <!-- 👤 PERFIL -->
+      <div class="perfil-card">
+
+        <!-- 🖼 FOTO -->
+        <div class="avatar-container">
+          <img 
+            [src]="preview || '/assets/images/default-user.png'" 
+            class="avatar"
+          >
+
+          <!-- 📸 BOTÓN SOBRE LA FOTO -->
+          <label class="upload-btn">
+            <span class="material-icons">photo_camera</span>
+            <input type="file" (change)="onFileSelected($event)">
+          </label>
+        </div>
+
+        <!-- 📝 FORM -->
+        <form [formGroup]="perfilForm" (ngSubmit)="actualizarPerfil()">
+          <input type="text" formControlName="nombre" placeholder="Tu nombre">
+
+          <button type="submit">Guardar cambios</button>
+        </form>
+      </div>
+
+      <!-- 🔒 SEGURIDAD -->
+      <div class="perfil-card">
+        <h3>Seguridad</h3>
+
+        <form [formGroup]="passwordForm" (ngSubmit)="cambiarPassword()">
+          <input type="password" formControlName="actual" placeholder="Contraseña actual">
+          <input type="password" formControlName="nueva" placeholder="Nueva contraseña">
+
+          <button type="submit">Actualizar contraseña</button>
+        </form>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
