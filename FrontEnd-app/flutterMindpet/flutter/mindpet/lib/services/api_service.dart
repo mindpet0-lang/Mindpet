@@ -1,13 +1,15 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/item.dart';
+import '../models/usuario.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
   static const String baseUrl = "http://localhost:8080"; 
 
   static Future<int> getMonedas(int userId) async {
     try {
-      final response = await http.get(Uri.parse('$baseUrl/usuarios/$userId'));
+      final response = await http.get(Uri.parse('$baseUrl/usuarios/get/$userId'));
       if (response.statusCode == 200) {
         return jsonDecode(response.body)['monedas'];
       }
@@ -31,7 +33,7 @@ class ApiService {
       );
       return response.statusCode == 200;
     } catch (e) {
-      print("Error en realizarCompra: $e");
+
       return false;
     }
   }
@@ -47,14 +49,14 @@ static Future<bool> sumarMonedasPrueba(int userId) async {
     );
 
     if (response.statusCode == 200) {
-      print("Monedas sumadas en el servidor correctamente");
+
       return true;
     } else {
-      print("Error del servidor: ${response.statusCode}");
+
       return false;
     }
   } catch (e) {
-    print("Error de conexión al sumar monedas: $e");
+
     return false;
   }
 }
@@ -64,6 +66,8 @@ static Future<List<dynamic>> getInventarioComida(int userId) async {
   final response = await http.get(Uri.parse("$baseUrl/tienda/inventario/$userId/comida-completa"));
   return response.statusCode == 200 ? json.decode(response.body) : [];
 }
+
+
 
 // Traer los jabones que el usuario compró (usa el endpoint que ya tienes de inventario)
 static Future<List<dynamic>> getInventarioAseo(int userId) async {
@@ -83,9 +87,39 @@ static Future<bool> consumirItem(int userId, String nombre) async {
     );
     return response.statusCode == 200;
   } catch (e) {
-    print("Error al consumir: $e");
     return false;
   }
+}
+
+// Añade esta función dentro de tu clase ApiService
+static Future<Usuario?> obtenerUsuarioPorId(int userId) async {
+  try {
+    // Apunta a /get/{id} tal como lo definiste en tu @GetMapping de Spring Boot
+    final response = await http.get(Uri.parse('$baseUrl/usuarios/get/$userId'));
+
+    if (response.statusCode == 200) {
+      // Decodificamos el JSON y lo convertimos en nuestro modelo Usuario
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      return Usuario.fromJson(data);
+    } else {
+      print("Error al obtener usuario: Código ${response.statusCode}");
+      return null;
+    }
+  } catch (e) {
+    print("Error en obtenerUsuarioPorId: $e");
+    return null;
+  }
+}
+
+static Future<void> cerrarSesion() async {
+  final prefs = await SharedPreferences.getInstance();
+  
+  // Opción A: Borrar solo las llaves de la sesión (Recomendado si guardas otras configs como el tema oscuro)
+  await prefs.remove('userId');
+  await prefs.remove('token');
+
+  // Opción B: Borrar absolutamente todo lo guardado
+  // await prefs.clear();
 }
 
 }

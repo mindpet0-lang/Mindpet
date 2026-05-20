@@ -60,7 +60,7 @@ class DetalleDiarioScreen extends StatelessWidget {
                   const Text("Estado emocional: ", style: TextStyle(fontSize: 14, color: Colors.black87)),
                   const SizedBox(width: 8),
                   Text(
-                    entrada['emocion'],
+                    entrada['emocion'] ?? '',
                     style: const TextStyle(fontSize: 14, color: Colors.black87),
                   ),
                 ],
@@ -70,7 +70,7 @@ class DetalleDiarioScreen extends StatelessWidget {
               // Título con fuente más pequeña y elegante
               const SizedBox(height: 5),
               Text(
-                entrada['titulo'],
+                entrada['titulo'] ?? '',
                 style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
               ),
               const Divider(color: Colors.black26, thickness: 0.8),
@@ -80,7 +80,7 @@ class DetalleDiarioScreen extends StatelessWidget {
               Expanded(
                 child: SingleChildScrollView(
                   child: Text(
-                    entrada['texto'],
+                    entrada['texto'] ?? '',
                     style: const TextStyle(
                       fontSize: 14, // Fuente más pequeña solicitada
                       color: Colors.black,

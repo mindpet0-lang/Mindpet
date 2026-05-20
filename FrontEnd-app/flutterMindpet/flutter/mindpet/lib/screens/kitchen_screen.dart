@@ -4,6 +4,8 @@ import '../models/pet.dart';
 import '../widgets/top_status_bar.dart';
 import '../services/api_service.dart';
 import 'dart:async';
+// Asegúrate de verificar que el import de tu TiendaScreen sea el correcto:
+import '../screens/tienda/tienda_screen.dart'; 
 
 class KitchenScreen extends StatefulWidget {
   final Pet pet;
@@ -46,16 +48,51 @@ class _KitchenScreenState extends State<KitchenScreen> {
 
     List<dynamic> items = await ApiService.getInventarioComida(widget.userId);
 
-    if (!mounted) return; // Arreglo para evitar error tras respuesta de API
+    if (!mounted) return;
     setState(() {
-      inventarioComida = items;
+      // Dejamos en el inventario local solo los ítems que tengan stock real > 0
+      inventarioComida = List.from(items).where((item) => item['cantidad'] > 0).toList();
       cargando = false;
       _currentIndex = 0;
     });
   }
 
+  // Alerta interactiva que redirige a la tienda pasando el userId
+  void _mostrarAlertaTienda() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("¡Sin comida!"),
+          content: const Text("No tienes alimentos en tu inventario. ¿Quieres ir a la tienda a comprar algo rico?"),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Cancelar", style: TextStyle(color: Colors.grey)),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Cierra el diálogo
+                // Navegación directa pasando el userId
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TiendaScreen(userId: widget.userId),
+                  ),
+                ).then((_) {
+                  // Al regresar, refresca automáticamente el inventario de la cocina
+                  _cargarInventario();
+                });
+              },
+              child: const Text("Ir a la Tienda", style: TextStyle(fontWeight: FontWeight.bold)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void _procesarAlimentacion(Map<String, dynamic> item) async {
-    // Verificamos ambas condiciones de animación
     if (comiendo || tomando || widget.pet.isSleeping) return;
 
     if (widget.pet.hambre >= 100) {
@@ -63,7 +100,6 @@ class _KitchenScreenState extends State<KitchenScreen> {
       return;
     }
 
-    // Detectamos si el item actual es una bebida
     bool esBebida = item['categoria'] == 'BEBIDA';
 
     setState(() {
@@ -85,9 +121,9 @@ class _KitchenScreenState extends State<KitchenScreen> {
 
       if (mounted) {
         setState(() {
-          if (item['cantidad'] > 1) {
-            item['cantidad']--;
-          } else {
+          item['cantidad']--;
+          // Si el alimento se agotó por completo, lo borramos de la lista de forma reactiva
+          if (item['cantidad'] <= 0) {
             inventarioComida.removeAt(_currentIndex);
             if (_currentIndex >= inventarioComida.length && _currentIndex > 0) {
               _currentIndex--;
@@ -95,15 +131,22 @@ class _KitchenScreenState extends State<KitchenScreen> {
           }
         });
       }
+    } else {
+      _mensaje("Hubo un problema al consumir el alimento. ⚠️");
+      setState(() {
+        comiendo = false;
+        tomando = false;
+      });
+      return;
     }
 
-    // Tiempo que dura la animación (2 segundos)
+    // Duración de la animación (2 segundos)
     await Future.delayed(const Duration(seconds: 2));
 
     if (mounted) {
       setState(() {
         comiendo = false;
-        tomando = false; // <-- Apagamos el estado de tomar
+        tomando = false; 
         imgNutria = widget.pet.imagenActual;
       });
     }
@@ -117,8 +160,7 @@ class _KitchenScreenState extends State<KitchenScreen> {
   void _iniciarReloj() {
     Future.doWhile(() async {
       await Future.delayed(const Duration(seconds: 1));
-      if (!mounted)
-        return false; // Arreglo para detener el bucle si se cierra la pantalla
+      if (!mounted) return false; 
       setState(() {
         widget.pet.updateWithTime();
       });
@@ -127,15 +169,19 @@ class _KitchenScreenState extends State<KitchenScreen> {
   }
 
   Widget _buildSelector() {
-    if (cargando) return const Center(child: CircularProgressIndicator());
+    if (cargando) return const Center(child: CircularProgressIndicator(color: Colors.orangeAccent));
+    
+    // Si la lista está vacía, mostramos el botón para saltar a TiendaScreen
     if (inventarioComida.isEmpty) {
-      return const Center(
-        child: Text(
-          "Sin comida. ¡Ve a la tienda!",
-          style: TextStyle(
-            color: Colors.white,
-            backgroundColor: Colors.black45,
-            fontSize: 16,
+      return Center(
+        child: ElevatedButton.icon(
+          onPressed: _mostrarAlertaTienda,
+          icon: const Icon(Icons.shopping_cart),
+          label: const Text("Ir a la tienda a comprar comida"),
+          style: ElevatedButton.styleFrom(
+            foregroundColor: Colors.white,
+            backgroundColor: Colors.orangeAccent,
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
           ),
         ),
       );
@@ -145,6 +191,7 @@ class _KitchenScreenState extends State<KitchenScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _buildArrow(Icons.arrow_back_ios_new, () {
+          if (inventarioComida.length <= 1) return;
           _pageController.previousPage(
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeOutBack,
@@ -187,22 +234,17 @@ class _KitchenScreenState extends State<KitchenScreen> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Opacity(
-                            opacity: esSeleccionado ? 1.0 : 0.0,
-                            child: const SizedBox.shrink(),
-                          ),
                           Image.asset(
                             item['imagen'],
                             height: 75,
                             fit: BoxFit.contain,
+                            errorBuilder: (_, __, ___) => const Icon(Icons.restaurant, color: Colors.white60, size: 45),
                           ),
                           const SizedBox(height: 5),
                           Text(
                             "${item['cantidad']}",
                             style: TextStyle(
-                              color: esSeleccionado
-                                  ? Colors.black
-                                  : Colors.black38,
+                              color: esSeleccionado ? Colors.black : Colors.black38,
                               fontSize: 22,
                               fontWeight: FontWeight.w900,
                               letterSpacing: -1,
@@ -219,6 +261,7 @@ class _KitchenScreenState extends State<KitchenScreen> {
         ),
 
         _buildArrow(Icons.arrow_forward_ios, () {
+          if (inventarioComida.length <= 1) return;
           _pageController.nextPage(
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeOutBack,
@@ -268,20 +311,27 @@ class _KitchenScreenState extends State<KitchenScreen> {
     return Scaffold(
       body: Stack(
         children: [
+          /// 1️⃣ FONDO DE LA COCINA
           Image.asset(
-            "assets/images/fondo/kitchen.png",
+            "images/fondo/kitchen.png",
             width: double.infinity,
             height: double.infinity,
             fit: BoxFit.cover,
           ),
 
+          /// 2️⃣ BARRA SUPERIOR
           Positioned(
             top: 0,
             left: 0,
             right: 0,
-            child: TopStatusBar(pet: widget.pet, userId: widget.userId),
+            child: TopStatusBar(
+  pet: widget.pet, 
+  userId: widget.userId,
+  onRegresoTienda: () => _cargarInventario(), // ⚡ Recarga comida al volver
+)
           ),
 
+          /// 3️⃣ MASCOTA (NUTRIA CON SUS ESTADOS ANIMADOS)
           Center(
             child: ListenableBuilder(
               listenable: widget.pet,
@@ -303,18 +353,25 @@ class _KitchenScreenState extends State<KitchenScreen> {
                     : Image.asset(
                         imgNutria,
                         width: size,
-                        errorBuilder: (context, error, stackTrace) =>
-                            const Icon(
-                              Icons.pets,
-                              size: 100,
-                              color: Colors.white54,
-                            ),
+                        errorBuilder: (context, error, stackTrace) => const Icon(
+                          Icons.pets,
+                          size: 100,
+                          color: Colors.white54,
+                        ),
                       );
               },
             ),
           ),
 
-          Positioned(bottom: 130, left: 0, right: 0, child: _buildSelector()),
+          /// 4️⃣ SELECTOR DE INVENTARIO DINÁMICO
+          Positioned(
+            bottom: 130, 
+            left: 0, 
+            right: 0, 
+            child: _buildSelector()
+          ),
+
+          /// 5️⃣ MENÚ GLOBAL INFERIOR
           Positioned(
             bottom: 40,
             left: 0,

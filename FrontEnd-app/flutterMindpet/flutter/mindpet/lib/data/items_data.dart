@@ -25,16 +25,16 @@ List<Item> comidaItems = [
 List<Item> bebidaItems = [
   Item(nombre: "Cafe Frio", imagen: "images/tienda/bebida/cafefrio.png", precio: 10),
   Item(nombre: "Cafe", imagen: "images/tienda/bebida/cafe.png", precio: 10),
-  Item(nombre: "Chocolate Frio", imagen: "images/tienda/bebida/chocolatefrio.png", precio: 10),
+  Item(nombre: "Frape", imagen: "images/tienda/bebida/chocolatefrio.png", precio: 10),
   Item(nombre: "Chocolate", imagen: "images/tienda/bebida/chocolate.png", precio: 10),
   Item(nombre: "Limonada", imagen: "images/tienda/bebida/limonada.png", precio: 10),
-  Item(nombre: "Te Burbujas Rosa", imagen: "images/tienda/bebida/teburbujasrosa.png", precio: 10),
+  Item(nombre: "Rosa", imagen: "images/tienda/bebida/teburbujasrosa.png", precio: 10),
   Item(nombre: "Te Burbujas", imagen: "images/tienda/bebida/teburbujas.png", precio: 10),
   Item(nombre: "Te", imagen: "images/tienda/bebida/te.png", precio: 10),
 ];
 
 List<Item> aseoItems = [
-  Item(nombre: "Jabón", imagen: "images/tienda/aseo/jabon.png", precio: 20),
+  Item(nombre: "Jabon", imagen: "images/tienda/aseo/jabon.png", precio: 20),
   Item(nombre: "flores", imagen: "images/tienda/aseo/jabonflores.png", precio: 20),
   Item(nombre: "coco", imagen: "images/tienda/aseo/jaboncoco.png", precio: 20),
 ];

@@ -105,23 +105,20 @@ class _GameRoomScreenState extends State<GameRoomScreen> {
                 : Image.asset(imgNutria, width: 250),
           ),
 
+
           // Botón de Jugar
           Positioned(
             bottom: 150,
             left: 0,
             right: 0,
             child: Center(
-              child: ElevatedButton(
-                onPressed: (widget.pet.isSleeping || jugando) ? null : jugar,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orangeAccent,
-                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-                ),
-                child: Text(
-                  jugando ? "¡Diversión!" : "Jugar",
-                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
+              child: GestureDetector(
+                onTap: (widget.pet.isSleeping || jugando) ? null : jugar,
+                child: 
+                Image.asset(
+                           "images/control2.png",
+                           height: 75,
+                          )
               ),
             ),
           ),

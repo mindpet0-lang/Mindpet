@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class TarjetaEmocion extends StatelessWidget {
-
   final String emocion;
   final String titulo;
   final String texto;
@@ -17,10 +16,8 @@ class TarjetaEmocion extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
-
-      margin: EdgeInsets.only(bottom:15),
+      margin: EdgeInsets.only(bottom: 15),
       padding: EdgeInsets.all(15),
 
       decoration: BoxDecoration(
@@ -32,38 +29,30 @@ class TarjetaEmocion extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
 
         children: [
-
           Row(
             children: [
-
               Container(
-                width:10,
-                height:10,
-                decoration: BoxDecoration(
-                  color: color,
-                  shape: BoxShape.circle,
-                ),
+                width: 10,
+                height: 10,
+                decoration: BoxDecoration(color: color, shape: BoxShape.circle),
               ),
 
-              SizedBox(width:8),
+              SizedBox(width: 8),
 
-              Text(
-                emocion,
-                style: TextStyle(fontWeight: FontWeight.bold),
-              )
-
+              Text(emocion, style: TextStyle(fontWeight: FontWeight.bold)),
             ],
           ),
 
-          SizedBox(height:5),
+          SizedBox(height: 5),
+
+          Text(titulo, style: TextStyle(fontWeight: FontWeight.bold)),
 
           Text(
-            titulo,
-            style: TextStyle(fontWeight: FontWeight.bold),
+            texto,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(fontSize: 14, color: Colors.black87),
           ),
-
-          Text(texto)
-
         ],
       ),
     );

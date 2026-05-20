@@ -35,10 +35,10 @@ class _DiarioScreenState extends State<DiarioScreen> {
         entradas = data.map<Map<String, dynamic>>((e) {
           String emocion = normalizarEmocion(e["emocion"]);
           return {
-            "id": e["id"],
+            "id": e["id"] ?? 0,
             "emocion": emocion,
-            "titulo": e["titulo"],
-            "texto": e["contenido"],
+            "titulo": e["titulo"]?.toString() ?? "",
+            "texto": e["contenido"]?.toString() ?? "",
             "color": obtenerColorPorEmocion(emocion),
           };
         }).toList();
@@ -58,7 +58,7 @@ class _DiarioScreenState extends State<DiarioScreen> {
         Container(
           decoration: const BoxDecoration(
             image: DecorationImage(
-              image: AssetImage("images/fondodiario.png"),
+              image: AssetImage("images/fondo/fondodiario.png"),
               fit: BoxFit.cover,
             ),
           ),
@@ -88,7 +88,9 @@ class _DiarioScreenState extends State<DiarioScreen> {
             onPressed: () async {
               final nuevaEntrada = await Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const NuevaEntradaScreen()),
+                MaterialPageRoute(
+                  builder: (context) => const NuevaEntradaScreen(),
+                ),
               );
 
               if (nuevaEntrada != null) {
@@ -105,13 +107,16 @@ class _DiarioScreenState extends State<DiarioScreen> {
           ),
           body: Padding(
             padding: const EdgeInsets.all(20),
-            child: cargando 
-              ? const Center(child: CircularProgressIndicator())
-              : entradas.isEmpty
+            child: cargando
+                ? const Center(child: CircularProgressIndicator())
+                : entradas.isEmpty
                 ? const Center(
                     child: Text(
                       "No hay nada aún. ¡Agrega tu primera nota!",
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   )
                 : ListView.builder(
@@ -133,8 +138,11 @@ class _DiarioScreenState extends State<DiarioScreen> {
                           child: const Icon(Icons.delete, color: Colors.white),
                         ),
                         onDismissed: (direction) async {
-                          await diarioService.eliminarDiario(entrada["id"], widget.userId);
-                          // No es necesario cargarDiarios() aquí si lo borras del local, 
+                          await diarioService.eliminarDiario(
+                            entrada["id"],
+                            widget.userId,
+                          );
+                          // No es necesario cargarDiarios() aquí si lo borras del local,
                           // pero es más seguro para sincronizar con Spring Boot.
                           cargarDiarios();
                         },
@@ -148,7 +156,10 @@ class _DiarioScreenState extends State<DiarioScreen> {
                                   entrada: entrada,
                                   userId: widget.userId,
                                   onDelete: () async {
-                                    await diarioService.eliminarDiario(entrada["id"], widget.userId);
+                                    await diarioService.eliminarDiario(
+                                      entrada["id"],
+                                      widget.userId,
+                                    );
                                     if (mounted) {
                                       Navigator.pop(context); // Cierra detalle
                                       cargarDiarios();
@@ -158,7 +169,10 @@ class _DiarioScreenState extends State<DiarioScreen> {
                                     final editado = await Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => NuevaEntradaScreen(entrada: entrada),
+                                        builder: (context) =>
+                                            NuevaEntradaScreen(
+                                              entrada: entrada,
+                                            ),
                                       ),
                                     );
 
@@ -171,7 +185,9 @@ class _DiarioScreenState extends State<DiarioScreen> {
                                         editado["emocion"],
                                       );
                                       if (mounted) {
-                                        Navigator.pop(context); // Cierra detalle
+                                        Navigator.pop(
+                                          context,
+                                        ); // Cierra detalle
                                         cargarDiarios();
                                       }
                                     }
@@ -197,43 +213,44 @@ class _DiarioScreenState extends State<DiarioScreen> {
   }
 
   // 🎨 LÓGICA DE COLORES POR EMOCIÓN
-Color obtenerColorPorEmocion(String emocion) {
-  emocion = emocion.toLowerCase();
+  Color obtenerColorPorEmocion(String emocion) {
+    emocion = emocion.toLowerCase();
 
-  if (emocion.contains("alegría"))     return Colors.green.withOpacity(0.7);
-  if (emocion.contains("tristeza"))   return Colors.blue.withOpacity(0.7);
-  if (emocion.contains("enojo"))      return Colors.red.withOpacity(0.7);
-  if (emocion.contains("ansiedad"))   return Colors.purple.withOpacity(0.7);
-  if (emocion.contains("miedo"))      return Colors.deepPurple.withOpacity(0.7);
-  if (emocion.contains("estres"))     return Colors.orange.withOpacity(0.7);
-  if (emocion.contains("calma"))      return Colors.teal.withOpacity(0.7);
-  if (emocion.contains("amor"))       return Colors.pink.withOpacity(0.7);
-  if (emocion.contains("cansancio"))  return Colors.brown.withOpacity(0.7);
-  if (emocion.contains("confusión"))  return Colors.indigo.withOpacity(0.7);
-  if (emocion.contains("motivación")) return Colors.lightGreen.withOpacity(0.7);
-  if (emocion.contains("soledad"))    return Colors.blueGrey.withOpacity(0.7);
+    if (emocion.contains("alegría")) return Colors.yellow.withOpacity(0.7);
+    if (emocion.contains("tristeza")) return Colors.blue.withOpacity(0.7);
+    if (emocion.contains("enojo")) return Colors.red.withOpacity(0.7);
+    if (emocion.contains("ansiedad")) return Colors.purple.withOpacity(0.7);
+    if (emocion.contains("miedo")) return Colors.deepPurple.withOpacity(0.7);
+    if (emocion.contains("estres")) return Colors.orange.withOpacity(0.7);
+    if (emocion.contains("calma")) return Colors.teal.withOpacity(0.7);
+    if (emocion.contains("amor")) return Colors.pink.withOpacity(0.7);
+    if (emocion.contains("cansancio")) return Colors.brown.withOpacity(0.7);
+    if (emocion.contains("confusión")) return Colors.indigo.withOpacity(0.7);
+    if (emocion.contains("motivación"))
+      return Colors.lightGreen.withOpacity(0.7);
+    if (emocion.contains("soledad")) return Colors.blueGrey.withOpacity(0.7);
 
-  return Colors.grey.withOpacity(0.7); // Color por defecto
-}
-
+    return Colors.grey.withOpacity(0.7); // Color por defecto
+  }
 
   // 😊 NORMALIZACIÓN DE TEXTO
- String normalizarEmocion(String? emocion) {
-  emocion = (emocion ?? "").toLowerCase();
+  String normalizarEmocion(String? emocion) {
+    emocion = (emocion ?? "").toLowerCase();
 
-  if (emocion.contains("alegr") || emocion.contains("feliz")) return "Alegría";
-  if (emocion.contains("triste")) return "Tristeza";
-  if (emocion.contains("enojo"))  return "Enojo";
-  if (emocion.contains("ansie"))  return "Ansiedad";
-  if (emocion.contains("miedo"))  return "Miedo";
-  if (emocion.contains("estr"))  return "Estrés";
-  if (emocion.contains("calma"))  return "Calma";
-  if (emocion.contains("amor"))   return "Amor";
-  if (emocion.contains("cans"))   return "Cansancio";
-  if (emocion.contains("confu"))  return "Confusión";
-  if (emocion.contains("motiv"))  return "Motivación";
-  if (emocion.contains("sol"))   return "Soledad";
+    if (emocion.contains("alegr") || emocion.contains("feliz"))
+      return "Alegría";
+    if (emocion.contains("triste")) return "Tristeza";
+    if (emocion.contains("enojo")) return "Enojo";
+    if (emocion.contains("ansie")) return "Ansiedad";
+    if (emocion.contains("miedo")) return "Miedo";
+    if (emocion.contains("estr")) return "Estrés";
+    if (emocion.contains("calma")) return "Calma";
+    if (emocion.contains("amor")) return "Amor";
+    if (emocion.contains("cans")) return "Cansancio";
+    if (emocion.contains("confu")) return "Confusión";
+    if (emocion.contains("motiv")) return "Motivación";
+    if (emocion.contains("sol")) return "Soledad";
 
-  return "Otros";
-}
+    return "Otros";
+  }
 }
