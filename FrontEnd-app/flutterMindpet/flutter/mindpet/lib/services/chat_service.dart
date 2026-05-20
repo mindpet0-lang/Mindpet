@@ -31,4 +31,21 @@ class ChatService {
       return [];
     }
   }
+
+//Borrar el historial del chat
+  Future<bool> borrarHistorial(int userId) async {
+    try {
+      final response = await http.delete(Uri.parse('$baseUrl/clear/$userId'));
+      
+      if (response.statusCode == 200) {
+        return true; // Borrado exitoso en el backend
+      } else {
+        print("Error del servidor al borrar: ${response.body}");
+        return false;
+      }
+    } catch (e) {
+      print("Error de conexión al borrar: $e");
+      return false;
+    }
+  }
 }

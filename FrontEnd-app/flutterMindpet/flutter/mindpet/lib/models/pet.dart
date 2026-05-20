@@ -9,7 +9,7 @@ class Pet extends ChangeNotifier {
   int energia;
   int felicidad;
   int higiene;
-  int hambre; // Funciona como nivel de saciedad
+  int hambre; 
   int lastUpdate;
   bool isSleeping;
   
@@ -47,25 +47,29 @@ class Pet extends ChangeNotifier {
     return "$path/parada.gif";
   }
 
-  void updateWithTime() {
+ void updateWithTime() {
     int now = DateTime.now().millisecondsSinceEpoch;
-    int seconds = (now - lastUpdate) ~/ 1000;
+    int milliseconds = now - lastUpdate;
+    
+    // Convertimos a segundos reales con decimales para no perder fracciones de tiempo
+    double seconds = milliseconds / 1000;
 
-    if (seconds > 0) {
+    if (seconds >= 1) {
       if (isSleeping) {
-        // CORRECCIÓN: Sigue sumando energía pasivamente si duerme, pero NO la despierta automáticamente.
-        energia = (energia + seconds ~/ 30).clamp(0, 100);
+        // Recupera 1 punto de energía cada 30 segundos (proporcionalmente en decimal)
+        energia = (energia + (seconds / 30)).round().clamp(0, 100);
       } else {
-        energia = (energia - seconds ~/ 60).clamp(0, 100);
+        // Pierde 1 punto de energía cada 120 segundos
+        energia = (energia - (seconds / 120)).round().clamp(0, 100);
       }
-      higiene = (higiene - seconds ~/ 600).clamp(0, 100);
-      hambre = (hambre - seconds ~/ 120).clamp(0, 100);
-      felicidad = (felicidad- seconds ~/ 120).clamp(0, 100);
       
+      // Resto de estados decayendo proporcionalmente
+      higiene = (higiene - (seconds / 600)).round().clamp(0, 100);
+      hambre = (hambre - (seconds / 120)).round().clamp(0, 100);
+      felicidad = (felicidad - (seconds / 60)).round().clamp(0, 100);
+      
+      // Solo actualizamos lastUpdate si efectivamente procesamos el tiempo
       lastUpdate = now;
-      
-      // SOLUCIÓN: Eliminamos la línea que ponía 'isSleeping = false' de manera automática.
-      
       notifyListeners(); 
     }
   }
@@ -92,9 +96,17 @@ class Pet extends ChangeNotifier {
   };
 
   // --- LÓGICA DE TIEMPO REAL ---
-  void _startRealtimeUpdate() {
-    _timer = Timer.periodic(const Duration(minutes: 1), (timer) {
+void _startRealtimeUpdate() {
+    _timer = Timer.periodic(const Duration(minutes: 1), (timer) async {
       updateWithTime();
+      
+      // 🔥 LA SOLUCIÓN: Si está durmiendo y estás en otra pantalla,
+      // obligamos a la mascota a guardar su nueva energía en el servidor/base de datos.
+      if (isSleeping) {
+        await saveToServer(id);
+        await saveLocal(); // Opcional, por si manejas persistencia local también
+      }
+      
       notifyListeners(); 
     });
   }
