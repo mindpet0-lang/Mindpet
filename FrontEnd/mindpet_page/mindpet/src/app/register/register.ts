@@ -126,7 +126,6 @@ mostrarPasswordC = false;
           confirmButtonColor: '#62C6E2', 
           backdrop: `
             rgba(0,0,123,0.4)
-            url("assets/images/nyan-cat.gif") 
             left top
             no-repeat
           ` 

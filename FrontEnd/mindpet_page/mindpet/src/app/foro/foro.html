@@ -1,93 +1,171 @@
-<div class="forum-wrapper">
-  
-  <nav class="mindpet-nav">
-    <span class="logo" routerLink="/home" style="cursor:pointer">🐾 MindPet</span>
+<div class="foro-container">
+    <div class="foro-wrapper">
 
-    <div class="nav-right" style="display: flex; align-items: center; gap: 15px;">
-      
-      <button *ngIf="!isLoggedIn()" (click)="login()" class="btn-publish" routerLink="/login">
-        Entrar
-      </button>
-
-      <ng-container *ngIf="isLoggedIn()">
-        <span class="user-badge" style="color: #000;">
-          Hola, {{ currentUser() }}
-        </span>
-
-        <div class="profile-header">
-          <div class="account-container" (click)="onProfileClick()" style="cursor: pointer; display: flex;">
-            <span class="material-icons" style="font-size: 32px; color: #000;">account_circle</span>
-          </div>
-
-          <div class="user-menu" *ngIf="isMenuOpen && user">
-            <div class="user-info">
-              <p style="font-weight: bold; color: #333; font-size: 1rem;">{{ user.nombre }}</p>
-              <p style="font-size: 0.85rem; color: #666;">{{ user.correo }}</p>
+        <header class="profile-header">
+            <div class="account-container" (click)="onProfileClick()">
+                <img [src]="user?.fotoPerfil || '/assets/images/default-user.png'" class="profile-img">
             </div>
-            
-            <hr style="border: 0; border-top: 1px solid #eee; margin: 12px 0;">
-            
-            <button class="btn-logout" (click)="onLogout()">
-              <span class="material-icons" style="font-size: 18px;">logout</span>
-              Cerrar sesión
-            </button>
-          </div>
-        </div>
-      </ng-container>
-    </div>
-  </nav>
 
-  <div class="content-container">
+            <div class="user-menu" *ngIf="isMenuOpen">
+                <div class="user-info">
+                    <p class="user-name">{{ user?.nombre }}</p>
+                    <p class="user-email">{{ user?.correo }}</p>
+                </div>
+                <hr>
 
-    <div class="post-box card" *ngIf="isLoggedIn()">
-      <textarea [(ngModel)]="newPostContent" placeholder="¿Cómo te sientes hoy?" class="textarea" rows="3"></textarea>
+                <button class="btn-settings" [routerLink]="['/perfil']">
+                    <span class="material-icons">settings</span>
+                    Ajustes
+                </button>
 
-      <div class="actions" style="display: flex; justify-content: flex-end; margin-top: 10px;">
-        <button (click)="publishPost()" class="btn-publish">
-          Publicar
+                @if(user?.correo === "Inicia sesión") {
+                <button class="btn-login" [routerLink]="['/login']">
+                    <span class="material-icons">logout</span>
+                    Iniciar sesión
+                </button>
+                } @else {
+                <button class="btn-logout" (click)="onLogout()">
+                    <span class="material-icons">logout</span>
+                    Cerrar sesión
+                </button>
+                }
+            </div>
+        </header>
+
+        <button type="button" class="btn-volver" (click)="volverAtras()" title="volver a la pagina anterior">
+            ← Volver
         </button>
-      </div>
-    </div>
 
-    <div class="feed">
-      <div *ngFor="let post of posts()" class="post-card card">
-        
-        <div class="post-header" style="display: flex; align-items: center; gap: 10px;">
-          <div style="background: #3f6d8c; color: white; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-            👤
-          </div>
-          <strong style="color: #000;">{{ post.author || 'Usuario' }}</strong>
-        </div>
+        <header class="foro-header">
+            <h2>🌸 Foro Comunitario 🌸</h2>
+            <p>Comparte tus ideas de forma libre y bonita</p>
+        </header>
 
-        <div style="margin-top: 15px;">
-          <p *ngIf="editandoPostId !== post.id" class="post-body" style="color: #000;">
-            {{ post.content }}
-          </p>
-
-          <div *ngIf="editandoPostId === post.id" style="display: flex; flex-direction: column; gap: 10px;">
-            <textarea [(ngModel)]="editContent" class="textarea" style="background: #fff; border: 1px solid #ddd;"></textarea>
-            <div style="display: flex; gap: 10px;">
-              <button (click)="guardarEdicion(post)" class="btn-publish" style="padding: 6px 12px; font-size: 13px;">Guardar</button>
-              <button (click)="editandoPostId = null" style="background: #eee; border: none; padding: 6px 12px; border-radius: 20px; cursor: pointer; font-size: 13px;">Cancelar</button>
+        <div class="card-publicar">
+            <textarea 
+                [(ngModel)]="nuevoContenido" 
+                placeholder="¿De qué te gustaría hablar hoy? Escribe aquí... 🍦"
+                rows="3"
+                [disabled]="guardando">
+            </textarea>
+            
+            <div *ngIf="previsualizacionUrl" class="wrapper-previsualizacion">
+                <img [src]="previsualizacionUrl" class="img-preview">
+                <button type="button" class="btn-quitar-img" (click)="limpiarImagen()">✕</button>
             </div>
-          </div>
+
+            <div class="acciones-publicar">
+                <label class="btn-subir-archivo" title="Añadir imagen">
+                    <input type="file" (change inversion)="onFileSelected($event)" accept="image/*" style="display: none;">
+                    📷 Añadir foto
+                </label>
+
+                <button type="button" class="btn-publicar" [disabled]="(!nuevoContenido.trim() && !imagenSeleccionada) || guardando" (mousedown)="publicar()">
+                    {{ guardando ? '✨ Publicando...' : '✨ Publicar entrada' }}
+                </button>
+            </div>
         </div>
 
-        <img *ngIf="post.image" [src]="post.image" class="post-image">
+        <div class="divisor"></div>
 
-        <div class="post-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
-          <button (click)="toggleLike(post.id)" class="like-btn" [class.liked]="post.likes.includes(currentUser()!)">
-            ❤️ {{ post.likes.length || 0 }}
-          </button>
+        <main class="lista-publicaciones">
+            <h3>Publicaciones recientes</h3>
 
-          <div *ngIf="currentUser() === post.author" style="display: flex; gap: 8px;">
-            <button (click)="editarPost(post)" style="background: rgba(0,0,0,0.05); border: none; padding: 5px 10px; border-radius: 10px; cursor: pointer; font-size: 12px;">✏️ Editar</button>
-            <button (click)="eliminarPost(post.id)" style="background: rgba(0,0,0,0.05); border: none; padding: 5px 10px; border-radius: 10px; cursor: pointer; font-size: 12px;">🗑 Eliminar</button>
-          </div>
-        </div>
+            <div *ngIf="publicaciones.length === 0" class="sin-publicaciones">
+                Aún no hay publicaciones... ¡Sé la primera persona en llenar este espacio de magia! 🍦
+            </div>
 
-      </div>
+            <div *ngFor="let pub of publicaciones" class="card-publicacion">
+
+                <div class="acciones-superiores"
+                    *ngIf="publicacionIdParaBorrar !== pub.id && publicacionIdParaEditar !== pub.id && pub.usuario.id === idUsuarioLogueado">
+                    <button type="button" class="btn-accion btn-editar-icono"
+                        (click)="activarEdicion(pub.contenido, pub.id)" title="Editar">✏️</button>
+                    <button type="button" class="btn-accion btn-eliminar" (click)="solicitarEliminar(pub.id)"
+                        title="Eliminar">✕</button>
+                </div>
+
+                <div *ngIf="publicacionIdParaBorrar === pub.id" class="cartel-confirmacion">
+                    <span>¿Eliminar esta publicación?</span>
+                    <div class="confirmacion-acciones">
+                        <button type="button" class="btn-confirmar-si" (click)="confirmarEliminar()">Sí</button>
+                        <button type="button" class="btn-confirmar-no" (click)="cancelarEliminar()">No</button>
+                    </div>
+                </div>
+
+                <div class="avatar-autor-container">
+                    <img [src]="pub.usuario.fotoPerfil || '/assets/images/default-user.png'" class="avatar-autor-img">
+                </div>
+
+                <div class="contenido-publicacion">
+
+                    <div *ngIf="publicacionIdParaEditar !== pub.id">
+                        <p class="texto-pub">{{ obtenerTextoLimpio(pub.contenido) }}</p>
+                        
+                        <div *ngIf="obtenerImagenUrl(pub.contenido)" class="imagen-publicada-container">
+                            <img [src]="obtenerImagenUrl(pub.contenido)" class="imagen-publicada">
+                        </div>
+                    </div>
+
+                    <div *ngIf="publicacionIdParaEditar === pub.id" class="editor-interno">
+                        <textarea [(ngModel)]="contenidoEditado" rows="2" class="textarea-edicion"></textarea>
+                        <div class="confirmacion-acciones" style="margin-top: 8px; justify-content: flex-end;">
+                            <button type="button" class="btn-confirmar-si"
+                                style="background-color: #b5ead7; color: #333;"
+                                (click)="guardarEdicion(pub)">Guardar</button>
+                            <button type="button" class="btn-confirmar-no"
+                                style="background-color: #ff9aa2; color: white;"
+                                (click)="cancelarEdicion()">Cancelar</button>
+                        </div>
+                    </div>
+
+                    <div class="meta-pub">
+                        <span class="autor">✨ Por: <strong>{{ pub.usuario.nombre || 'Usuario Anónimo' }}</strong></span>
+
+                        <div class="likes-container" (click)="darLike(pub)">
+                            <span class="corazon" [class.activo]="pub.leDioLike">
+                                {{ pub.leDioLike ? '❤️' : '🤍' }}
+                            </span>
+                            <span class="contador-likes">{{ pub.totalLikes || 0 }}</span>
+                        </div>
+
+                        <span class="fecha">{{ pub.fechaCreacion | date:'medium' }}</span>
+                    </div>
+
+                    <div class="seccion-comentarios">
+                        
+                        <div class="lista-comentarios" *ngIf="pub.comentarios && pub.comentarios.length > 0">
+                            <div *ngFor="let com of pub.comentarios" class="item-comentario">
+                                <img [src]="com.usuario.fotoPerfil || '/assets/images/default-user.png'" class="avatar-comentario">
+                                
+                                <div class="cuerpo-comentario">
+                                    <div class="globo-comentario">
+                                        <span class="nombre-comentario"><strong>{{ com.usuario.nombre }}</strong></span>
+                                        <p class="texto-comentario">{{ com.contenido }}</p>
+                                    </div>
+                                    
+                                    <div class="meta-comentario">
+                                        <span class="fecha-comentario">{{ com.fechaCreacion | date:'shortTime' }}</span>
+                                        
+                                        <span class="like-comentario-btn" (click)="darLikeComentario(com)">
+                                            {{ com.leDioLike ? '❤️' : '🤍' }} {{ com.totalLikes || 0 }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="input-comentario-container">
+                            <input 
+                                type="text" 
+                                [(ngModel)]="pub.nuevoComentarioTexto" 
+                                placeholder="Escribe una respuesta bonita... 🍦"
+                                (keyup.enter)="agregarComentario(pub)"
+                                class="input-comentario">
+                            <button type="button" class="btn-enviar-comentario" (click)="agregarComentario(pub)">✨</button>
+                        </div>
+
+                    </div> </div> </div> </main>
+
     </div>
-
-  </div>
 </div>

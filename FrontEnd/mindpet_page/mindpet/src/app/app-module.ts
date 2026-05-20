@@ -9,8 +9,9 @@ import { Login } from './login/login';
 import { Home } from './home/home';
 import { Welcome } from './welcome/welcome';
 import { Register } from './register/register';
-import { Foro } from './foro/foro';
 import { Download } from './download/download';
+import { Perfil } from './perfil/perfil';
+import { Foro} from './foro/foro';
 
 
 @NgModule({
@@ -20,8 +21,9 @@ import { Download } from './download/download';
     Login,
     Welcome,
     Register,
-    Foro,
     Download,
+    Perfil,
+    Foro,
   ],
   imports: [
     BrowserModule,

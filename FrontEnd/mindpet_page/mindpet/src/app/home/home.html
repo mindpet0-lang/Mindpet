@@ -27,7 +27,9 @@
 </nav>
 <header class="profile-header">
     <div class="account-container" (click)="onProfileClick()">
-      <span class="material-icons">account_circle</span>
+      <img 
+  [src]="user?.fotoPerfil || '/assets/images/default-user.png'" 
+  class="profile-img">
     </div>
 
     <div class="user-menu" *ngIf="isMenuOpen">
@@ -36,6 +38,11 @@
     <p class="user-email">{{ user?.correo }}</p>
   </div>
   <hr>
+
+<button class="btn-settings" [routerLink]="['/perfil']">
+  <span class="material-icons">settings</span>
+  Ajustes
+</button>
 
   @if(user?.correo=="Inicia sesión"){
       <button class="btn-login" [routerLink]="['/login']">

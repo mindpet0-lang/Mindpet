@@ -266,3 +266,32 @@ object-fit: cover;
   background-color: #f5f5f5;
   transform: translateY(-1px);
 }
+
+.profile-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  object-fit: cover;
+}
+.btn-settings {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #333;
+  font-weight: bold;
+  margin-top: 10px;
+  transition: all 0.2s ease;
+}
+
+.btn-settings:hover {
+  background: #f5f5f5;
+  border-color: #bbb;
+}
