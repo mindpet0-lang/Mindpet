@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mindpet/juegos/coin_manager.dart';
 import 'package:provider/provider.dart'; 
 import 'screens/login_screen.dart';
 import 'widgets/pet_loader.dart';
@@ -11,11 +12,19 @@ void main() async {
   final prefs = await SharedPreferences.getInstance();
   final int? userId = prefs.getInt('userId'); 
 
-
   runApp(
-    ChangeNotifierProvider(
-      // Creamos la instancia de Pet aquí para que sea global
-      create: (context) => Pet(id: userId ?? 0), 
+    // 2. Usamos MultiProvider para inyectar múltiples estados globales
+    MultiProvider(
+      providers: [
+        // Estado global de la mascota virtual
+        ChangeNotifierProvider(
+          create: (context) => Pet(id: userId ?? 0),
+        ),
+        // Estado global de las monedas (Usando tu Singleton CoinManager.instance)
+        ChangeNotifierProvider.value(
+          value: CoinManager.instance,
+        ),
+      ],
       child: MyApp(userId: userId),
     ),
   );
