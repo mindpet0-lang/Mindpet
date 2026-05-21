@@ -103,17 +103,26 @@ cargarUsuarioSesion(): void {
   }
 
   //seleccionar imagen
-  onFileSelected(event: any):void{
-    const file = event.target.files[0];
-    if(file){
-      this.imagenSeleccionada = file;
-
+  onFileSelected(event: any): void {
+    const input = event.target as HTMLInputElement;
+    
+    if (input.files && input.files.length > 0) {
+      this.imagenSeleccionada = input.files[0];
+      
+      // Creamos el lector de archivos de JavaScript
       const reader = new FileReader();
-      reader.onload = () => {
-        this.previsualizacionUrl = reader.result as string;
-        this.cdr.detectChanges;
+      
+      // 🌟 CAMBIO CLAVE: Usamos una función flecha tradicional para asegurar que
+      // el contexto de 'this' apunte correctamente al componente de Angular
+      reader.onload = (e: any) => {
+        this.previsualizacionUrl = e.target.result;
+        
+        // Forzamos a Angular a redibujar la pantalla de inmediato
+        this.cdr.detectChanges(); 
       };
-      reader.readAsDataURL(file)
+      
+      // Leemos el archivo para generar la URL en Base64
+      reader.readAsDataURL(this.imagenSeleccionada);
     }
   }
 
@@ -134,7 +143,7 @@ cargarPublicaciones(): void {
         
         // Buscamos los comentarios para cada una
         this.publicaciones.forEach(pub => {
-          pub.comentarios = [];
+          pub.comentarios = pub.comentarios || [];
           pub.nuevoComentarioTexto = ''; // Inicializamos su caja de texto vacía
           if (pub.id) {
             this.foroService.getComentarios(pub.id, this.idUsuarioLogueado).subscribe(coms => {
@@ -148,7 +157,7 @@ cargarPublicaciones(): void {
     });
   }
 
-  agregarComentario(pub: any): void {
+agregarComentario(pub: any): void {
     if (!pub.nuevoComentarioTexto || !pub.nuevoComentarioTexto.trim()) return;
 
     const nuevoCom: Comentario = {
@@ -159,7 +168,7 @@ cargarPublicaciones(): void {
 
     this.foroService.crearComentario(nuevoCom).subscribe({
       next: (comentarioGuardado) => {
-        // Le inyectamos los datos visuales de la sesión local activa al momento
+        // Le inyectamos los datos visuales de la sesión local activa
         comentarioGuardado.usuario = {
           id: this.idUsuarioLogueado,
           nombre: this.user?.nombre || 'Usuario Anónimo',
@@ -168,10 +177,18 @@ cargarPublicaciones(): void {
         comentarioGuardado.totalLikes = 0;
         comentarioGuardado.leDioLike = false;
 
-        pub.comentarios.push(comentarioGuardado); // Se añade al final del hilo de respuestas
-        pub.nuevoComentarioTexto = ''; // Limpiamos la caja
+        // 🌟 ARREGLO SEGURIDAD: Si pub.comentarios es null o undefined, lo convertimos en un array vacío []
+        if (!pub.comentarios) {
+          pub.comentarios = [];
+        }
+
+        // Ahora sí, el push nunca fallará
+        pub.comentarios.push(comentarioGuardado); 
+        
+        pub.nuevoComentarioTexto = ''; // Limpiamos la caja de texto
         this.cdr.detectChanges();
-      }
+      },
+      error: (err) => console.error('Error al guardar comentario', err)
     });
   }
 
