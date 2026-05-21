@@ -402,7 +402,7 @@ void initState() {
           // ⬅️ BOTÓN VOLVER (SUPERIOR DERECHA)
           Positioned(
             top: 40,
-            left: 20,
+            left: 15,
             child: GestureDetector(
               onTap: () {
                 Navigator.pop(context);
@@ -434,7 +434,7 @@ void initState() {
           // MONEDAS
           Positioned(
             top: 35,
-            left: 100,
+            left: 90,
             child: AnimatedBuilder(
               animation: CoinManager.instance,
               builder: (context, _) {
