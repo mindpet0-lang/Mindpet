@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mindpet/widgets/bottom_menu.dart';
 import '../models/pet.dart';
 import '../widgets/top_status_bar.dart';
+import '../juegos/menu-principal.dart';
 
 class GameRoomScreen extends StatefulWidget {
   final Pet pet;
@@ -12,7 +13,7 @@ class GameRoomScreen extends StatefulWidget {
     super.key,
     required this.pet,
     required this.controller,
-    required this.userId
+    required this.userId,
   });
 
   @override
@@ -26,7 +27,7 @@ class _GameRoomScreenState extends State<GameRoomScreen> {
   @override
   void initState() {
     super.initState();
-    imgNutria = widget.pet.imagenActual; 
+    imgNutria = widget.pet.imagenActual;
     _iniciarReloj();
   }
 
@@ -105,7 +106,6 @@ class _GameRoomScreenState extends State<GameRoomScreen> {
                 : Image.asset(imgNutria, width: 250),
           ),
 
-
           // Botón de Jugar
           Positioned(
             bottom: 150,
@@ -113,12 +113,13 @@ class _GameRoomScreenState extends State<GameRoomScreen> {
             right: 0,
             child: Center(
               child: GestureDetector(
-                onTap: (widget.pet.isSleeping || jugando) ? null : jugar,
-                child: 
-                Image.asset(
-                           "images/control2.png",
-                           height: 75,
-                          )
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => MenuPrincipal(userId: widget.userId)),
+                  );
+                },
+                child: Image.asset("images/control2.png", height: 75),
               ),
             ),
           ),
@@ -140,19 +141,23 @@ class _GameRoomScreenState extends State<GameRoomScreen> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.bedtime, color: Color.fromARGB(255, 255, 255, 255), size: 50),
+          const Icon(
+            Icons.bedtime,
+            color: Color.fromARGB(255, 255, 255, 255),
+            size: 50,
+          ),
           const SizedBox(height: 10),
-                  Container(
-                        padding: const EdgeInsets.all(10),
-                        color: Colors.black54,
-                        child: const Text(
-                          "Tu mascota está durmiendo...",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
+          Container(
+            padding: const EdgeInsets.all(10),
+            color: Colors.black54,
+            child: const Text(
+              "Tu mascota está durmiendo...",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
         ],
       ),
     );

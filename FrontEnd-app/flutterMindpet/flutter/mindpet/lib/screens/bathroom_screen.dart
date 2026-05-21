@@ -198,6 +198,7 @@ Future<void> _cargarInventario() async {
     });
 
     widget.pet.higiene = 100;
+    widget.pet.felicidad = (widget.pet.felicidad + 20).clamp(0, 100);
     widget.pet.notifyListeners();
     await widget.pet.saveLocal();
 

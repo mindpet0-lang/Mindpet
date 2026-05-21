@@ -47,6 +47,34 @@ class Pet extends ChangeNotifier {
     return "$path/parada.gif";
   }
 
+  String get imagenComiendo{
+    String path = "images/nutria/kitchen/comiendo";
+
+    bool s = energia < 35;
+    bool u = higiene < 35;
+    
+     if (u && s) return "$path/sucia-sueno.gif";
+         if (u) return "$path/sucia.gif";
+    if (s) return "$path/sueno.gif";
+
+    return "$path/normal.gif";
+
+  }
+
+    String get imagenTomando{
+    String path = "images/nutria/kitchen/tomando";
+
+    bool s = energia < 35;
+    bool u = higiene < 35;
+    
+     if (u && s) return "$path/sucia-sueno.png";
+         if (u) return "$path/sucia.png";
+    if (s) return "$path/sueno.png";
+
+    return "$path/normal.png";
+
+  }
+
  void updateWithTime() {
     int now = DateTime.now().millisecondsSinceEpoch;
     int milliseconds = now - lastUpdate;
@@ -144,7 +172,7 @@ void _startRealtimeUpdate() {
     hambre += 20;
     if (hambre > 100) hambre = 100;
     
-    felicidad += 5;
+    felicidad += 10;
     if (felicidad > 100) felicidad = 100;
 
     lastUpdate = DateTime.now().millisecondsSinceEpoch;

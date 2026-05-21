@@ -4,7 +4,6 @@ import '../models/pet.dart';
 import '../widgets/top_status_bar.dart';
 import '../services/api_service.dart';
 import 'dart:async';
-// Asegúrate de verificar que el import de tu TiendaScreen sea el correcto:
 import '../screens/tienda/tienda_screen.dart'; 
 
 class KitchenScreen extends StatefulWidget {
@@ -25,6 +24,8 @@ class KitchenScreen extends StatefulWidget {
 
 class _KitchenScreenState extends State<KitchenScreen> {
   late String imgNutria;
+  late String imagenComiendo;
+  late String imagenTomando;
   bool comiendo = false;
   bool tomando = false;
 
@@ -38,6 +39,8 @@ class _KitchenScreenState extends State<KitchenScreen> {
   void initState() {
     super.initState();
     imgNutria = widget.pet.imagenActual;
+    imagenComiendo = widget.pet.imagenComiendo;
+    imagenTomando = widget.pet.imagenTomando;
     _iniciarReloj();
     _cargarInventario();
   }
@@ -339,10 +342,10 @@ class _KitchenScreenState extends State<KitchenScreen> {
                 late double size = 250;
 
                 if (comiendo) {
-                  imgNutria = "images/nutria/kitchen/nutria-comiendo.gif";
+                  imgNutria = imagenComiendo;
                   size = 300;
                 } else if (tomando) {
-                  imgNutria = "images/nutria/kitchen/tomando.png";
+                  imgNutria = imagenTomando;
                   size = 300;
                 } else {
                   imgNutria = widget.pet.imagenActual;

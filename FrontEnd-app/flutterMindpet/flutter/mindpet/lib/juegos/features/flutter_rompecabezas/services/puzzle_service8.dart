@@ -1,0 +1,36 @@
+import '../models/puzzle_piece8.dart';
+
+class PuzzleService8 {
+  static List<PuzzlePiece8> generatePieces(int size, List<String> images) {
+    List<PuzzlePiece8> pieces = [];
+
+    int total = size * size;
+
+    for (int i = 0; i < total; i++) {
+      int x = i % size;
+      int y = i ~/ size;
+
+      // 🔥 usar una imagen diferente SOLO si existe
+      String imagePath = images[i % images.length];
+
+      pieces.add(
+  PuzzlePiece8(
+    imagePath: imagePath,
+    correctIndex: i,
+  ),
+);
+    }
+
+    return pieces;
+  }
+
+  static bool isCompleted(List<PuzzlePiece8?> board) {
+    for (int i = 0; i < board.length; i++) {
+      if (board[i] == null || board[i]!.correctIndex != i) {
+        return false;
+      }
+    }
+    return true;
+  }
+  
+}
