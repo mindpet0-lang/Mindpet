@@ -36,5 +36,5 @@ List<Item> bebidaItems = [
 List<Item> aseoItems = [
   Item(nombre: "Jabon", imagen: "images/tienda/aseo/jabon.png", precio: 20),
   Item(nombre: "flores", imagen: "images/tienda/aseo/jabonflores.png", precio: 20),
-  Item(nombre: "coco", imagen: "images/tienda/aseo/jaboncoco.png", precio: 20),
+  //Item(nombre: "coco", imagen: "images/tienda/aseo/jaboncoco.png", precio: 20),
 ];
