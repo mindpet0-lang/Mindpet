@@ -1,14 +1,14 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ForoService } from '../services/foro';
-import { Publicacion,Comentario} from '../models/publicacion.model';
+import { Publicacion, Comentario } from '../models/publicacion.model';
 import { Location } from '@angular/common';
-import { Router } from '@angular/router';
 import { User } from '../models/usuarios.model';
+import { HttpClient } from '@angular/common/http';
 import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-foro',
-  standalone:false,
+  standalone: false,
   templateUrl: './foro.html',
   styleUrls: ['./foro.css']
 })
@@ -28,27 +28,27 @@ export class Foro implements OnInit {
   publicacionIdParaEditar: number | null = null;
   contenidoEditado: string = '';
 
-  //Variables menu de perfil
+  // Variables menu de perfil
   isMenuOpen = false;
   user: User | null = null;
 
-  //Variables imagenes
-  imagenSeleccionada:File | null = null;
-  previsualizacionUrl:string | null = null;
+  // Variables imagenes
+  imagenSeleccionada: File | null = null;
+  previsualizacionUrl: string | null = null;
 
   constructor(
     private foroService: ForoService,
     private cdr: ChangeDetectorRef,
     private location: Location,
-    private router: Router
+    private http: HttpClient
   ) { }
 
   ngOnInit(): void {
     this.cargarUsuarioSesion();
   }
 
-  //carga el perfil
-cargarUsuarioSesion(): void {
+  // Carga el perfil
+  cargarUsuarioSesion(): void {
     const userData = localStorage.getItem('user');
     
     if (userData) {
@@ -56,7 +56,6 @@ cargarUsuarioSesion(): void {
         const parsedData = JSON.parse(userData);
         if (typeof parsedData === 'object' && parsedData !== null) {
           this.user = parsedData;
-          
           
           if (this.user && this.user.id) {
             this.idUsuarioLogueado = this.user.id; 
@@ -71,11 +70,10 @@ cargarUsuarioSesion(): void {
       this.idUsuarioLogueado = 1;
     }
     
-    
     this.cargarPublicaciones(); 
   }
 
-  //modulos Menu Perfil
+  // Modulos Menu Perfil
   onProfileClick(): void {
     this.isMenuOpen = !this.isMenuOpen;
     this.cdr.detectChanges();
@@ -98,53 +96,72 @@ cargarUsuarioSesion(): void {
       timer: 1500,
       showConfirmButton: false
     }).then(() => {
-      window.location.href = '/home'; // Te redirige al Home limpio
+      window.location.href = '/home';
     });
   }
 
-  //seleccionar imagen
+  // Seleccionar imagen publicación nueva
   onFileSelected(event: any): void {
     const input = event.target as HTMLInputElement;
     
     if (input.files && input.files.length > 0) {
       this.imagenSeleccionada = input.files[0];
-      
-      // Creamos el lector de archivos de JavaScript
       const reader = new FileReader();
       
-      // 🌟 CAMBIO CLAVE: Usamos una función flecha tradicional para asegurar que
-      // el contexto de 'this' apunte correctamente al componente de Angular
       reader.onload = (e: any) => {
         this.previsualizacionUrl = e.target.result;
-        
-        // Forzamos a Angular a redibujar la pantalla de inmediato
         this.cdr.detectChanges(); 
       };
       
-      // Leemos el archivo para generar la URL en Base64
       reader.readAsDataURL(this.imagenSeleccionada);
     }
   }
 
-  //limpiar imagen
-  limpiarImagen(): void {
-    this.imagenSeleccionada = null;
-    this.previsualizacionUrl= null;
+  // Seleccionar imagen para comentarios o ediciones (Distingue si es nuevo comentario)
+  onComentarioFileSelected(event: any, comOrPub: any, esNuevoComentario: boolean = false): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const archivo = input.files[0];
+      const reader = new FileReader();
+
+      reader.onload = (e: any) => {
+        if (esNuevoComentario) {
+          (comOrPub as any).comentarioPreviewUrl = e.target.result; // Casteo a any para evitar quejas de TS
+        } else {
+          (comOrPub as any).previsualizacionUrl = e.target.result;
+        }
+        this.cdr.detectChanges();
+      };
+      reader.readAsDataURL(archivo);
+    }
+  }
+
+  limpiarImagenComentario(comOrPub: any, esNuevoComentario: boolean = false): void {
+    if (esNuevoComentario) {
+      (comOrPub as any).comentarioPreviewUrl = undefined;
+    } else {
+      (comOrPub as any).previsualizacionUrl = undefined;
+    }
     this.cdr.detectChanges();
   }
 
+  limpiarImagen(): void {
+    this.imagenSeleccionada = null;
+    this.previsualizacionUrl = null;
+    this.cdr.detectChanges();
+  }
 
   // 1. LISTAR PUBLICACIONES
-cargarPublicaciones(): void {
+  cargarPublicaciones(): void {
     this.publicaciones = []; 
     this.foroService.getPublicaciones(this.idUsuarioLogueado).subscribe({
       next: (data) => {
         this.publicaciones = data.sort((a, b) => (b.id || 0) - (a.id || 0));
         
-        // Buscamos los comentarios para cada una
         this.publicaciones.forEach(pub => {
           pub.comentarios = pub.comentarios || [];
-          pub.nuevoComentarioTexto = ''; // Inicializamos su caja de texto vacía
+          (pub as any).nuevoComentarioTexto = ''; 
+          (pub as any).comentarioPreviewUrl = undefined; // Inicializado dinámicamente sin romper la interfaz
           if (pub.id) {
             this.foroService.getComentarios(pub.id, this.idUsuarioLogueado).subscribe(coms => {
               pub.comentarios = coms;
@@ -157,18 +174,23 @@ cargarPublicaciones(): void {
     });
   }
 
-agregarComentario(pub: any): void {
-    if (!pub.nuevoComentarioTexto || !pub.nuevoComentarioTexto.trim()) return;
+  // AGREGAR COMENTARIO
+  agregarComentario(pub: any): void {
+    if (!pub.nuevoComentarioTexto && !pub.comentarioPreviewUrl) return;
+
+    let contenidoFinal = pub.nuevoComentarioTexto || '';
+    if (pub.comentarioPreviewUrl) {
+      contenidoFinal += ` [IMG]${pub.comentarioPreviewUrl}[/IMG]`;
+    }
 
     const nuevoCom: Comentario = {
-      contenido: pub.nuevoComentarioTexto,
+      contenido: contenidoFinal,
       publicacion: { id: pub.id },
       usuario: { id: this.idUsuarioLogueado }
     };
 
     this.foroService.crearComentario(nuevoCom).subscribe({
       next: (comentarioGuardado) => {
-        // Le inyectamos los datos visuales de la sesión local activa
         comentarioGuardado.usuario = {
           id: this.idUsuarioLogueado,
           nombre: this.user?.nombre || 'Usuario Anónimo',
@@ -177,18 +199,13 @@ agregarComentario(pub: any): void {
         comentarioGuardado.totalLikes = 0;
         comentarioGuardado.leDioLike = false;
 
-        // 🌟 ARREGLO SEGURIDAD: Si pub.comentarios es null o undefined, lo convertimos en un array vacío []
-        if (!pub.comentarios) {
-          pub.comentarios = [];
-        }
-
-        // Ahora sí, el push nunca fallará
+        if (!pub.comentarios) pub.comentarios = [];
         pub.comentarios.push(comentarioGuardado); 
         
-        pub.nuevoComentarioTexto = ''; // Limpiamos la caja de texto
+        pub.nuevoComentarioTexto = '';
+        pub.comentarioPreviewUrl = undefined; 
         this.cdr.detectChanges();
-      },
-      error: (err) => console.error('Error al guardar comentario', err)
+      }
     });
   }
 
@@ -203,19 +220,17 @@ agregarComentario(pub: any): void {
     });
   }
 
-  // 2. CREAR (PUBLICAR)
- publicar(): void {
+  // 2. CREAR (PUBLICAR ORIGINAL)
+  publicar(): void {
     if (!this.nuevoContenido.trim() && !this.imagenSeleccionada) return;
     if (this.guardando) return;
 
     this.guardando = true;
     this.cdr.detectChanges();
 
-    // Si hay una imagen, la subimos primero
     if (this.imagenSeleccionada) {
       this.foroService.subirImagenPublicacion(this.imagenSeleccionada).subscribe({
         next: (res) => {
-          // Guardamos el texto y la URL de la imagen junta separada por un marcador especial [IMG]
           const contenidoFinal = `${this.nuevoContenido} [IMG]${res.fotoPerfil}[/IMG]`;
           this.enviarPublicacionAlBackend(contenidoFinal);
         },
@@ -226,7 +241,6 @@ agregarComentario(pub: any): void {
         }
       });
     } else {
-      // Si no hay imagen, se publica solo el texto normal
       this.enviarPublicacionAlBackend(this.nuevoContenido);
     }
   }
@@ -249,7 +263,6 @@ agregarComentario(pub: any): void {
           fotoPerfil: this.user?.fotoPerfil
         };
         
-
         publicacionGuardada.totalLikes = 0;
         publicacionGuardada.leDioLike = false;
 
@@ -264,17 +277,18 @@ agregarComentario(pub: any): void {
     });
   }
 
-  //metodos para imgs
-
+  // MÉTODOS PARA EXTRACCIÓN DE TEXTO E IMÁGENES
   obtenerTextoLimpio(contenido: string): string {
+    if (!contenido) return '';
     if (contenido.includes(' [IMG]')) {
       return contenido.split(' [IMG]')[0];
     }
     return contenido;
   }
 
-  // Helper para el HTML: extrae la URL de la imagen si existe
   obtenerImagenUrl(contenido: string): string | null {
+    if (!contenido) return null;
+    // ✨ CORREGIDO: Cambiado 'content.includes' por 'contenido.includes'
     if (contenido.includes('[IMG]') && contenido.includes('[/IMG]')) {
       const inicio = contenido.indexOf('[IMG]') + 5;
       const fin = contenido.indexOf('[/IMG]');
@@ -283,11 +297,11 @@ agregarComentario(pub: any): void {
     return null;
   }
 
-  // 3. ELIMINAR (PASO A PASO)
+  // 3. ELIMINAR
   solicitarEliminar(id?: number): void {
     if (!id) return;
     this.publicacionIdParaBorrar = id;
-    this.cdr.detectChanges(); // Muestra el cartel "Sí/No" al primer clic
+    this.cdr.detectChanges(); 
   }
 
   cancelarEliminar(): void {
@@ -303,7 +317,6 @@ agregarComentario(pub: any): void {
     this.foroService.eliminarPublicacion(idABorrar).subscribe({
       next: () => {
         this.publicacionIdParaBorrar = null;
-        // Elimina el elemento del arreglo local al instante
         this.publicaciones = this.publicaciones.filter(pub => pub.id !== idABorrar);
         this.cdr.detectChanges(); 
       },
@@ -315,11 +328,17 @@ agregarComentario(pub: any): void {
     });
   }
 
-  // 4. EDITAR (PASO A PASO)
- activarEdicion(contenidoActual: string, id?: number): void {
+  // 4. EDICIÓN DE PUBLICACIONES
+  activarEdicion(contenido: string, id?: number): void {
     if (!id) return;
     this.publicacionIdParaEditar = id;
-    this.contenidoEditado = contenidoActual; // Rellena el textarea con el texto viejo
+
+    this.contenidoEditado = this.obtenerTextoLimpio(contenido);
+    const pubActual = this.publicaciones.find(p => p.id === id);
+    
+    if (pubActual) {
+      (pubActual as any).previsualizacionUrl = this.obtenerImagenUrl(contenido) || undefined;
+    }
     this.cdr.detectChanges();
   }
 
@@ -330,23 +349,20 @@ agregarComentario(pub: any): void {
   }
 
   guardarEdicion(pub: Publicacion): void {
-    if (!this.contenidoEditado.trim() || !pub.id) return;
+    let contenidoFinal = this.contenidoEditado;
+    
+    if ((pub as any).previsualizacionUrl) {
+      contenidoFinal += ` [IMG]${(pub as any).previsualizacionUrl}[/IMG]`;
+    }
 
-    const pubActualizada: Publicacion = {
-      ...pub,
-      contenido: this.contenidoEditado
-    };
+    pub.contenido = contenidoFinal;
 
-    this.foroService.editarPublicacion(pub.id, pubActualizada).subscribe({
-      next: (resultado) => {
-        // Busca la publicación en la lista y cambia su texto en tiempo real
-        const index = this.publicaciones.findIndex(p => p.id === pub.id);
-        if (index !== -1) {
-          this.publicaciones[index] = resultado;
-        }
-        this.cancelarEdicion(); // Cierra el modo edición
-      },
-      error: (err) => console.error('Error al editar', err)
+    this.foroService.editarPublicacion(pub.id!, pub).subscribe({
+      next: () => {
+        this.publicacionIdParaEditar = null;
+        (pub as any).previsualizacionUrl = undefined;
+        this.cdr.detectChanges();
+      }
     });
   }
 
@@ -355,12 +371,44 @@ agregarComentario(pub: any): void {
 
     this.foroService.alternarLike(pub.id, this.idUsuarioLogueado).subscribe({
       next: (nuevoTotal) => {
-        // Actualizamos la tarjeta en tiempo real localmente
         pub.totalLikes = nuevoTotal;
         pub.leDioLike = !pub.leDioLike;
-        this.cdr.detectChanges(); // Refresco instantáneo de pantalla
+        this.cdr.detectChanges(); 
       },
       error: (err) => console.error('Error al procesar el like', err)
+    });
+  }
+
+  // 5. EDICIÓN DE COMENTARIOS
+  activarEdicionComentario(com: Comentario): void {
+    com.editando = true;
+    com.contenidoEditado = this.obtenerTextoLimpio(com.contenido);
+    (com as any).previsualizacionUrl = this.obtenerImagenUrl(com.contenido) || undefined;
+    this.cdr.detectChanges();
+  }
+
+  cancelarEdicionComentario(com: Comentario): void {
+    com.editando = false;
+    com.contenidoEditado = '';
+    (com as any).previsualizacionUrl = undefined;
+    this.cdr.detectChanges();
+  }
+
+  guardarEdicionComentario(com: Comentario): void {
+    let contenidoFinal = com.contenidoEditado || '';
+    
+    if ((com as any).previsualizacionUrl) {
+      contenidoFinal += ` [IMG]${(com as any).previsualizacionUrl}[/IMG]`;
+    }
+
+    com.contenido = contenidoFinal;
+
+    this.http.put(`http://localhost:8080/comentarios/${com.id}`, com).subscribe({
+      next: () => {
+        com.editando = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error("Error al editar el comentario", err)
     });
   }
 

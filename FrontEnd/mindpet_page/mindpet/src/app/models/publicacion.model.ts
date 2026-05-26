@@ -15,6 +15,10 @@ export interface Publicacion {
 
     comentarios?: Comentario[];
     nuevoComentarioTexto?: string;
+
+    imagenSeleccionada?:File;
+    previsualizacionUrl?:string;
+    comentarioPreviewUrl?:string;
 }
 
 export interface Comentario {
@@ -29,4 +33,11 @@ export interface Comentario {
     publicacion:{id:number};
     totalLikes?: number;
     leDioLike?:boolean;
+
+    editando?:boolean;
+    contenidoEditado?:string;
+    imagenSeleccionada?:File;
+    previsualizacionUrl?:string;
+    comentarioPreviewUrl?:string;
+
 }
