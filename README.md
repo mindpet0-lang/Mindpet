@@ -11,6 +11,91 @@ Laura Sofia Martinez
 Juan Diego Solano
 Isabella Valentina Sanchez
 Sarid Nicole Quiroga
+
+Frontend del proyecto
+
+El proyecto también cuenta con dos interfaces frontend desarrolladas para diferentes plataformas:
+
+Frontend Web
+
+Desarrollado con Angular, permite acceder al sistema desde navegadores web mediante una interfaz moderna e interactiva.
+
+Funcionalidades principales del frontend web:
+
+Registro e inicio de sesión de usuarios
+Gestión de usuario, como cambio de contraseña y personalización de la foto de perfil
+Visualización y participación en foros
+Diario emocional
+Inventario y tienda
+Consumo de la API REST del backend
+Autenticación segura con JWT
+
+Frontend Móvil
+
+Desarrollado con Flutter, permite utilizar la aplicación desde dispositivos móviles Android.
+
+Funcionalidades principales del frontend móvil:
+
+Interfaz interactiva y amigable
+Sistema de mascotas virtuales
+Registro de emociones y diario
+Gestión de inventario
+Conexión con el backend mediante API REST
+Persistencia de sesión con JWT
+Arquitectura completa del proyecto
+
+El sistema MindPet implementa una arquitectura Cliente-Servidor compuesta por:
+
+Backend en Spring Boot
+Frontend web en Angular
+Frontend móvil en Flutter
+Base de datos MySQL
+
+Los frontends consumen los servicios expuestos por la API REST del backend para gestionar toda la información del sistema.
+
+COMO INSTALAR EL PROYECTO:
+
+Requisitos previos
+
+Antes de ejecutar el proyecto, verificar que estén instalados:
+
+Node.js
+npm
+Angular CLI
+Flutter SDK
+Un navegador web actualizado
+
+FRONTEND:
+
+1. Clonar el repositorio
+git clone https://github.com/mindpet0-lang/mindpet.git
+
+Abrir el proyecto
+Abrir el proyecto en un entorno de desarrollo compatible como:
+
+Visual Studio Code 3. Instalar dependencias
+
+Para angular en la terminal ir a la carpeta de angular:
+cd frontend/mindpet_page/mindpet
+
+y ejecuta npm install 
+
+para ejecutar el proyecto ejecuta: ng serve
+
+Una vez iniciado correctamente, la aplicación podrá visualizarse desde el navegador en:
+http://localhost:4200
+
+Para flutter en al terminal ir a la carpeta de la aplicación:
+cd frontend-app/fluttermindpet/flutter/mindpet
+
+y ejecuta flutter pub get 
+
+para ejecutar el proyecto ejecuta: flutter run 
+
+Luego seleccionar el dispositivo o entorno donde se desea ejecutar la aplicación.
+En algunos equipos con Windows pueden presentarse errores de compatibilidad. Por esta razón, se recomienda ejecutar la aplicación en un navegador web o en un dispositivo Android.
+
+
 1. Clonar el repositorio
 git clone https://github.com/mindpet0-lang/backend_mindpet.git
 
