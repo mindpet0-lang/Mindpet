@@ -41,8 +41,6 @@ Desarrollado con Angular, permite acceder al sistema desde navegadores web media
 * Cambio de contraseña
 * Personalización de foto de perfil
 * Participación en foros
-* Diario emocional
-* Inventario y tienda
 * Consumo de API REST
 * Autenticación con JWT
 
@@ -55,7 +53,7 @@ Desarrollado con Flutter, permite utilizar la aplicación desde dispositivos mó
 ### Funcionalidades principales
 
 * Interfaz interactiva
-* Sistema de mascotas virtuales
+* Sistema de mascota virtual
 * Registro emocional y diario
 * Gestión de inventario
 * Conexión con API REST
@@ -194,9 +192,37 @@ En IntelliJ IDEA se puede seleccionar:
 
 ---
 
+## Configurar las variables de entorno
+
+Antes de ejecutar el proyecto, configurar las siguientes variables de entorno necesarias para el funcionamiento del backend:
+
+* JWT.SECRET
+* GEMINI_API_KEY 
+
+Configuración en IntelliJ IDEA
+* Ir a Run > Edit Configurations
+* Seleccionar la configuración de MindPetApplication
+* Buscar la sección Environment Variables
+* Agregar las variables:
+JWT.SECRET=tu_clave_secreta;
+GEMINI_API_KEY=tu_api_key;
+
+se puede crear una clave para jwt.secret segura y para la gemini api key colocar la siguiente gratuita:
+AIzaSyAJPI1KOeta5HUWcxd6UTBdfrD5K2uBF1o
+
+Guardar los cambios y ejecutar nuevamente el proyecto.
+
+Estas variables son necesarias para:
+
+JWT.SECRET: autenticación y generación de tokens JWT.
+GEMINI_API_KEY: conexión con los servicios de inteligencia artificial utilizados por el proyecto.
+
+---
+
 ## Configurar la base de datos
 
-Configurar MySQL y verificar las credenciales de conexión en el archivo de configuración del proyecto.
+Configurar MySQL y verificar las credenciales de conexión en el archivo de configuración del proyecto.  
+aplication.properties
 
 ---
 
