@@ -12,7 +12,7 @@ Juan Diego Solano
 Isabella Valentina Sanchez
 Sarid Nicole Quiroga
 1. Clonar el repositorio
-git clone https://github.com/mindpet0-lang/backend_backup.git
+git clone https://github.com/mindpet0-lang/backend_mindpet.git
 
 Abrir el proyecto
 Abrir el proyecto en un entorno de desarrollo compatible con Java como:
@@ -43,7 +43,7 @@ Controller Service Repository Model Config Funcionalidades principales Gestión 
 Ejecución local
 1 Clonar el repositorio:
 
-git clone https://github.com/mindpet0-lang/backend_backup.git
+git clone https://github.com/mindpet0-lang/backend_mindpet.git
 
 2 Abrir el proyecto en IntelliJ IDEA o Visual Studio Code. 3 Verificar que Java JDK y Maven estén instalados. 4 Descargar las dependencias Maven desde el archivo pom.xml. 5 Configurar la conexión a MySQL en el archivo de propiedades del proyecto. 6 Ejecutar la clase principal: MindPetApplication.java
 
