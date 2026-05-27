@@ -1,19 +1,19 @@
 # 🧠🐾 MINDPET
 
-## 🌟 Descripción del proyecto
+## Descripción del proyecto
 
-**MINDPET** es una aplicación diseñada para acompañar a personas con problemas de salud mental relacionados con el bienestar emocional 💙.
+**MINDPET** es una aplicación diseñada para acompañar a personas con problemas de salud mental relacionados con el bienestar emocional.
 
 El sistema permite:
 
-* 👤 Registrar usuarios
-* 🔍 Consultar información
-* ✏️ Actualizar datos
-* ❌ Eliminar usuarios
+* Registrar usuarios
+* Consultar información
+* Actualizar datos
+* Eliminar usuarios
 
-Todo esto mediante una **API REST** conectada a una base de datos MySQL.
+Todo esto mediante una API REST conectada a una base de datos MySQL.
 
-El proyecto implementa una arquitectura **Cliente-Servidor**, donde el backend desarrollado en Spring Boot gestiona la lógica y la conexión con la base de datos.
+El proyecto implementa una arquitectura Cliente-Servidor, donde el backend desarrollado en Spring Boot gestiona la lógica y la conexión con la base de datos.
 
 ---
 
@@ -30,38 +30,36 @@ El proyecto implementa una arquitectura **Cliente-Servidor**, donde el backend d
 
 El proyecto cuenta con dos interfaces frontend desarrolladas para diferentes plataformas.
 
----
-
-# 🌐 Frontend Web
+## 🌐 Frontend Web
 
 Desarrollado con Angular, permite acceder al sistema desde navegadores web mediante una interfaz moderna e interactiva.
 
-## ✨ Funcionalidades principales
+### Funcionalidades principales
 
-* 🔐 Registro e inicio de sesión
-* 👤 Gestión de usuario
-* 🔑 Cambio de contraseña
-* 🖼️ Personalización de foto de perfil
-* 💬 Visualización y participación en foros
-* 📖 Diario emocional
-* 🎒 Inventario y tienda
-* 🔗 Consumo de API REST
-* 🛡️ Autenticación segura con JWT
+* Registro e inicio de sesión
+* Gestión de usuario
+* Cambio de contraseña
+* Personalización de foto de perfil
+* Participación en foros
+* Diario emocional
+* Inventario y tienda
+* Consumo de API REST
+* Autenticación con JWT
 
 ---
 
-# 📱 Frontend Móvil
+## 📱 Frontend Móvil
 
 Desarrollado con Flutter, permite utilizar la aplicación desde dispositivos móviles Android.
 
-## ✨ Funcionalidades principales
+### Funcionalidades principales
 
-* 🎨 Interfaz interactiva y amigable
-* 🐾 Sistema de mascotas virtuales
-* 😊 Registro de emociones y diario
-* 🎒 Gestión de inventario
-* 🔗 Conexión con API REST
-* 🔐 Persistencia de sesión mediante JWT
+* Interfaz interactiva
+* Sistema de mascotas virtuales
+* Registro emocional y diario
+* Gestión de inventario
+* Conexión con API REST
+* Persistencia de sesión mediante JWT
 
 ---
 
@@ -69,10 +67,10 @@ Desarrollado con Flutter, permite utilizar la aplicación desde dispositivos mó
 
 El sistema MindPet implementa una arquitectura Cliente-Servidor compuesta por:
 
-* ⚙️ Backend en Spring Boot
-* 🌐 Frontend web en Angular
-* 📱 Frontend móvil en Flutter
-* 🗄️ Base de datos MySQL
+* Backend en Spring Boot
+* Frontend web en Angular
+* Frontend móvil en Flutter
+* Base de datos MySQL
 
 Los frontends consumen los servicios expuestos por la API REST del backend para gestionar toda la información del sistema.
 
@@ -80,62 +78,58 @@ Los frontends consumen los servicios expuestos por la API REST del backend para 
 
 # ⚙️ Cómo instalar el proyecto
 
-# 📋 Requisitos previos
+## Requisitos previos
 
 Antes de ejecutar el proyecto, verificar que estén instalados:
 
-* 🟢 Node.js
-* 📦 npm
-* 🌐 Angular CLI
-* 📱 Flutter SDK
-* ☕ Java JDK
-* 🛠️ Maven
-* 🗄️ MySQL
-* 🌍 Un navegador web actualizado
+* Node.js
+* npm
+* Angular CLI
+* Flutter SDK
+* Java JDK
+* Maven
+* MySQL
+* Un navegador web actualizado
 
 ---
 
 # 🌐 Instalación Frontend
 
-## 📥 Clonar el repositorio
+## Clonar el repositorio
 
 ```bash
 git clone https://github.com/mindpet0-lang/mindpet.git
 ```
 
----
+## Abrir el proyecto
 
-## 🖥️ Abrir el proyecto
-
-Abrir el proyecto en un entorno de desarrollo compatible como:
+Abrir el proyecto en:
 
 * Visual Studio Code
 
 ---
 
-# 🌐 Ejecutar Angular
+## Angular
 
-## 📂 Ir a la carpeta del proyecto Angular
+### Ir a la carpeta del proyecto
 
 ```bash
 cd frontend/mindpet_page/mindpet
 ```
 
-## 📦 Instalar dependencias
+### Instalar dependencias
 
 ```bash
 npm install
 ```
 
-## ▶️ Ejecutar el proyecto
+### Ejecutar el proyecto
 
 ```bash
 ng serve
 ```
 
-## 🌍 Abrir en el navegador
-
-Una vez iniciado correctamente, ingresar a:
+### Abrir en el navegador
 
 ```bash
 http://localhost:4200
@@ -143,21 +137,21 @@ http://localhost:4200
 
 ---
 
-# 📱 Ejecutar Flutter
+## Flutter
 
-## 📂 Ir a la carpeta del proyecto Flutter
+### Ir a la carpeta del proyecto
 
 ```bash
 cd frontend-app/fluttermindpet/flutter/mindpet
 ```
 
-## 📦 Instalar dependencias
+### Instalar dependencias
 
 ```bash
 flutter pub get
 ```
 
-## ▶️ Ejecutar la aplicación
+### Ejecutar la aplicación
 
 ```bash
 flutter run
@@ -165,22 +159,20 @@ flutter run
 
 Luego seleccionar el dispositivo o entorno donde se desea ejecutar la aplicación.
 
-> ⚠️ En algunos equipos con Windows pueden presentarse errores de compatibilidad.
+> En algunos equipos con Windows pueden presentarse errores de compatibilidad.
 > Por esta razón, se recomienda ejecutar la aplicación en un navegador web o en un dispositivo Android.
 
 ---
 
 # ⚙️ Instalación Backend
 
-## 📥 Clonar el repositorio
+## Clonar el repositorio
 
 ```bash
 git clone https://github.com/mindpet0-lang/backend_mindpet.git
 ```
 
----
-
-## 🖥️ Abrir el proyecto
+## Abrir el proyecto
 
 Abrir el proyecto en:
 
@@ -189,7 +181,7 @@ Abrir el proyecto en:
 
 ---
 
-# 📦 Instalar dependencias
+## Instalar dependencias
 
 El proyecto utiliza Maven para la gestión de dependencias.
 
@@ -197,18 +189,18 @@ Las dependencias se descargan automáticamente desde el archivo `pom.xml`.
 
 En IntelliJ IDEA se puede seleccionar:
 
-* ✅ Load Maven Project
-* 🔄 Reload Maven Project
+* Load Maven Project
+* Reload Maven Project
 
 ---
 
-# 🗄️ Configurar la base de datos
+## Configurar la base de datos
 
 Configurar MySQL y verificar las credenciales de conexión en el archivo de configuración del proyecto.
 
 ---
 
-# ▶️ Ejecutar el backend
+## Ejecutar el backend
 
 Ejecutar la clase principal:
 
@@ -220,30 +212,16 @@ El servidor iniciará correctamente y permitirá acceder a los endpoints del bac
 
 ---
 
-# 🧪 Ejecución local
-
-1️⃣ Clonar el repositorio
-2️⃣ Abrir el proyecto en IntelliJ IDEA o Visual Studio Code
-3️⃣ Verificar que Java JDK y Maven estén instalados
-4️⃣ Descargar dependencias desde `pom.xml`
-5️⃣ Configurar la conexión a MySQL
-6️⃣ Ejecutar `MindPetApplication.java`
-7️⃣ Esperar a que Spring Boot inicie correctamente
-
-✅ El backend quedará ejecutándose localmente en el puerto configurado del proyecto.
-
----
-
 # 🛠️ Tecnologías utilizadas
 
-* ☕ Java
-* ⚙️ Spring Boot
-* 🛠️ Maven
-* 🗄️ MySQL
-* 🔐 JWT
-* 📦 JPA / Hibernate
-* 🌐 Angular
-* 📱 Flutter
+* Java
+* Spring Boot
+* Maven
+* MySQL
+* JWT
+* JPA / Hibernate
+* Angular
+* Flutter
 
 ---
 
@@ -251,22 +229,22 @@ El servidor iniciará correctamente y permitirá acceder a los endpoints del bac
 
 El proyecto está organizado por capas:
 
-* 📁 Controller
-* 📁 Service
-* 📁 Repository
-* 📁 Model
-* 📁 Config
+* Controller
+* Service
+* Repository
+* Model
+* Config
 
 ---
 
 # 🚀 Funcionalidades principales
 
-* 👤 Gestión de usuarios
-* 🐾 Gestión de mascotas
-* 💬 Sistema de foros
-* 📖 Diario emocional
-* 🎒 Inventario
-* 🔐 Seguridad con JWT
+* Gestión de usuarios
+* Gestión de mascotas
+* Sistema de foros
+* Diario emocional
+* Inventario
+* Seguridad con JWT
 
 ---
 
@@ -274,14 +252,14 @@ El proyecto está organizado por capas:
 
 El proyecto permite gestionar diferentes módulos relacionados con mascotas, usuarios y funcionalidades del sistema MindPet.
 
-## ✅ Evidencias incluidas
+### Evidencias incluidas
 
-* ⚙️ Configuración del backend en Spring Boot
-* 📦 Gestión de dependencias con Maven
-* 🗂️ Estructura organizada por capas
-* 🗄️ Conexión con MySQL
-* 🔐 Implementación de seguridad con JWT
-* 📸 Capturas y pruebas funcionales
+* Configuración del backend en Spring Boot
+* Gestión de dependencias con Maven
+* Estructura organizada por capas
+* Conexión con MySQL
+* Implementación de seguridad con JWT
+* Capturas y pruebas funcionales
 
 Las evidencias del funcionamiento pueden visualizarse mediante la ejecución local del proyecto desde la clase principal:
 
