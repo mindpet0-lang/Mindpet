@@ -25,22 +25,22 @@ class _PuzzleScreenState extends State<PuzzleScreen12> {
   Timer? timer;
 
   final List<String> images = [
-    'juegos/images/juego3/juego12/puzzle2.jpeg',
-    'juegos/images/juego3/juego12/puzzle1.jpeg',
-    'juegos/images/juego3/juego12/puzzle3.jpeg',
-    'juegos/images/juego3/juego12/puzzle4.jpeg',
-    'juegos/images/juego3/juego12/puzzle5.jpeg',
-    'juegos/images/juego3/juego12/puzzle6.jpeg',
-    'juegos/images/juego3/juego12/puzzle7.jpeg',
-    'juegos/images/juego3/juego12/puzzle8.jpeg',
-    'juegos/images/juego3/juego12/puzzle9.jpg',
-    'juegos/images/juego3/juego12/puzzle10.jpg',
-    'juegos/images/juego3/juego12/puzzle11.jpg',
-    'juegos/images/juego3/juego12/puzzle12.jpg',
-    'juegos/images/juego3/juego12/puzzle13.jpg',
-    'juegos/images/juego3/juego12/puzzle14.jpg',
-    'juegos/images/juego3/juego12/puzzle15.jpg',
-    'juegos/images/juego3/juego12/puzzle16.jpg',
+    'assets/juegos/images/juego3/juego12/puzzle2.jpeg',
+    'assets/juegos/images/juego3/juego12/puzzle1.jpeg',
+    'assets/juegos/images/juego3/juego12/puzzle3.jpeg',
+    'assets/juegos/images/juego3/juego12/puzzle4.jpeg',
+    'assets/juegos/images/juego3/juego12/puzzle5.jpeg',
+    'assets/juegos/images/juego3/juego12/puzzle6.jpeg',
+    'assets/juegos/images/juego3/juego12/puzzle7.jpeg',
+    'assets/juegos/images/juego3/juego12/puzzle8.jpeg',
+    'assets/juegos/images/juego3/juego12/puzzle9.jpg',
+    'assets/juegos/images/juego3/juego12/puzzle10.jpg',
+    'assets/juegos/images/juego3/juego12/puzzle11.jpg',
+    'assets/juegos/images/juego3/juego12/puzzle12.jpg',
+    'assets/juegos/images/juego3/juego12/puzzle13.jpg',
+    'assets/juegos/images/juego3/juego12/puzzle14.jpg',
+    'assets/juegos/images/juego3/juego12/puzzle15.jpg',
+    'assets/juegos/images/juego3/juego12/puzzle16.jpg',
   ];
 
  @override
@@ -109,7 +109,7 @@ print("MONEDAS ACTUALES: ${CoinManager.instance.coins}");
           ClipRRect(
             borderRadius: BorderRadius.circular(30),
             child: Image.asset(
-              'juegos/images/juego3/ganaste.png',
+              'assets/juegos/images/juego3/ganaste.png',
               width: double.infinity,
               height: double.infinity,
               fit: BoxFit.fill,
@@ -214,7 +214,7 @@ void startTimerIfNeeded() {
           // 🖼️ FONDO
           Positioned.fill(
             child: Image.asset(
-              'juegos/images/juego3/fondo.png', 
+              'assets/juegos/images/juego3/fondo.png', 
               fit: BoxFit.cover,
             ),
           ),

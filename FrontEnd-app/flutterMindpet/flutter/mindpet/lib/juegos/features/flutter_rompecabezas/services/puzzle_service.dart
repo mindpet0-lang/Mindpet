@@ -7,8 +7,7 @@ class PuzzleService {
     int total = size * size;
 
     for (int i = 0; i < total; i++) {
-      int x = i % size;
-      int y = i ~/ size;
+      
 
       // 🔥 usar una imagen diferente SOLO si existe
       String imagePath = images[i % images.length];

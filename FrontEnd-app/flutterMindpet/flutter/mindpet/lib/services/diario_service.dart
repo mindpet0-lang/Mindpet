@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class DiarioService {
-  final String baseUrl = "http://localhost:8080/diarios";
+  final String baseUrl = "https://backendmindpet-production.up.railway.app/diarios";
 
   Future<List<dynamic>> obtenerDiarios(int userId) async {
     final response = await http.get(

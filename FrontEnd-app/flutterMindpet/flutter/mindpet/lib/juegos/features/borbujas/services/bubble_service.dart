@@ -21,8 +21,8 @@ class BubbleService {
 
       // 🖼️ imagen según tipo
       image: isSpecial
-          ? "juegos/images/ejercicio1/bubble_coin.png"
-          : "juegos/images/ejercicio1/bubble_normal.png",
+          ? "assets/juegos/images/ejercicio1/bubble_coin.png"
+          : "assets/juegos/images/ejercicio1/bubble_normal.png",
     );
 
     return [bubble];

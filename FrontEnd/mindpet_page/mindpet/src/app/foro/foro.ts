@@ -403,7 +403,7 @@ export class Foro implements OnInit {
 
     com.contenido = contenidoFinal;
 
-    this.http.put(`http://localhost:8080/comentarios/${com.id}`, com).subscribe({
+    this.http.put(`https://backendmindpet-production.up.railway.app/comentarios/${com.id}`, com).subscribe({
       next: () => {
         com.editando = false;
         this.cdr.detectChanges();

@@ -9,7 +9,7 @@ class MascotaService {
   // Cambia esto según tu caso:
   // 10.0.2.2 para emulador Android
   // Tu IP local para dispositivo físico
-  final String baseUrl = "http://localhost:8080/mascotas"; 
+  final String baseUrl = "https://backendmindpet-production.up.railway.app/mascotas"; 
 
   Future<Pet> fetchMascota(int usuarioId) async {
     try {

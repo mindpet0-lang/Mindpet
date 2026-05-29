@@ -58,7 +58,7 @@ class _DiarioScreenState extends State<DiarioScreen> {
         Container(
           decoration: const BoxDecoration(
             image: DecorationImage(
-              image: AssetImage("images/fondo/fondodiario.png"),
+              image: AssetImage("assets/images/fondo/fondodiario.png"),
               fit: BoxFit.cover,
             ),
           ),

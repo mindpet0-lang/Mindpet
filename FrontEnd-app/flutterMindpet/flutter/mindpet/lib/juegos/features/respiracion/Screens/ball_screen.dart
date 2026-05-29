@@ -258,7 +258,7 @@ class _GameScreenState extends State<BallScreen>
             // 🌄 FONDO
             Positioned.fill(
               child: Image.asset(
-                'juegos/images/ejercicio2/nutriaFeliz.png',
+                'assets/juegos/images/ejercicio2/nutriaFeliz.png',
                 fit: BoxFit.cover,
               ),
             ),

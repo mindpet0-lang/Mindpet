@@ -93,7 +93,7 @@ class _GameScreenPianoState extends State<GameScreenPiano> {
           child: Stack(
             alignment: Alignment.center,
             children: [
-              Image.asset("juegos/images/juego1/gameover_ui.png", width: 300),
+              Image.asset("assets/juegos/images/juego1/gameover_ui.png", width: 300),
 
               Positioned(
                 top: 40,
@@ -367,8 +367,8 @@ Widget _botonMenu({
             Positioned.fill(
               child: Image.asset(
                 esPC
-                    ? "juegos/images/juego1/fondoPc.png"
-                    : "juegos/images/juego1/fondo.png",
+                    ? "assets/juegos/images/juego1/fondoPc.png"
+                    : "assets/juegos/images/juego1/fondo.png",
                 fit: BoxFit.cover,
               ),
             ),
@@ -426,7 +426,7 @@ Widget _botonMenu({
                     borderRadius: BorderRadius.circular(20),
                     image: DecorationImage(
                       image: AssetImage(
-                        "juegos/images/juego1/boton_inicio.png",
+                        "assets/juegos/images/juego1/boton_inicio.png",
                       ),
                       fit: BoxFit.cover,
                     ),
@@ -445,8 +445,8 @@ Widget _botonMenu({
           Positioned.fill(
             child: Image.asset(
               esPC
-                  ? "juegos/images/juego1/fondoPc.png"
-                  : "juegos/images/juego1/fondo.png",
+                  ? "assets/juegos/images/juego1/fondoPc.png"
+                  : "assets/juegos/images/juego1/fondo.png",
               fit: BoxFit.cover,
             ),
           ),

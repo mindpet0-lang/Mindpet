@@ -236,7 +236,7 @@ class _MemoryGameScreenState extends State<MemoryGameScreen> {
           children: [
             // 🖼️ TU IMAGEN DE GANASTE
             Image.asset(
-              "juegos/images/juego4/winImage.png", // cámbiala por la tuya
+              "assets/juegos/images/juego4/winImage.png", // cámbiala por la tuya
               width: 380,
               fit: BoxFit.cover,
             ),
@@ -304,7 +304,7 @@ class _MemoryGameScreenState extends State<MemoryGameScreen> {
           children: [
             // 🖼️ IMAGEN LOSE
             Image.asset(
-              "juegos/images/juego4/loseImage.png",
+              "assets/juegos/images/juego4/loseImage.png",
               width: 380,
               fit: BoxFit.cover,
             ),
@@ -652,7 +652,7 @@ class _MemoryGameScreenState extends State<MemoryGameScreen> {
         children: [
           Positioned.fill(
             child: Image.asset(
-              "juegos/images/juego4/background.png",
+              "assets/juegos/images/juego4/background.png",
               fit: BoxFit.cover,
             ),
           ),

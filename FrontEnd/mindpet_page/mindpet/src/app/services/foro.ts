@@ -7,7 +7,7 @@ import { Publicacion,Comentario } from '../models/publicacion.model';
   providedIn: 'root'
 })
 export class ForoService {
-  private apiUrl = 'http://localhost:8080/api/publicaciones';
+  private apiUrl = 'https://backendmindpet-production.up.railway.app/api/publicaciones';
 
   constructor(private http: HttpClient) { }
 
@@ -35,21 +35,21 @@ export class ForoService {
     const formData = new FormData();
     formData.append('file', file);
     // Usamos el endpoint existente de subir fotos que ya tienes configurado en tu backend
-    return this.http.post<{ fotoPerfil: string }>(`http://localhost:8080/usuarios/1/foto`, formData);
+    return this.http.post<{ fotoPerfil: string }>(`https://backendmindpet-production.up.railway.app/usuarios/1/foto`, formData);
   }
 
   //conexion comentarios
 
   getComentarios(pubId: number, usuarioId: number): Observable<Comentario[]> {
-    return this.http.get<Comentario[]>(`http://localhost:8080/comentarios/publicacion/${pubId}?usuarioId=${usuarioId}`);
+    return this.http.get<Comentario[]>(`https://backendmindpet-production.up.railway.app/comentarios/publicacion/${pubId}?usuarioId=${usuarioId}`);
   }
 
   crearComentario(comentario: Comentario): Observable<Comentario> {
-    return this.http.post<Comentario>(`http://localhost:8080/comentarios`, comentario);
+    return this.http.post<Comentario>(`https://backendmindpet-production.up.railway.app/comentarios`, comentario);
   }
 
   alternarLikeComentario(comentarioId: number, usuarioId: number): Observable<number> {
-    return this.http.post<number>(`http://localhost:8080/comentarios/${comentarioId}/like?usuarioId=${usuarioId}`, {});
+    return this.http.post<number>(`https://backendmindpet-production.up.railway.app/comentarios/${comentarioId}/like?usuarioId=${usuarioId}`, {});
   }
   
 }

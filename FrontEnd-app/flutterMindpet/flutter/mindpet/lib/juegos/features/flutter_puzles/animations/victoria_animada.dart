@@ -84,7 +84,7 @@ class _VictoriaAnimadaState extends State<VictoriaAnimada>
     ClipRRect(
       borderRadius: BorderRadius.circular(30), // 
       child: Image.asset(
-        "juegos/images/juego2/victoria.png",
+        "assets/juegos/images/juego2/victoria.png",
         width: 320,
       ),
     ),

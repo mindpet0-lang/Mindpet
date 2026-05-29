@@ -7,7 +7,7 @@ class CoinManager extends ChangeNotifier {
   CoinManager._internal();
 
   // Asegúrate de usar la IP correcta (localhost, 10.0.2.2 o tu IP local)
-  final String baseUrl = "http://localhost:8080"; 
+  final String baseUrl = "https://backendmindpet-production.up.railway.app"; 
   int _coins = 0;
   int get coins => _coins;
 

@@ -104,9 +104,10 @@ class _AccountScreenState extends State<AccountScreen> {
                             children: [
                               CircleAvatar(
                                 radius: 32,
-                                backgroundColor: const Color(0xFF29B6F6), // Azul del icono
+                                backgroundColor: const Color.fromARGB(255, 142, 219, 255), // Azul del icono
                                 child: const Icon(Icons.person_outline, size: 36, color: Colors.black),
                               ),
+                              
                               const SizedBox(width: 16),
                               Expanded(
                                 child: Column(

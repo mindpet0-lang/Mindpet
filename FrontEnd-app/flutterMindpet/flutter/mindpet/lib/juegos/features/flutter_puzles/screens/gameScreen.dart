@@ -631,8 +631,8 @@ Future<bool> _confirmarGasto(int costo, String poder) async {
           Positioned.fill(
             child: Image.asset(
               isDesktop
-                  ? "juegos/images/juego2/fondo_desktop.png"
-                  : "juegos/images/juego2/fondo_mobile.png",
+                  ? "assets/juegos/images/juego2/fondo_desktop.png"
+                  : "assets/juegos/images/juego2/fondo_mobile.png",
               fit: BoxFit.cover,
             ),
           ),

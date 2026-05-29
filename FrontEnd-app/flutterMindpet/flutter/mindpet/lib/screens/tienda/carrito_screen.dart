@@ -61,7 +61,7 @@ class _CarritoScreenState extends State<CarritoScreen> {
       body: Container(
         decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage("images/fondo/fondocarrito.png"), // Imagen local
+              image: AssetImage("assets/images/fondo/fondocarrito.png"), // Imagen local
               fit: BoxFit.cover, // Ajusta la imagen al tamaño
             ), 
             ),

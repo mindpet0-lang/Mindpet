@@ -316,7 +316,7 @@ class _KitchenScreenState extends State<KitchenScreen> {
         children: [
           /// 1️⃣ FONDO DE LA COCINA
           Image.asset(
-            "images/fondo/kitchen.png",
+            "assets/images/fondo/kitchen.png",
             width: double.infinity,
             height: double.infinity,
             fit: BoxFit.cover,

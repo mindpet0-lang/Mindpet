@@ -86,7 +86,7 @@ class _GameRoomScreenState extends State<GameRoomScreen> {
         children: [
           // Fondo de cuarto de juegos
           Image.asset(
-            "images/fondo/game.png",
+            "assets/images/fondo/game.png",
             width: double.infinity,
             height: double.infinity,
             fit: BoxFit.cover,
@@ -119,7 +119,7 @@ class _GameRoomScreenState extends State<GameRoomScreen> {
                     MaterialPageRoute(builder: (_) => MenuPrincipal(userId: widget.userId)),
                   );
                 },
-                child: Image.asset("images/control2.png", height: 75),
+                child: Image.asset("assets/images/control2.png", height: 75),
               ),
             ),
           ),

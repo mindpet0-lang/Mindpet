@@ -159,7 +159,7 @@ Future<void> _cargarInventario() async {
 
     setState(() {
       jabonUsado = true;
-      imgNutria = "images/nutria/banio/$carpetaJabonActual/jabon.gif";
+      imgNutria = "assets/images/nutria/banio/$carpetaJabonActual/jabon.gif";
       
       // Restamos la cantidad localmente
       item["cantidad"]--;
@@ -175,7 +175,7 @@ Future<void> _cargarInventario() async {
     if (mounted) {
       setState(() {
         animandoAccion = false;
-        imgNutria = "images/nutria/banio/$carpetaJabonActual/enjabonada.gif";
+        imgNutria = "assets/images/nutria/banio/$carpetaJabonActual/enjabonada.gif";
 
         // 3. Si se agotó el jabón por completo, se borra de la lista inmediatamente
         if (item["cantidad"] <= 0) {
@@ -194,7 +194,7 @@ Future<void> _cargarInventario() async {
 
     setState(() {
       animandoAccion = true;
-      imgNutria = "images/nutria/banio/$carpetaJabonActual/ducha.gif";
+      imgNutria = "assets/images/nutria/banio/$carpetaJabonActual/ducha.gif";
     });
 
     widget.pet.higiene = 100;
@@ -203,7 +203,7 @@ Future<void> _cargarInventario() async {
     await widget.pet.saveLocal();
 
     // Esperamos los 8 segundos que dura la ducha
-    await Future.delayed(const Duration(seconds: 8));
+    await Future.delayed(const Duration(seconds: 7));
 
     if (mounted) {
       setState(() {
@@ -227,7 +227,7 @@ Future<void> _cargarInventario() async {
             children: [
               /// 1️⃣ FONDO
               Image.asset(
-                "images/fondo/bano.png",
+                "assets/images/fondo/bano.png",
                 width: double.infinity,
                 height: double.infinity,
                 fit: BoxFit.cover,
@@ -255,7 +255,7 @@ Future<void> _cargarInventario() async {
                   builder: (context, child) {
                     if (!animandoAccion) {
                       if (jabonUsado) {
-                        imgNutria = "images/nutria/banio/$carpetaJabonActual/enjabonada.gif";
+                        imgNutria = "assets/images/nutria/banio/$carpetaJabonActual/enjabonada.gif";
                       } else {
                         imgNutria = widget.pet.imagenActual;
                       }
@@ -313,7 +313,7 @@ Future<void> _cargarInventario() async {
             mainAxisSize: MainAxisSize.min,
             children: [
               Image.asset(
-                "images/ducha.png", 
+                "assets/images/ducha.png", 
                 width: 75,
                 height: 75,
               ),

@@ -13,37 +13,37 @@ class TileWidget extends StatelessWidget {
   // 🖼️ MAPA DE IMÁGENES
   String getImage(String tipo) {
     switch (tipo) {
-      case "A": return "juegos/images/juego2/A.png";
-      case "B": return "juegos/images/juego2/B.png";
-      case "C": return "juegos/images/juego2/C.png";
-      case "D": return "juegos/images/juego2/D.png";
-      case "E": return "juegos/images/juego2/E.png";
-      case "F": return "juegos/images/juego2/F.png";
-      case "G": return "juegos/images/juego2/G.png";
-      case "H": return "juegos/images/juego2/H.png";
-      case "I": return "juegos/images/juego2/I.png";
-      case "J": return "juegos/images/juego2/J.png";
-      case "K": return "juegos/images/juego2/K.png";
-      case "L": return "juegos/images/juego2/L.png";
-      case "M": return "juegos/images/juego2/M.png";
-      case "N": return "juegos/images/juego2/N.png";
-      case "Ñ": return "juegos/images/juego2/Ñ.png";
-      case "O": return "juegos/images/juego2/O.png";
-      case "P": return "juegos/images/juego2/P.png";
-      case "Q": return "juegos/images/juego2/Q.png";
-      case "R": return "juegos/images/juego2/R.png";
-      case "S": return "juegos/images/juego2/S.png";
-      case "T": return "juegos/images/juego2/T.png";
-      case "U": return "juegos/images/juego2/U.png";
-      case "V": return "juegos/images/juego2/V.png";
-      case "W": return "juegos/images/juego2/W.png";
-      case "X": return "juegos/images/juego2/X.png";
-      case "Y": return "juegos/images/juego2/Y.png";
-      case "Z": return "juegos/images/juego2/Z.png";
-      case "AA": return "juegos/images/juego2/AA.png";
-      case "BB": return "juegos/images/juego2/BB.png";
-      case "CC": return "juegos/images/juego2/CC.png";
-      default: return "juegos/images/juego2/default.png";
+      case "A": return "assets/juegos/images/juego2/A.png";
+      case "B": return "assets/juegos/images/juego2/B.png";
+      case "C": return "assets/juegos/images/juego2/C.png";
+      case "D": return "assets/juegos/images/juego2/D.png";
+      case "E": return "assets/juegos/images/juego2/E.png";
+      case "F": return "assets/juegos/images/juego2/F.png";
+      case "G": return "assets/juegos/images/juego2/G.png";
+      case "H": return "assets/juegos/images/juego2/H.png";
+      case "I": return "assets/juegos/images/juego2/I.png";
+      case "J": return "assets/juegos/images/juego2/J.png";
+      case "K": return "assets/juegos/images/juego2/K.png";
+      case "L": return "assets/juegos/images/juego2/L.png";
+      case "M": return "assets/juegos/images/juego2/M.png";
+      case "N": return "assets/juegos/images/juego2/N.png";
+      case "Ñ": return "assets/juegos/images/juego2/Ñ.png";
+      case "O": return "assets/juegos/images/juego2/O.png";
+      case "P": return "assets/juegos/images/juego2/P.png";
+      case "Q": return "assets/juegos/images/juego2/Q.png";
+      case "R": return "assets/juegos/images/juego2/R.png";
+      case "S": return "assets/juegos/images/juego2/S.png";
+      case "T": return "assets/juegos/images/juego2/T.png";
+      case "U": return "assets/juegos/images/juego2/U.png";
+      case "V": return "assets/juegos/images/juego2/V.png";
+      case "W": return "assets/juegos/images/juego2/W.png";
+      case "X": return "assets/juegos/images/juego2/X.png";
+      case "Y": return "assets/juegos/images/juego2/Y.png";
+      case "Z": return "assets/juegos/images/juego2/Z.png";
+      case "AA": return "assets/juegos/images/juego2/AA.png";
+      case "BB": return "assets/juegos/images/juego2/BB.png";
+      case "CC": return "assets/juegos/images/juego2/CC.png";
+      default: return "assets/juegos/images/juego2/default.png";
     }
   }
 

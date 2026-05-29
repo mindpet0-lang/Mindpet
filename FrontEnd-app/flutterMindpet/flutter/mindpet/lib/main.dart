@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:mindpet/juegos/coin_manager.dart';
 import 'package:provider/provider.dart'; 
 import 'screens/login_screen.dart';
+// ignore: depend_on_referenced_packages
+import 'package:flutter_web_plugins/url_strategy.dart';
 import 'widgets/pet_loader.dart';
 import 'models/pet.dart'; 
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+usePathUrlStrategy();
   final prefs = await SharedPreferences.getInstance();
+  
   final int? userId = prefs.getInt('userId'); 
 
   runApp(
@@ -28,7 +31,7 @@ void main() async {
       child: MyApp(userId: userId),
     ),
   );
-}
+} 
 
 class MyApp extends StatelessWidget {
   final int? userId;

@@ -5,7 +5,6 @@ import 'features/borbujas/screens/bubble_screen.dart';
 import 'features/flutter_piano/screens/gameScreenPiano.dart';
 import 'features/flutter_puzles/screens/gameScreen.dart';
 import 'features/flutter_rompecabezas/Screens/puzzle_homeScreen.dart';
-import 'features/flutter_rompecabezas/services/coins_service.dart';
 import 'features/respiracion/Screens/ball_screen.dart';
 import 'coin_manager.dart';
 
@@ -39,22 +38,22 @@ void initState() {
     final apps = [
       {
         "name": "Piano",
-        "image": "juegos/images/JuegoPianoPortada.png",
+        "image": "assets/juegos/images/JuegoPianoPortada.png",
         "screen": GameScreenPiano(userId: widget.userId),
       },
       {
         "name": "Mahjong",
-        "image": "juegos/images/JuegoPuzzlePortada.png",
+        "image": "assets/juegos/images/JuegoPuzzlePortada.png",
         "screen": GameScreen(userId: widget.userId),
       },
       {
         "name": "Rompecabezas",
-        "image": "juegos/images/JuegoRompecabezasPortada.png",
+        "image": "assets/juegos/images/JuegoRompecabezasPortada.png",
         "screen": HomeScreen(userId: widget.userId),
       },
       {
         "name": "Memoria",
-        "image": "juegos/images/JuegoMemoriaPortada.png",
+        "image": "assets/juegos/images/JuegoMemoriaPortada.png",
         "screen": MemoryGameScreen(userId: widget.userId),
       },
     ];
@@ -67,7 +66,7 @@ void initState() {
             height: double.infinity,
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("juegos/images/FondoMenu.png"),
+                image: AssetImage("assets/juegos/images/FondoMenu.png"),
                 fit: BoxFit.cover,
               ),
             ),
@@ -211,14 +210,14 @@ void initState() {
                               _exerciseCard(
                                 context,
                                 "Borbujas",
-                                "juegos/images/ejercicio1.png",
+                                "assets/juegos/images/ejercicio1.png",
                                 BubbleScreen(userId: widget.userId),
                               ),
 
                               _exerciseCard(
                                 context,
                                 "Respiracion",
-                                "juegos/images/ejercicio2.png",
+                                "assets/juegos/images/ejercicio2.png",
                                 BallScreen(userId: widget.userId),
                               ),
                             ],

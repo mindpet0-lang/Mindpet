@@ -29,7 +29,7 @@ class Pet extends ChangeNotifier {
 
   // Getter dinámico para los GIFs basado en tus carpetas
   String get imagenActual {
-    String path = "images/nutria/parada";
+    String path = "assets/images/nutria/parada";
     
     // Estados críticos (menos de 35%)
     bool h = hambre < 35;
@@ -48,7 +48,7 @@ class Pet extends ChangeNotifier {
   }
 
   String get imagenComiendo{
-    String path = "images/nutria/kitchen/comiendo";
+    String path = "assets/images/nutria/kitchen/comiendo";
 
     bool s = energia < 35;
     bool u = higiene < 35;
@@ -62,7 +62,7 @@ class Pet extends ChangeNotifier {
   }
 
     String get imagenTomando{
-    String path = "images/nutria/kitchen/tomando";
+    String path = "assets/images/nutria/kitchen/tomando";
 
     bool s = energia < 35;
     bool u = higiene < 35;
@@ -160,7 +160,7 @@ void _startRealtimeUpdate() {
 
   Future<bool> saveToServer(int mascotaId) async {
     try {
-      final url = Uri.parse('http://localhost:8080/mascotas/update/$mascotaId');
+      final url = Uri.parse('https://backendmindpet-production.up.railway.app/mascotas/update/$mascotaId');
       final resp = await http.put(url, headers: {'Content-Type': 'application/json'}, body: jsonEncode(toJson()));
       return resp.statusCode == 200;
     } catch (e) { return false; }

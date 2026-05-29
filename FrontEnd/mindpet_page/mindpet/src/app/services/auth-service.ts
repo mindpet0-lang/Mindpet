@@ -10,7 +10,7 @@ import { LoginRequest, LoginResponse } from '../models/usuarios.model';
 })
 export class AuthService {
 
-  private API_URL = 'http://localhost:8080/usuarios';
+  private API_URL = 'https://backendmindpet-production.up.railway.app/usuarios';
 
 
   constructor(private http: HttpClient) { }
@@ -64,7 +64,7 @@ subirFoto(id: number, file: File) {
   const formData = new FormData();
   formData.append('file', file);
 
-  return this.http.post(`http://localhost:8080/usuarios/${id}/foto`, formData);
+  return this.http.post(`https://backendmindpet-production.up.railway.app/usuarios/${id}/foto`, formData);
 }
 
 }

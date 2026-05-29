@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ChatService {
-  final String baseUrl = "http://localhost:8080/api/chat";
+  final String baseUrl = "https://backendmindpet-production.up.railway.app/api/chat";
 
   // Envía el mensaje y el ID del usuario actual
   Future<Map<String, dynamic>> enviarMensaje(String texto, int userId) async {

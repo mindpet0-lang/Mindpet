@@ -24,7 +24,7 @@ class MemoryCard extends StatelessWidget {
                   fit: BoxFit.cover, // llena toda la card
                 )
               : Image.asset(
-                  "juegos/images/juego4/background_card.png",
+                  "assets/juegos/images/juego4/background_card.png",
                   fit: BoxFit.cover,
                 ),
         ),

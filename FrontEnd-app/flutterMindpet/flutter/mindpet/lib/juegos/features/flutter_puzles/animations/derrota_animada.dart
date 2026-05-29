@@ -84,7 +84,7 @@ class _DerrotaAnimadaState extends State<DerrotaAnimada>
                   ClipRRect(
                     borderRadius: BorderRadius.circular(30),
                     child: Image.asset(
-                      "juegos/images/juego2/derrota.png", 
+                      "assets/juegos/images/juego2/derrota.png", 
                       width: 300,
                     ),
                   ),

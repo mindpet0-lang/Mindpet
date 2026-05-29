@@ -194,67 +194,67 @@ Widget _botonMenu({
     final apps = [
       {
         "name": "Puzzle1",
-        "image": "juegos/images/juego3/puzle1.png",
+        "image": "assets/juegos/images/juego3/puzle1.png",
         "screen": PuzzleScreen(userId: widget.userId),
       },
       {
         "name": "Puzzle2",
-        "image": "juegos/images/juego3/puzle2.jpeg",
+        "image": "assets/juegos/images/juego3/puzle2.jpeg",
         "screen": PuzzleScreen2(userId: widget.userId),
       },
       {
         "name": "Puzle3",
-        "image": "juegos/images/juego3/puzle3.jpeg",
+        "image": "assets/juegos/images/juego3/puzle3.jpeg",
         "screen": PuzzleScreen3(userId: widget.userId),
       },
       {
         "name": "Puzle4",
-        "image": "juegos/images/juego3/puzle5.jpeg",
+        "image": "assets/juegos/images/juego3/puzle5.jpeg",
         "screen": PuzzleScreen5(userId: widget.userId),
       },
       {
         "name": "Puzzle5",
-        "image": "juegos/images/juego3/puzle7.jpeg",
+        "image": "assets/juegos/images/juego3/puzle7.jpeg",
         "screen": PuzzleScreen6(userId: widget.userId),
       },
       {
         "name": "Puzle6",
-        "image": "juegos/images/juego3/puzle8.jpeg",
+        "image": "assets/juegos/images/juego3/puzle8.jpeg",
         "screen": PuzzleScreen7(userId: widget.userId),
       },
       {
         "name": "Puzle7",
-        "image": "juegos/images/juego3/puzle9.jpeg",
+        "image": "assets/juegos/images/juego3/puzle9.jpeg",
         "screen": PuzzleScreen8(userId: widget.userId),
       },
       {
         "name": "Puzle8",
-        "image": "juegos/images/juego3/puzle10.jpeg",
+        "image": "assets/juegos/images/juego3/puzle10.jpeg",
         "screen": PuzzleScreen9(userId: widget.userId),
       },
       {
         "name": "Puzle9",
-        "image": "juegos/images/juego3/puzle11.jpeg",
+        "image": "assets/juegos/images/juego3/puzle11.jpeg",
         "screen": PuzzleScreen10(userId: widget.userId),
       },
       {
         "name": "Puzle10",
-        "image": "juegos/images/juego3/puzle12.jpeg",
+        "image": "assets/juegos/images/juego3/puzle12.jpeg",
         "screen": PuzzleScreen11(userId: widget.userId),
       },
       {
         "name": "Puzle11",
-        "image": "juegos/images/juego3/puzle13.jpeg",
+        "image": "assets/juegos/images/juego3/puzle13.jpeg",
         "screen": PuzzleScreen12(userId: widget.userId),
       },
       {
         "name": "Puzle12",
-        "image": "juegos/images/juego3/puzle14.jpeg",
+        "image": "assets/juegos/images/juego3/puzle14.jpeg",
         "screen": PuzzleScreen13(userId: widget.userId),
       },
       {
         "name": "Puzle13",
-        "image": "juegos/images/juego3/puzle15.jpeg",
+        "image": "assets/juegos/images/juego3/puzle15.jpeg",
         "screen": PuzzleScreen14(userId: widget.userId),
       },
     ];
@@ -265,7 +265,7 @@ Widget _botonMenu({
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("juegos/images/juego3/fondo.png"),
+                image: AssetImage("assets/juegos/images/juego3/fondo.png"),
                 fit: BoxFit.cover,
               ),
             ),

@@ -21,7 +21,7 @@ class SleepScreen extends StatefulWidget {
 
 class _SleepScreenState extends State<SleepScreen> {
   double _oscuridad = 0.0;
-  final String _imgDormida = "images/nutria-durmiendo.gif";
+  final String _imgDormida = "assets/images/nutria-durmiendo.gif";
   double _sizeNutria = 250;
 
   @override
@@ -216,8 +216,8 @@ class _SleepScreenState extends State<SleepScreen> {
                 onTap: widget.pet.isSleeping ? _despertar : _dormir,
                 child: Image.asset(
                   widget.pet.isSleeping
-                      ? "images/lamparaoff.png"
-                      : "images/lamparaon.png",
+                      ? "assets/images/lamparaoff.png"
+                      : "assets/images/lamparaon.png",
                   width: 100,
                   height: 100,
                 ),

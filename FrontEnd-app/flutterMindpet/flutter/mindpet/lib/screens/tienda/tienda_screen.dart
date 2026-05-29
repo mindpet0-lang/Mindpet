@@ -35,7 +35,7 @@ class _TiendaScreenState extends State<TiendaScreen> {
       height: double.infinity,
 decoration: const BoxDecoration(
         image: DecorationImage(
-          image: AssetImage("images/fondo/fondo-tienda3.jpg"), 
+          image: AssetImage("assets/images/fondo/fondo-tienda3.jpg"), 
           fit: BoxFit.cover, 
         ),
       ),

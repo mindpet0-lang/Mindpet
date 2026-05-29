@@ -26,7 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://localhost:8080/usuarios/login'),
+        Uri.parse('https://backendmindpet-production.up.railway.app/usuarios/login'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'correo': _emailController.text.trim().toLowerCase(),
@@ -83,7 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Image.asset(
-              'images/fondo/imagen-terapia.png',
+              'assets/images/fondo/imagen-terapia.png',
               width: MediaQuery.of(context).size.width,
               fit: BoxFit.fitWidth,
               filterQuality: FilterQuality.high,
@@ -96,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   children: [
                     const SizedBox(height: 40),
-                    Image.asset("images/logo.png", height: 150),
+                    Image.asset("assets/images/logo.png", height: 150),
                     const SizedBox(height: 40),
                     const Text(
                       'Iniciar sesión',

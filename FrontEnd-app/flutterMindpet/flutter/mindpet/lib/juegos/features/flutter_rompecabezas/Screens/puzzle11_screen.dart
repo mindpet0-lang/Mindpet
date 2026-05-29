@@ -25,22 +25,22 @@ class _PuzzleScreenState extends State<PuzzleScreen11> {
   Timer? timer;
 
   final List<String> images = [
-    'juegos/images/juego3/juego11/puzzle1.jpeg',
-    'juegos/images/juego3/juego11/puzzle2.jpeg',
-    'juegos/images/juego3/juego11/puzzle3.jpeg',
-    'juegos/images/juego3/juego11/puzzle4.jpeg',
-    'juegos/images/juego3/juego11/puzzle5.jpeg',
-    'juegos/images/juego3/juego11/puzzle6.jpeg',
-    'juegos/images/juego3/juego11/puzzle7.jpeg',
-    'juegos/images/juego3/juego11/puzzle8.jpeg',
-    'juegos/images/juego3/juego11/puzzle9.jpeg',
-    'juegos/images/juego3/juego11/puzzle10.jpeg',
-    'juegos/images/juego3/juego11/puzzle11.jpeg',
-    'juegos/images/juego3/juego11/puzzle12.jpeg',
-    'juegos/images/juego3/juego11/puzzle13.jpeg',
-    'juegos/images/juego3/juego11/puzzle14.jpeg',
-    'juegos/images/juego3/juego11/puzzle15.jpeg',
-    'juegos/images/juego3/juego11/puzzle16.jpeg',
+    'assets/juegos/images/juego3/juego11/puzzle1.jpeg',
+    'assets/juegos/images/juego3/juego11/puzzle2.jpeg',
+    'assets/juegos/images/juego3/juego11/puzzle3.jpeg',
+    'assets/juegos/images/juego3/juego11/puzzle4.jpeg',
+    'assets/juegos/images/juego3/juego11/puzzle5.jpeg',
+    'assets/juegos/images/juego3/juego11/puzzle6.jpeg',
+    'assets/juegos/images/juego3/juego11/puzzle7.jpeg',
+    'assets/juegos/images/juego3/juego11/puzzle8.jpeg',
+    'assets/juegos/images/juego3/juego11/puzzle9.jpeg',
+    'assets/juegos/images/juego3/juego11/puzzle10.jpeg',
+    'assets/juegos/images/juego3/juego11/puzzle11.jpeg',
+    'assets/juegos/images/juego3/juego11/puzzle12.jpeg',
+    'assets/juegos/images/juego3/juego11/puzzle13.jpeg',
+    'assets/juegos/images/juego3/juego11/puzzle14.jpeg',
+    'assets/juegos/images/juego3/juego11/puzzle15.jpeg',
+    'assets/juegos/images/juego3/juego11/puzzle16.jpeg',
   ];
 
   @override
@@ -107,7 +107,7 @@ class _PuzzleScreenState extends State<PuzzleScreen11> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(30),
                 child: Image.asset(
-                  'juegos/images/juego3/ganaste.png',
+                  'assets/juegos/images/juego3/ganaste.png',
                   width: double.infinity,
                   height: double.infinity,
                   fit: BoxFit.fill,
@@ -212,7 +212,7 @@ class _PuzzleScreenState extends State<PuzzleScreen11> {
           // 🖼️ FONDO
           Positioned.fill(
             child: Image.asset(
-              'juegos/images/juego3/fondo.png',
+              'assets/juegos/images/juego3/fondo.png',
               fit: BoxFit.cover,
             ),
           ),

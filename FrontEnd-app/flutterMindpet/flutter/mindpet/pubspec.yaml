@@ -33,12 +33,12 @@ dependencies:
   
 
   cupertino_icons: ^1.0.8
-  google_fonts: ^6.1.0
+  google_fonts: ^8.1.0
   provider: ^6.1.2
   percent_indicator: ^4.2.3
   shared_preferences: ^2.2.2
-  audioplayers: ^5.2.1
-  vibration: ^1.8.4
+  audioplayers: ^6.6.0
+  vibration: ^3.1.8
   http: ^1.2.1
   confetti: ^0.8.0
 
@@ -63,23 +63,44 @@ flutter:
   uses-material-design: true
 
   assets:
-  
+    # Sonidos globales
+    - assets/sounds/
 
-    - assets/images/fondo/sala.png
-    - assets/images/fondo/bano.png
-    - assets/images/fondo/game.png
-    - assets/images/fondo/kitchen.png
-    - assets/images/fondo/sleep.png
-    - assets/sounds/click.wav
-    - assets/sounds/fondo.mp3
-    - assets/images/fondo/fondochat2.jpg
-    - assets/images/fondo/fondodiario.png
-    - assets/images/fondo/imagen-terapia.png
+    # Imágenes base y fondos
+    - assets/images/
+    - assets/images/fondo/
 
+    # Animaciones y estados de la Nutria
+    - assets/images/nutria/
+    - assets/images/nutria/parada/
+
+
+    - assets/images/nutria/banio/
+    - assets/images/nutria/banio/jabon/
+    - assets/images/nutria/banio/jabonflores/
+    - assets/images/nutria/banio/jaboncoco/
+
+    
+    - assets/images/nutria/kitchen/
+    - assets/images/nutria/kitchen/comiendo/
+    - assets/images/nutria/kitchen/tomando/
+
+    # Secciones de la Tienda
+    - assets/images/tienda/
+    - assets/images/tienda/comida/
+    - assets/images/tienda/bebida/
+    - assets/images/tienda/aseo/
+
+    # Estructura de los Juegos y Ejercicios
+    - assets/juegos/
+    - assets/juegos/images/
+    - assets/juegos/images/ejercicio1/
+    - assets/juegos/images/ejercicio2/
     - assets/juegos/images/juego1/
     - assets/juegos/images/juego2/
     - assets/juegos/images/juego3/
     - assets/juegos/images/juego4/
+
     - assets/juegos/images/juego3/juego1/
     - assets/juegos/images/juego3/juego2/
     - assets/juegos/images/juego3/juego3/
@@ -93,10 +114,4 @@ flutter:
     - assets/juegos/images/juego3/juego12/
     - assets/juegos/images/juego3/juego13/
     - assets/juegos/images/juego3/juego14/
-    - assets/juegos/images/ejercicio1/
-    - assets/juegos/images/ejercicio2/
-
-    - assets/juegos/images/
-    - assets/sounds/
-
 

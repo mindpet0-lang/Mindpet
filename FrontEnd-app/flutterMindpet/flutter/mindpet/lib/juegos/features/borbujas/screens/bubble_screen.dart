@@ -242,7 +242,7 @@ Widget _botonMenu({
         height: double.infinity,
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("juegos/images/ejercicio1/fondoLago.png"),
+            image: AssetImage("assets/juegos/images/ejercicio1/fondoLago.png"),
             fit: BoxFit.cover, // 👈 responsive real
           ),
         ),

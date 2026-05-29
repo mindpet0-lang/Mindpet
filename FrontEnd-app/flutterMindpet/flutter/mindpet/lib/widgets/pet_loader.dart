@@ -24,7 +24,7 @@ class _PetLoaderState extends State<PetLoader> {
   Future<void> _loadAndNavigate() async {
     final String cleanId = widget.userId.toString().trim();
     // Si usas emulador recuerda cambiar a 10.0.2.2
-    final url = Uri.parse('http://localhost:8080/mascotas/usuario/$cleanId');
+    final url = Uri.parse('https://backendmindpet-production.up.railway.app/mascotas/usuario/$cleanId');
 
     try {
       final response = await http.get(url);

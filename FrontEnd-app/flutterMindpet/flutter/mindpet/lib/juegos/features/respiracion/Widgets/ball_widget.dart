@@ -21,7 +21,7 @@ class BallWidget extends StatelessWidget {
           width: size,
           height: size,
           child: Image.asset(
-            'juegos/images/ejercicio2/pelota.png',
+            'assets/juegos/images/ejercicio2/pelota.png',
             fit: BoxFit.contain,
           ),
         ),

@@ -27,26 +27,26 @@ class _PuzzleScreenState extends State<PuzzleScreen5> {
   Timer? timer;
 
   final List<String> images = [
-    'juegos/images/juego3/juego5/puzzle1.jpg',
-    'juegos/images/juego3/juego5/puzzle2.jpg',
-    'juegos/images/juego3/juego5/puzzle3.jpg',
-    'juegos/images/juego3/juego5/puzzle4.jpg',
-    'juegos/images/juego3/juego5/puzzle5.jpg',
-    'juegos/images/juego3/juego5/puzzle6.jpg',
-    'juegos/images/juego3/juego5/puzzle7.jpg',
-    'juegos/images/juego3/juego5/puzzle8.jpg',
-    'juegos/images/juego3/juego5/puzzle9.jpg',
-    'juegos/images/juego3/juego5/puzzle10.jpg',
-    'juegos/images/juego3/juego5/puzzle11.jpg',
-    'juegos/images/juego3/juego5/puzzle12.jpg',
-    'juegos/images/juego3/juego5/puzzle13.jpg',
-    'juegos/images/juego3/juego5/puzzle14.jpg',
-    'juegos/images/juego3/juego5/puzzle15.jpg',
-    'juegos/images/juego3/juego5/puzzle16.jpg',
-    'juegos/images/juego3/juego5/puzzle17.jpg',
-    'juegos/images/juego3/juego5/puzzle18.jpg',
-    'juegos/images/juego3/juego5/puzzle19.jpg',
-    'juegos/images/juego3/juego5/puzzle20.jpg',
+    'assets/juegos/images/juego3/juego5/puzzle1.jpg',
+    'assets/juegos/images/juego3/juego5/puzzle2.jpg',
+    'assets/juegos/images/juego3/juego5/puzzle3.jpg',
+    'assets/juegos/images/juego3/juego5/puzzle4.jpg',
+    'assets/juegos/images/juego3/juego5/puzzle5.jpg',
+    'assets/juegos/images/juego3/juego5/puzzle6.jpg',
+    'assets/juegos/images/juego3/juego5/puzzle7.jpg',
+    'assets/juegos/images/juego3/juego5/puzzle8.jpg',
+    'assets/juegos/images/juego3/juego5/puzzle9.jpg',
+    'assets/juegos/images/juego3/juego5/puzzle10.jpg',
+    'assets/juegos/images/juego3/juego5/puzzle11.jpg',
+    'assets/juegos/images/juego3/juego5/puzzle12.jpg',
+    'assets/juegos/images/juego3/juego5/puzzle13.jpg',
+    'assets/juegos/images/juego3/juego5/puzzle14.jpg',
+    'assets/juegos/images/juego3/juego5/puzzle15.jpg',
+    'assets/juegos/images/juego3/juego5/puzzle16.jpg',
+    'assets/juegos/images/juego3/juego5/puzzle17.jpg',
+    'assets/juegos/images/juego3/juego5/puzzle18.jpg',
+    'assets/juegos/images/juego3/juego5/puzzle19.jpg',
+    'assets/juegos/images/juego3/juego5/puzzle20.jpg',
   ];
 
   @override
@@ -115,7 +115,7 @@ print("MONEDAS ACTUALES: ${CoinManager.instance.coins}");
           ClipRRect(
             borderRadius: BorderRadius.circular(30),
             child: Image.asset(
-              'juegos/images/juego3/ganaste.png',
+              'assets/juegos/images/juego3/ganaste.png',
               width: double.infinity,
               height: double.infinity,
               fit: BoxFit.fill,
@@ -220,7 +220,7 @@ void startTimerIfNeeded() {
           // 🖼️ FONDO
           Positioned.fill(
             child: Image.asset(
-              'juegos/images/juego3/fondo.png', 
+              'assets/juegos/images/juego3/fondo.png', 
               fit: BoxFit.cover,
             ),
           ),

@@ -5,7 +5,7 @@ import '../models/usuario.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
-  static const String baseUrl = "http://localhost:8080"; 
+  static const String baseUrl = "https://backendmindpet-production.up.railway.app"; 
 
   static Future<int> getMonedas(int userId) async {
     try {
@@ -119,7 +119,7 @@ static Future<void> cerrarSesion() async {
   await prefs.remove('token');
 
   // Opción B: Borrar absolutamente todo lo guardado
-  // await prefs.clear();
+ await prefs.clear();
 }
 
 }
