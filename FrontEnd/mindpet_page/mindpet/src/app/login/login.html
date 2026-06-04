@@ -9,8 +9,9 @@
         <div class="form-group">
           <label>Correo</label>
           <input type="email" 
-                 formControlName="correo" 
-                 placeholder="ejemplo@correo.com">
+                formControlName="correo" 
+                placeholder="ejemplo@correo.com"
+                name="correo">
           
           @if (correo?.invalid && correo?.touched) {
             <small class="error-text">Correo inválido o incompleto</small>
@@ -20,15 +21,16 @@
         <div class="form-group">
           <label>Contraseña</label>
           <input type="password" 
-                 formControlName="contrasena"
-                 placeholder="********">
+                formControlName="contrasena"
+                placeholder="********"
+                name="contrasena">
           
           @if (contrasena?.invalid && contrasena?.touched) {
             <small class="error-text">La contraseña es requerida</small>
           }
         </div>
 
-        <button type="submit" [disabled]="loginForm.invalid">
+        <button type="submit" [disabled]="loginForm.invalid" name="login"> 
           Iniciar sesión
         </button>
 
