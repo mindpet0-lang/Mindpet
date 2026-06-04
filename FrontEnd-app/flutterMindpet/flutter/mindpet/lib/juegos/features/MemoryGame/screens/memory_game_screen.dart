@@ -66,11 +66,11 @@ class _MemoryGameScreenState extends State<MemoryGameScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const [
-                      Icon(Icons.settings, color: Colors.white),
+                      Icon(Icons.menu, color: Colors.white),
                       SizedBox(width: 8),
 
                       Text(
-                        "Ajustes",
+                        "Menú",
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -412,7 +412,7 @@ class _MemoryGameScreenState extends State<MemoryGameScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text("Usar $poder"),
-          content: Text("¿Quieres gastar 🪙 $costo monedas para activar este poder?"),
+          content: Text("¿Quieres gastar 💛 $costo monedas para activar este poder?"),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(false),
@@ -599,12 +599,8 @@ class _MemoryGameScreenState extends State<MemoryGameScreen> {
             builder: (context, _) {
               return Row(
                 children: [
-                  const Icon(Icons.monetization_on, color: Colors.amber),
-
-                  const SizedBox(width: 5),
-
                   Text(
-                    "${CoinManager.instance.coins}",
+                    "💛${CoinManager.instance.coins}",
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 22,
@@ -667,7 +663,7 @@ class _MemoryGameScreenState extends State<MemoryGameScreen> {
 
                       IconButton(
                         onPressed: mostrarMenu,
-                        icon: const Icon(Icons.settings, color: Colors.white),
+                        icon: const Icon(Icons.menu, color: Colors.white),
                       ),
                     ],
                   ),

@@ -74,11 +74,11 @@ class _BubbleScreenState extends State<BubbleScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
-                    Icon(Icons.settings, color: Colors.white),
+                    Icon(Icons.menu, color: Colors.white),
                     SizedBox(width: 8),
 
                     Text(
-                      "Ajustes",
+                      "Menú",
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -221,7 +221,7 @@ Widget _botonMenu({
 
   ScaffoldMessenger.of(context).showSnackBar(
     const SnackBar(
-      content: Text("🪙 +5 monedas"),
+      content: Text("💛 +5 monedas"),
       duration: Duration(milliseconds: 500),
     ),
   );
@@ -259,7 +259,7 @@ Widget _botonMenu({
     animation: CoinManager.instance,
     builder: (context, _) {
       return Text(
-        "🪙 Monedas: ${CoinManager.instance.coins}",
+        "💛 Monedas: ${CoinManager.instance.coins}",
         style: const TextStyle(
           fontSize: 22,
           fontWeight: FontWeight.bold,
@@ -277,7 +277,7 @@ Positioned(
 
   child: IconButton(
     icon: const Icon(
-      Icons.settings,
+      Icons.menu,
       color: Colors.white,
       size: 32,
     ),

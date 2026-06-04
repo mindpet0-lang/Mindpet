@@ -59,11 +59,11 @@ class _GameScreenState extends State<BallScreen>
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const [
-                      Icon(Icons.settings, color: Colors.white),
+                      Icon(Icons.menu, color: Colors.white),
                       SizedBox(width: 8),
 
                       Text(
-                        "Ajustes",
+                        "Menú",
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -318,7 +318,7 @@ class _GameScreenState extends State<BallScreen>
               left: 20,
               child: IconButton(
                 onPressed: mostrarMenu,
-                icon: const Icon(Icons.settings, color: Colors.white, size: 32),
+                icon: const Icon(Icons.menu, color: Colors.white, size: 32),
               ),
             ),
 
@@ -340,12 +340,9 @@ class _GameScreenState extends State<BallScreen>
                     ),
                     child: Row(
                       children: [
-                        const Icon(Icons.monetization_on, color: Colors.yellow),
-
-                        const SizedBox(width: 6),
 
                         Text(
-                          "${CoinManager.instance.coins}",
+                          "💛${CoinManager.instance.coins}",
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 18,

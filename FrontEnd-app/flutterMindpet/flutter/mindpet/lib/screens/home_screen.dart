@@ -94,8 +94,8 @@ class HomeScreen extends StatelessWidget {
 
                 /// BOTÓN HABLA CON KOKO
                 _buildCentralButton(
-                  imagePath: "assets/images/chat-icon.PNG",
-                  label: "Habla con Koko",
+                  imagePath: "assets/images/chat-icon2.png",
+                  label: "Habla con tu mascota",
                   isLarge: true,
                   onTap: () {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen(userId: userId,)));
@@ -104,14 +104,14 @@ class HomeScreen extends StatelessWidget {
                 ),
 
                 /// BOTÓN RETOS
-                _buildCentralButton(
-                  imagePath: "assets/images/retos-icon.PNG",
-                  label: "Retos",
-                  onTap: () {
-                    // Navigator.push(context, MaterialPageRoute(builder: (context) => const RetosScreen()));
-                    print("Cargando retos diarios...");
-                  },
-                ),
+                //_buildCentralButton(
+                //  imagePath: "assets/images/retos-icon2.PNG",
+                //  label: "Actividades",
+                //  onTap: () {
+                //    // Navigator.push(context, MaterialPageRoute(builder: (context) => const RetosScreen()));
+                //    print("Cargando retos diarios...");
+                //  },
+                //),
               ],
             ),
           ),
@@ -142,7 +142,8 @@ class HomeScreen extends StatelessWidget {
         children: [
           Image.asset(
             imagePath,
-            width: isLarge ? 95 : 80, // El botón central de chat destaca por tamaño
+            //width: isLarge ? 95 : 80,
+            width: isLarge ? 80 : 80, // El botón central de chat destaca por tamaño
             fit: BoxFit.contain,
             errorBuilder: (context, error, stackTrace) => const Icon(Icons.book, size: 50),
           ),

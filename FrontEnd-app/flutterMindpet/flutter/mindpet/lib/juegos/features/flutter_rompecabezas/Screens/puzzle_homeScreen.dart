@@ -74,12 +74,12 @@ void mostrarMenu() {
                   mainAxisAlignment: MainAxisAlignment.center,
 
                   children: const [
-                    Icon(Icons.settings, color: Colors.white),
+                    Icon(Icons.menu, color: Colors.white),
 
                     SizedBox(width: 8),
 
                     Text(
-                      "Ajustes",
+                      "Menú",
                       style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
@@ -367,7 +367,7 @@ Positioned(
       ),
 
       child: const Icon(
-        Icons.settings,
+        Icons.menu,
         color: Colors.white,
         size: 28,
       ),
@@ -394,12 +394,8 @@ Positioned(
                   ),
                   child: Row(
                     children: [
-                      const Icon(Icons.monetization_on, color: Colors.amber),
-
-                      const SizedBox(width: 5),
-
                       Text(
-                        '${CoinManager.instance.coins}',
+                        '💛${CoinManager.instance.coins}',
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 20,

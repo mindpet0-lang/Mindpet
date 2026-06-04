@@ -124,33 +124,6 @@ class TopStatusBar extends StatelessWidget {
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            /// OPCIÓN: DIARIO
-            ListTile(
-              leading: const Icon(Icons.book),
-              title: const Text("Diario"),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => DiarioScreen(userId: userId)),
-                );
-              },
-            ),
-
-            /// OPCIÓN: CHAT CON IA
-            ListTile(
-              leading: const Icon(Icons.chat_bubble),
-              title: const Text("Hablar con mi mascota"),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => ChatScreen(userId: userId),
-                  ),
-                );
-              },
-            ),
 
              /// OPCIÓN ACOUNT
             ListTile(

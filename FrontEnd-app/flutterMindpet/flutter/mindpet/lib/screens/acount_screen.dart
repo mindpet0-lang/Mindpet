@@ -7,7 +7,7 @@ import 'login_screen.dart'; // Asegúrate de importar tu pantalla de Login real
 class AccountScreen extends StatefulWidget {
   final int userId;
 
-  const AccountScreen({Key? key, required this.userId}) : super(key: key);
+  const AccountScreen({super.key, required this.userId});
 
   @override
   State<AccountScreen> createState() => _AccountScreenState();
@@ -57,15 +57,15 @@ class _AccountScreenState extends State<AccountScreen> {
                   const Text(
                     'Cuenta',
                     style: TextStyle(
-                      fontSize: 28, 
-                      fontWeight: FontWeight.bold, 
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 24),
-              
+
               // Tarjeta Blanca Principal controlada por el FutureBuilder
               Expanded(
                 child: Container(
@@ -82,7 +82,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(child: CircularProgressIndicator());
                       }
-                      
+
                       // 2. Si hay error o el usuario no existe en la BD (404)
                       if (snapshot.hasError || snapshot.data == null) {
                         return const Center(
@@ -102,12 +102,61 @@ class _AccountScreenState extends State<AccountScreen> {
                           // Sección del Perfil Dinámica (Avatar + Datos de la BD)
                           Row(
                             children: [
-                              CircleAvatar(
-                                radius: 32,
-                                backgroundColor: const Color.fromARGB(255, 142, 219, 255), // Azul del icono
-                                child: const Icon(Icons.person_outline, size: 36, color: Colors.black),
-                              ),
-                              
+                              usuario.foto_perfil == 'Sin foto de perfil'
+                                  ? ClipOval(
+                                      child: Image.asset(
+                                        'assets/images/sin-foto.png',
+                                        width: 60,
+                                        height: 60,
+                                        fit: BoxFit
+                                            .cover, // Ajusta la imagen para llenar el círculo sin deformarse
+                                      ),
+                                    )
+                                  : ClipOval(
+                                      child: Image.network(
+                                        usuario.foto_perfil,
+                                        width: 60,
+                                        height: 60,
+                                        fit: BoxFit
+                                            .cover, // Ajusta la imagen de red perfectamente
+                                        // Muestra un indicador de carga mientras se descarga la imagen
+                                        loadingBuilder:
+                                            (context, child, loadingProgress) {
+                                              if (loadingProgress == null)
+                                                return child;
+                                              return SizedBox(
+                                                width: 60,
+                                                height: 60,
+                                                child: const Padding(
+                                                  padding: EdgeInsets.all(
+                                                    8.0,
+                                                  ), // Margen para que el loader no toque los bordes
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                        strokeWidth: 2,
+                                                      ),
+                                                ),
+                                              );
+                                            },
+
+                                        // Muestra un ícono si ocurre un error al cargar la imagen
+                                        errorBuilder: (context, error, stackTrace) {
+                                          return Container(
+                                            width: 60,
+                                            height: 60,
+                                            color: Colors
+                                                .grey[200], // Fondo sutil para el error
+                                            child: const Icon(
+                                              Icons.error,
+                                              size:
+                                                  24, // Ajustado al tamaño de 50 del contenedor
+                                              color: Colors.red,
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+
                               const SizedBox(width: 16),
                               Expanded(
                                 child: Column(
@@ -122,6 +171,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                         color: Colors.black,
                                       ),
                                     ),
+
                                     const SizedBox(height: 4),
                                     // Correo real desde Java
                                     Text(
@@ -135,13 +185,17 @@ class _AccountScreenState extends State<AccountScreen> {
                                     // Monedas en tiempo real de tu entidad Usuario
                                     Row(
                                       children: [
-                                        const Icon(Icons.monetization_on, color: Colors.amber, size: 18),
+                                        const Icon(
+                                          Icons.monetization_on,
+                                          color: Colors.amber,
+                                          size: 18,
+                                        ),
                                         const SizedBox(width: 4),
                                         Text(
                                           '${usuario.monedas} monedas',
                                           style: const TextStyle(
-                                            fontSize: 14, 
-                                            fontWeight: FontWeight.bold, 
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
                                             color: Colors.amber,
                                           ),
                                         ),
@@ -153,28 +207,42 @@ class _AccountScreenState extends State<AccountScreen> {
                             ],
                           ),
                           const SizedBox(height: 32),
-                          
+
                           // Botón de Cerrar Sesión
                           OutlinedButton(
                             onPressed: () async {
                               // Mostrar diálogo de confirmación antes de salir
-                              bool confirmar = await showDialog(
+                              bool confirmar =
+                                  await showDialog(
                                     context: context,
                                     builder: (context) => AlertDialog(
                                       title: const Text('Cerrar Sesión'),
-                                      content: const Text('¿Estás seguro de que deseas salir de MindPet?'),
+                                      content: const Text(
+                                        '¿Estás seguro de que deseas salir de MindPet?',
+                                      ),
                                       actions: [
                                         TextButton(
-                                          onPressed: () => Navigator.pop(context, false),
-                                          child: const Text('Cancelar', style: TextStyle(color: Colors.grey)),
+                                          onPressed: () =>
+                                              Navigator.pop(context, false),
+                                          child: const Text(
+                                            'Cancelar',
+                                            style: TextStyle(
+                                              color: Colors.grey,
+                                            ),
+                                          ),
                                         ),
                                         TextButton(
-                                          onPressed: () => Navigator.pop(context, true),
-                                          child: const Text('Salir', style: TextStyle(color: Colors.red)),
+                                          onPressed: () =>
+                                              Navigator.pop(context, true),
+                                          child: const Text(
+                                            'Salir',
+                                            style: TextStyle(color: Colors.red),
+                                          ),
                                         ),
                                       ],
                                     ),
-                                  ) ?? false;
+                                  ) ??
+                                  false;
 
                               // Si confirma, limpia SharedPreferences y va al Login
                               if (confirmar) {
@@ -184,27 +252,40 @@ class _AccountScreenState extends State<AccountScreen> {
                                   // Redirige eliminando todo el historial de pantallas hacia atrás
                                   Navigator.pushAndRemoveUntil(
                                     context,
-                                    MaterialPageRoute(builder: (context) => const LoginScreen()),
+                                    MaterialPageRoute(
+                                      builder: (context) => const LoginScreen(),
+                                    ),
                                     (route) => false,
                                   );
                                 }
                               }
                             },
                             style: OutlinedButton.styleFrom(
-                              side: const BorderSide(color: Colors.red, width: 1.5),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                              side: const BorderSide(
+                                color: Colors.red,
+                                width: 1.5,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 12,
+                              ),
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                const Icon(Icons.logout_rounded, color: Colors.red),
+                                const Icon(
+                                  Icons.logout_rounded,
+                                  color: Colors.red,
+                                ),
                                 const SizedBox(width: 8),
                                 const Text(
                                   'Cerrar Sesión',
                                   style: TextStyle(
-                                    color: Colors.red, 
-                                    fontSize: 16, 
+                                    color: Colors.red,
+                                    fontSize: 16,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),

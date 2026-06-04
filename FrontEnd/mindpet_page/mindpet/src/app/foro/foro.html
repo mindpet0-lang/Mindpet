@@ -60,9 +60,16 @@
                     📷 Añadir foto
                 </label>
 
-                <button type="button" class="btn-publicar" [disabled]="(!nuevoContenido.trim() && !imagenSeleccionada) || guardando" (mousedown)="publicar()">
-                    {{ guardando ? '✨ Publicando...' : '✨ Publicar entrada' }}
-                </button>
+<button type="button" 
+        class="btn-publicar" 
+        [disabled]="(!nuevoContenido.trim() && !imagenSeleccionada) || guardando" 
+        (mousedown)="publicar()">
+    
+    <i [ngClass]="guardando ? 'bi bi-send-fill' : 'bi bi-send'"></i>
+    
+    {{ guardando ? 'Publicando...' : 'Publicar entrada' }}
+
+</button>
             </div>
         </div>
 
@@ -203,7 +210,11 @@
                                 📷
                             </label>
 
-                            <button type="button" class="btn-enviar-comentario" (click)="agregarComentario(pub)">✨</button>
+                            <button type="button" 
+        class="btn-enviar-comentario" 
+        (click)="agregarComentario(pub)">
+    <i class="bi bi-send"></i>
+</button>
                         </div>
 
                     </div>

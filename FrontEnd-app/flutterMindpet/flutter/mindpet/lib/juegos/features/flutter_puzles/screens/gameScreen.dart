@@ -66,10 +66,10 @@ class _GameScreenState extends State<GameScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.settings, color: Colors.white),
+                      Icon(Icons.menu, color: Colors.white),
                       SizedBox(width: 8),
                       Text(
-                        "Ajustes",
+                        "Menú",
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -616,13 +616,13 @@ Future<bool> _confirmarGasto(int costo, String poder) async {
         title: AnimatedBuilder(
           animation: CoinManager.instance,
           builder: (context, _) {
-            return Text("MindPet 🧠 | 💛 ${CoinManager.instance.coins}");
+            return Text("Majhong | 💛 ${CoinManager.instance.coins}");
           },
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
-          IconButton(icon: Icon(Icons.settings), onPressed: mostrarMenu),
+          IconButton(icon: Icon(Icons.menu), onPressed: mostrarMenu),
         ],
       ),
 

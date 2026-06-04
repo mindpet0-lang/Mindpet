@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mindpet/services/chat_service.dart'; 
 
 class ChatScreen extends StatefulWidget {
-  final int userId; // Recibe el ID del usuario logueado
+  final int userId; 
 
   const ChatScreen({super.key, required this.userId});
 
@@ -18,19 +18,20 @@ class _ChatScreenState extends State<ChatScreen> {
   
   final List<Map<String, String>> _mensajes = [];
   bool _estaCargando = false;
+  // 🔹 NUEVA VARIABLE: Para saber si es la carga inicial del historial
+  bool _cargandoHistorial = true; 
 
   @override
   void initState() {
     super.initState();
-    _cargarHistorial(); // Carga mensajes viejos al abrir
+    _cargarHistorial(); 
   }
 
-  // Carga el historial desde MySQL vía Spring Boot
   Future<void> _cargarHistorial() async {
     try {
       final historial = await _chatService.obtenerHistorial(widget.userId);
       setState(() {
-        _mensajes.clear(); // Limpia antes de cargar por si acaso
+        _mensajes.clear(); 
         for (var m in historial) {
           _mensajes.add({
             "texto": m['content'] ?? "", 
@@ -41,10 +42,14 @@ class _ChatScreenState extends State<ChatScreen> {
       _scrollToBottom();
     } catch (e) {
       print("Error historial: $e");
+    } finally {
+      // 🔹 Terminó de cargar el historial (ya sea con datos o vacío)
+      setState(() {
+        _cargandoHistorial = false;
+      });
     }
   }
 
-  // 🔹 Función para mostrar la alerta de confirmación
   void _mostrarDialogoBorrar() {
     showDialog(
       context: context,
@@ -60,13 +65,13 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.of(context).pop(), // Cierra la alerta sin hacer nada
+              onPressed: () => Navigator.of(context).pop(), 
               child: Text("Cancelar", style: TextStyle(color: Colors.grey[700])),
             ),
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Cierra el diálogo
-                _confirmarBorradoChat();     // Llama a la función para borrar
+                Navigator.of(context).pop(); 
+                _confirmarBorradoChat();     
               },
               child: const Text("Borrar", style: TextStyle(color: Colors.red)),
             ),
@@ -76,16 +81,13 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  // 🔹 Función de borrado 
- Future<void> _confirmarBorradoChat() async {
+  Future<void> _confirmarBorradoChat() async {
     setState(() => _estaCargando = true);
     
     try {
-      // 1. Llamamos al servicio de Flutter que conecta con Spring Boot
       final exito = await _chatService.borrarHistorial(widget.userId);
       
       if (exito) {
-        // 2. Si el backend borró todo en MySQL, limpiamos la lista local de la UI
         setState(() {
           _mensajes.clear();
         });
@@ -97,7 +99,6 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         );
       } else {
-        // Si el backend tiró un error (ej. error 500)
         _mostrarErrorNotificacion("No se pudo borrar el historial en el servidor.");
       }
     } catch (e) {
@@ -107,7 +108,6 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  // Pequeño helper visual para no ensuciar la lista de chat con errores de borrado
   void _mostrarErrorNotificacion(String mensaje) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -117,7 +117,6 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  // Envía nuevo mensaje a la IA
   Future<void> _enviarMensajeAlServidor() async {
     final texto = _controller.text.trim();
     if (texto.isEmpty) return;
@@ -167,19 +166,17 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        // 🔹 Imagen de fondo
         Container(
           decoration: const BoxDecoration(
             image: DecorationImage(
-              image: AssetImage("assets/images/fondo/fondochat2.jpg"),
+              image: AssetImage("assets/images/fondo/fondochat3.png"),
               fit: BoxFit.cover,
             ),
           ),
         ),
 
-        // 🔹 Tu UI encima
         Scaffold(
-          backgroundColor: Colors.transparent, // 👈 CLAVE
+          backgroundColor: Colors.transparent, 
           appBar: AppBar(
             title: Text(
               "MindPet ia",
@@ -187,52 +184,95 @@ class _ChatScreenState extends State<ChatScreen> {
                 color: const Color.fromARGB(255, 0, 0, 0),
               ),
             ),
-            backgroundColor: Colors.transparent, // 👈 CLAVE
-            elevation: 0, // 👈 QUITA SOMBRA
-            
-            // 🔹 SE AÑADIÓ EL BOTÓN DE BORRAR AQUÍ
+            backgroundColor: Colors.transparent, 
+            elevation: 0, 
             actions: [
               IconButton(
                 icon: const Icon(Icons.delete_outline, color: Colors.black87),
-                onPressed: _mensajes.isEmpty ? null : _mostrarDialogoBorrar, // Deshabilitado si no hay mensajes
+                onPressed: _mensajes.isEmpty ? null : _mostrarDialogoBorrar, 
               ),
             ],
           ),
 
           body: Column(
             children: [
+              // 🔹 CONTROL DE FLUJO AQUÍ
               Expanded(
-                child: ListView.builder(
-                  controller: _scrollController,
-                  itemCount: _mensajes.length,
-                  itemBuilder: (context, index) {
-                    final m = _mensajes[index];
-                    final esUser = m["tipo"] == "user";
+                child: _cargandoHistorial
+                    ? const Center(
+                        // Muestra un círculo de carga centrado mientras conecta con Spring Boot
+                        child: CircularProgressIndicator(),
+                      )
+                    : _mensajes.isEmpty
+                        ? Center(
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                              margin: const EdgeInsets.all(20),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.8), 
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(
+                                    Icons.chat_bubble_outline, 
+                                    size: 40, 
+                                    color: Colors.black54
+                                  ),
+                                  const SizedBox(height: 12),
+                                  Text(
+                                    "Chat vacío",
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 18, 
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black87
+                                    ),
+                                  ),
+                                  const SizedBox(height: 6),
+                                  Text(
+                                    "Prueba saludando a tu nutria",
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.roboto(
+                                      fontSize: 14, 
+                                      color: Colors.black
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                        : ListView.builder(
+                            controller: _scrollController,
+                            itemCount: _mensajes.length,
+                            itemBuilder: (context, index) {
+                              final m = _mensajes[index];
+                              final esUser = m["tipo"] == "user";
 
-                    return Align(
-                      alignment: esUser
-                          ? Alignment.centerRight
-                          : Alignment.centerLeft,
-                      child: Container(
-                        margin: const EdgeInsets.all(8),
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: esUser
-                              ? const Color.fromARGB(251, 140, 202, 252)
-                              : const Color.fromARGB(248, 192, 220, 247),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Text(
-                          m["texto"]!,
-                          style: GoogleFonts.roboto(),
-                        ),
-                      ),
-                    );
-                  },
-                ),
+                              return Align(
+                                alignment: esUser
+                                    ? Alignment.centerRight
+                                    : Alignment.centerLeft,
+                                child: Container(
+                                  margin: const EdgeInsets.all(8),
+                                  padding: const EdgeInsets.all(12),
+                                  decoration: BoxDecoration(
+                                    color: esUser
+                                        ? const Color.fromARGB(251, 140, 202, 252)
+                                        : const Color.fromARGB(248, 192, 220, 247),
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  child: Text(
+                                    m["texto"]!,
+                                    style: GoogleFonts.roboto(),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
               ),
 
-              if (_estaCargando) const LinearProgressIndicator(),
+              if (_estaCargando && !_cargandoHistorial) const LinearProgressIndicator(),
 
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -244,7 +284,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         decoration: InputDecoration(
                           hintText: "Escribe aquí...",
                           filled: true,
-                          fillColor: Colors.white70, // 👈 para que se vea bien
+                          fillColor: Colors.white70, 
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
                           ),

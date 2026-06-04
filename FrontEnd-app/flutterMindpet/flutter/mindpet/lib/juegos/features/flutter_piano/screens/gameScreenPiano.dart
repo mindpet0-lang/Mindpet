@@ -205,12 +205,12 @@ void mostrarMenu() {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
-                    Icon(Icons.settings, color: Colors.white),
+                    Icon(Icons.menu, color: Colors.white),
 
                     SizedBox(width: 8),
 
                     Text(
-                      "Ajustes",
+                      "Menú",
                       style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
@@ -403,7 +403,7 @@ Widget _botonMenu({
                   ),
 
                   child: const Icon(
-                    Icons.settings,
+                    Icons.menu,
                     color: Colors.white,
                     size: 28,
                   ),

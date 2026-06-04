@@ -463,21 +463,6 @@ void initState() {
 
                   child: Row(
                     children: [
-                      // ICONO MONEDA
-                      Container(
-                        padding: const EdgeInsets.all(6),
-
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.25),
-                          shape: BoxShape.circle,
-                        ),
-
-                        child: const Icon(
-                          Icons.monetization_on,
-                          color: Colors.white,
-                          size: 26,
-                        ),
-                      ),
 
                       const SizedBox(width: 10),
 
@@ -486,7 +471,7 @@ void initState() {
                       Consumer<CoinManager>(
                         builder: (context, coinManager, child) {
                           return Text(
-                            "${coinManager.coins}",
+                            "💛${coinManager.coins}",
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 24,
