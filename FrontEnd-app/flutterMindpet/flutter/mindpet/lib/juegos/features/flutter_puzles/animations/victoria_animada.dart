@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 class VictoriaAnimada extends StatefulWidget {
   final VoidCallback onRestart;
 
-  const VictoriaAnimada({required this.onRestart});
+  const VictoriaAnimada({super.key, required this.onRestart});
 
   @override
+  // ignore: library_private_types_in_public_api
   _VictoriaAnimadaState createState() => _VictoriaAnimadaState();
 }
 

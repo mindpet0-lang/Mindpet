@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 class DerrotaAnimada extends StatefulWidget {
   final VoidCallback onRestart;
 
-  const DerrotaAnimada({required this.onRestart});
+  const DerrotaAnimada({super.key, required this.onRestart});
 
   @override
+  // ignore: library_private_types_in_public_api
   _DerrotaAnimadaState createState() => _DerrotaAnimadaState();
 }
 

@@ -25,7 +25,7 @@ class GameLogic {
       col: col,
       isActive: true,
       y: -120,
-      image: "juegos/images/juego1/nutria.png",
+      image: "assets/juegos/images/juego1/nutria.png",
     ),
   );
 }

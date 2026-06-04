@@ -12,6 +12,7 @@ class GameScreen extends StatefulWidget {
   const GameScreen({super.key, required this.userId});
   
   @override
+  // ignore: library_private_types_in_public_api
   _GameScreenState createState() => _GameScreenState();
   
 }

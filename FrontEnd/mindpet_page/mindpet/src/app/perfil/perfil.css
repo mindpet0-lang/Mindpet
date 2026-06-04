@@ -140,3 +140,24 @@ button:hover {
 .upload-btn input {
   display: none;
 }
+
+.error-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: -5px;
+  margin-bottom: 10px;
+  padding-left: 5px;
+}
+
+.error-text {
+  color: #dc3545; /* Un tono rojo suave que resalte sin romper la armonía visual */
+  font-size: 0.82rem;
+  margin-top: 4px;
+  text-align: left;
+}
+
+button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  opacity: 0.7;
+}

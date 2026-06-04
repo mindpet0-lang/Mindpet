@@ -141,7 +141,7 @@ class _GameScreenPianoState extends State<GameScreenPiano> {
                 child: GestureDetector(
                   onTap: () {
                     Navigator.pop(context);
-
+                    reiniciar();
                     setState(() {
                       gameStarted = false;
                       gameOver = false;
@@ -269,7 +269,7 @@ void mostrarMenu() {
 
                   onTap: () {
                     Navigator.pop(context);
-                    Navigator.pop(context);
+                    reiniciar();
                   },
                 ),
               ],

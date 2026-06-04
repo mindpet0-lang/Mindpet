@@ -29,25 +29,45 @@
         </div>
 
         <!-- 📝 FORM -->
-        <form [formGroup]="perfilForm" (ngSubmit)="actualizarPerfil()">
-          <input type="text" formControlName="nombre" placeholder="Tu nombre">
+<form [formGroup]="perfilForm" (ngSubmit)="actualizarPerfil()">
+  <input type="text" formControlName="nombre" placeholder="Tu nombre">
 
-          <button type="submit">Guardar cambios</button>
-        </form>
+  <div *ngIf="perfilForm.get('nombre')?.touched && perfilForm.get('nombre')?.errors?.['required']" class="error-text">
+    El nombre es obligatorio y no puede estar vacío.
+  </div>
+
+  <button type="submit" [disabled]="perfilForm.invalid">Guardar cambios</button>
+</form>
       </div>
 
       <!-- 🔒 SEGURIDAD -->
-      <div class="perfil-card">
-        <h3>Seguridad</h3>
+<div class="perfil-card">
+  <h3>Seguridad</h3>
 
-        <form [formGroup]="passwordForm" (ngSubmit)="cambiarPassword()">
-          <input type="password" formControlName="actual" placeholder="Contraseña actual">
-          <input type="password" formControlName="nueva" placeholder="Nueva contraseña">
+  <form [formGroup]="passwordForm" (ngSubmit)="cambiarPassword()">
+    
+    <input type="password" formControlName="actual" placeholder="Contraseña actual">
+    <div *ngIf="passwordForm.get('actual')?.touched && passwordForm.get('actual')?.errors?.['required']" class="error-text">
+      La contraseña actual es obligatoria.
+    </div>
 
-          <button type="submit">Actualizar contraseña</button>
-        </form>
-      </div>
+    <input type="password" formControlName="nueva" placeholder="Nueva contraseña">
+    
+    <div *ngIf="passwordForm.get('nueva')?.touched && passwordForm.get('nueva')?.errors" class="error-container">
+      <small *ngIf="passwordForm.get('nueva')?.errors?.['required']" class="error-text">
+        La nueva contraseña es obligatoria.
+      </small>
+      <small *ngIf="passwordForm.get('nueva')?.errors?.['minlength']" class="error-text">
+        Debe tener un mínimo de 8 caracteres.
+      </small>
+      <small *ngIf="passwordForm.get('nueva')?.errors?.['pattern']" class="error-text">
+        Debe contener al menos una letra mayúscula.
+      </small>
+    </div>
 
+    <button type="submit" [disabled]="passwordForm.invalid">Actualizar contraseña</button>
+  </form>
+</div>
     </div>
 
   </div>

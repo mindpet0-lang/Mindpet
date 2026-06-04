@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms'; // 👈 Se agregó Validators
 import { AuthService } from '../services/auth-service';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
@@ -19,13 +19,18 @@ export class Perfil implements OnInit {
 
   preview: any = null; // 🔥 SOLO PARA MOSTRAR IMAGEN
 
-  perfilForm: FormGroup = this.fb.group({
-    nombre: ['']
-  });
+perfilForm: FormGroup = this.fb.group({
+  nombre: ['', [Validators.required]] // 👈 Le agregamos Validators.required
+});
 
+  // 👈 Se agregaron las validaciones solicitadas aquí
   passwordForm: FormGroup = this.fb.group({
-    actual: [''],
-    nueva: ['']
+    actual: ['', [Validators.required]],
+    nueva: ['', [
+      Validators.required,
+      Validators.minLength(8),
+      Validators.pattern(/(?=.*[A-Z])/)
+    ]]
   });
 
   constructor(private router: Router) {}
@@ -43,6 +48,11 @@ export class Perfil implements OnInit {
   }
 
   actualizarPerfil() {
+
+    if (this.perfilForm.invalid) {
+    this.perfilForm.markAllAsTouched();
+    return;
+  }
     const user = JSON.parse(localStorage.getItem('user')!);
 
     this.authService.actualizarPerfil(user.id, this.perfilForm.value)
@@ -71,6 +81,12 @@ export class Perfil implements OnInit {
   }
 
   cambiarPassword() {
+    // 👈 Detiene la ejecución si el formulario no cumple las reglas
+    if (this.passwordForm.invalid) {
+      this.passwordForm.markAllAsTouched();
+      return;
+    }
+
     const user = JSON.parse(localStorage.getItem('user')!);
 
     this.authService.cambiarPassword(user.id, this.passwordForm.value)
@@ -82,6 +98,7 @@ export class Perfil implements OnInit {
             timer: 1500,
             showConfirmButton: false
           });
+          this.passwordForm.reset(); // 🔥 Limpia el formulario tras el éxito
         },
         error: (err) => {
           Swal.fire({
