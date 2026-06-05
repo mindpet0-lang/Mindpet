@@ -30,13 +30,13 @@
 
         <!-- 📝 FORM -->
 <form [formGroup]="perfilForm" (ngSubmit)="actualizarPerfil()">
-  <input type="text" formControlName="nombre" placeholder="Tu nombre">
+  <input name="update" type="text" formControlName="nombre" placeholder="Tu nombre" >
 
   <div *ngIf="perfilForm.get('nombre')?.touched && perfilForm.get('nombre')?.errors?.['required']" class="error-text">
     El nombre es obligatorio y no puede estar vacío.
   </div>
 
-  <button type="submit" [disabled]="perfilForm.invalid">Guardar cambios</button>
+  <button name="cambio" type="submit" [disabled]="perfilForm.invalid" >Guardar cambios</button>
 </form>
       </div>
 
@@ -46,12 +46,12 @@
 
   <form [formGroup]="passwordForm" (ngSubmit)="cambiarPassword()">
     
-    <input type="password" formControlName="actual" placeholder="Contraseña actual">
+    <input name="contrasenaA" type="password" formControlName="actual" placeholder="Contraseña actual">
     <div *ngIf="passwordForm.get('actual')?.touched && passwordForm.get('actual')?.errors?.['required']" class="error-text">
       La contraseña actual es obligatoria.
     </div>
 
-    <input type="password" formControlName="nueva" placeholder="Nueva contraseña">
+    <input name="contrasenaN" type="password" formControlName="nueva" placeholder="Nueva contraseña">
     
     <div *ngIf="passwordForm.get('nueva')?.touched && passwordForm.get('nueva')?.errors" class="error-container">
       <small *ngIf="passwordForm.get('nueva')?.errors?.['required']" class="error-text">
@@ -65,7 +65,7 @@
       </small>
     </div>
 
-    <button type="submit" [disabled]="passwordForm.invalid">Actualizar contraseña</button>
+    <button name="cambioC" type="submit" [disabled]="passwordForm.invalid">Actualizar contraseña</button>
   </form>
 </div>
     </div>
