@@ -23,6 +23,7 @@ export class Foro implements OnInit {
 
   // Variables para controlar la eliminación
   publicacionIdParaBorrar: number | null = null;
+  comentarioIdParaBorrar: number | null = null;
 
   // Variables para controlar la edición
   publicacionIdParaEditar: number | null = null;
@@ -411,6 +412,44 @@ export class Foro implements OnInit {
       error: (err) => console.error("Error al editar el comentario", err)
     });
   }
+
+  solicitarEliminarComentario(id?: number): void {
+  if (!id) return;
+  this.comentarioIdParaBorrar = id;
+}
+
+cancelarEliminarComentario(): void {
+  this.comentarioIdParaBorrar = null;
+}
+
+confirmarEliminarComentario(pub: Publicacion): void {
+
+  if (!this.comentarioIdParaBorrar) return;
+
+  const id = this.comentarioIdParaBorrar;
+
+  this.foroService.eliminarComentario(id).subscribe({
+
+    next: () => {
+
+      if (pub.comentarios) {
+        pub.comentarios = pub.comentarios.filter(c => c.id !== id);
+      }
+
+      this.comentarioIdParaBorrar = null;
+      this.cdr.detectChanges();
+
+    },
+
+    error: err => {
+      console.error(err);
+      this.comentarioIdParaBorrar = null;
+    }
+
+  });
+
+}
+
 
   volverAtras(): void {
     this.location.back();

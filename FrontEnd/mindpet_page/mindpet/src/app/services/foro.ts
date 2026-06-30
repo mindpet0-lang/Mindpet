@@ -51,5 +51,11 @@ export class ForoService {
   alternarLikeComentario(comentarioId: number, usuarioId: number): Observable<number> {
     return this.http.post<number>(`https://backendmindpet-production.up.railway.app/comentarios/${comentarioId}/like?usuarioId=${usuarioId}`, {});
   }
+
+  eliminarComentario(id: number): Observable<void> {
+  return this.http.delete<void>(
+    `https://backendmindpet-production.up.railway.app/comentarios/${id}`
+  );
+}
   
 }
